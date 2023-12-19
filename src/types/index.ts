@@ -9,12 +9,6 @@ export type ContextType = {
   checkAuthUser: () => Promise<boolean>;
 };
 
-export type NavLink = {
-  imgURL: string;
-  route: string;
-  label: string;
-};
-
 export type UpdateUser = {
   userId: string;
   name: string;
@@ -45,8 +39,8 @@ export type UpdatePost = {
 export type User = {
   id: string;
   name: string;
-  username: string;
   email: string;
+  username: string;
   imageUrl: string;
   bio: string;
 };

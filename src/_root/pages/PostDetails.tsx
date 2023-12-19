@@ -84,22 +84,21 @@ const PostDetails = () => {
 
             <div className="flex flex-1 flex-col w-full small-medium lg:base-regular">
               <p>{post?.caption}</p>
-              {post?.tags[0] !== "" && (
-                <ul className="flex gap-3 mt-3">
-                  {post?.tags.map((tag: string) => {
-                    return (
-                      <li dir="auto" key={tag} className="text-light-3">
-                        #{tag}
-                      </li>
-                    );
-                  })}
-                </ul>
-              )}
+              <ul className="flex gap-3 mt-3">
+                {post?.tags.map((tag: string) => {
+                  return (
+                    <li dir="auto" key={tag} className="text-light-3">
+                      #{tag}
+                    </li>
+                  );
+                })}
+              </ul>
             </div>
 
             <div className="w-full">
               <PostStats post={post} userId={user.id} />
             </div>
+
           </div>
         </div>
       )}

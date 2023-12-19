@@ -1,6 +1,6 @@
 import { ID, Query } from "appwrite";
 
-import { NewPost, NewUser, UpdatePost } from "@/types";
+import { NewPost, NewUser, UpdatePost, UpdateUser } from "@/types";
 import { account, appwriteConfig, avatars, databases, storage } from "./config";
 
 export async function createUserAccount(user: NewUser) {
@@ -332,7 +332,7 @@ export async function getPostById(postId: string) {
 }
 
 export async function getInfinitePosts({ pageParam }: { pageParam: number }) {
-  const queries: any[] = [Query.orderDesc("$updatedAt"), Query.limit(10)];
+  const queries: string[] = [Query.orderDesc("$updatedAt"), Query.limit(10)];
   if (pageParam) {
     queries.push(Query.cursorAfter(pageParam.toString()));
   }
@@ -385,7 +385,7 @@ export async function getUserPosts(userId?: string) {
 }
 
 export async function getUsers(limit?: number) {
-  const queries: any[] = [Query.orderDesc("$createdAt")];
+  const queries: string[] = [Query.orderDesc("$createdAt")];
 
   if (limit) {
     queries.push(Query.limit(limit));
@@ -423,7 +423,7 @@ export async function getUserById(userId: string) {
 }
 
 // ============================== UPDATE USER
-export async function updateUser(user: IUpdateUser) {
+export async function updateUser(user: UpdateUser) {
   const hasFileToUpdate = user.file.length > 0;
   try {
     let image = {

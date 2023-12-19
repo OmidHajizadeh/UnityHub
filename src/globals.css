@@ -153,7 +153,7 @@
   }
 
   .post_details-card {
-    @apply bg-dark-2 w-full max-w-5xl rounded-[30px] flex-col flex xl:flex-row border border-dark-4 xl:rounded-l-[24px];
+    @apply w-full max-w-5xl rounded-[30px] flex-col flex xl:flex-row xl:rounded-l-[24px];
   }
 
   .post_details-img {
@@ -242,13 +242,17 @@
 
   /* Post Card */
   .post-card {
-    @apply relative rounded-3xl overflow-hidden p-5 lg:p-7 w-full max-w-screen-sm before:absolute before:w-[1250px] before:h-[1250px] before:bg-post-card before:top-[--y] before:left-[--x] before:-translate-x-1/2 before:-translate-y-1/2 before:opacity-0 hover:before:opacity-100 after:absolute after:inset-[2px] after:block after:rounded-3xl;
+    @apply p-5 lg:p-7 w-full max-w-screen-sm rounded-3xl;
   }
 
-  .post-card::before {
+  .glowing-card {
+    @apply relative overflow-hidden before:absolute before:bg-post-card before:top-[--y] before:left-[--x] before:-translate-x-1/2 before:-translate-y-1/2 before:opacity-0 hover:before:opacity-100 after:absolute after:inset-[2px] after:block;
+  }
+
+  .glowing-card::before {
     transition: opacity 0.3s;
   }
-  .post-card::after {
+  .glowing-card::after {
     background-color: rgba(20, 20, 25, 0.9);
   }
 
@@ -263,7 +267,7 @@
 
   /* User card */
   .user-card {
-    @apply flex-center flex-col gap-4 border border-dark-4 rounded-[20px] px-5 py-8;
+    @apply flex-center flex-col gap-4 px-5 py-8;
   }
 }
 

@@ -17,7 +17,8 @@ export default {
     },
     extend: {
       backgroundImage: {
-        "post-card": "radial-gradient(rgb(59 130 246), transparent, transparent)",
+        "post-card":
+          "radial-gradient(rgb(59 130 246), transparent, transparent)",
       },
       colors: {
         "primary-500": "#877EFF",
@@ -33,6 +34,7 @@ export default {
         "light-2": "#EFEFEF",
         "light-3": "#7878A3",
         "light-4": "#5C5C7B",
+        destructive: "#290a04",
       },
       screens: {
         xs: "480px",

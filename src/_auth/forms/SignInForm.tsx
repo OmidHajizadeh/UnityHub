@@ -3,7 +3,6 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
 
-
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -42,24 +41,22 @@ const SignInForm = () => {
     });
 
     if (!session) {
-      return toast({
+      toast({
         title: "ورود با خطا مواجه شد",
         description: "لطفا مجدداً امتحان کنید.",
-        variant: 'destructive'
+        variant: "destructive",
       });
     }
-    
-    
+
     const isLoggedIn = await checkAuthUser();
-    console.log(isLoggedIn);
     if (isLoggedIn) {
       form.reset();
       navigate("/");
     } else {
-      return toast({
+      toast({
         title: "ورود با خطا مواجه شد",
         description: "لطفا مجدداً امتحان کنید.",
-        variant: 'destructive'
+        variant: "destructive",
       });
     }
   }

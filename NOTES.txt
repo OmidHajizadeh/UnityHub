@@ -1,9 +1,11 @@
-1. Learn about React Server Components.
-2. Make sure the UI is Working properly and be thorough.
-3. Learn TanStack Query.
-4. Research through Appwrite documents.
-5. Make the app SEO friendly with meta tags and such.
-6. Fix the save post feature.
-7. Make a search feature like the one in the Explore page, but this time for All Users page.
-8. Make the following and unfollowing of a user a feature.
-9. Make loaders right and design skeleton loaders for pages.
+
+XX. Learn about React Server Components.
+XX. Make sure the UI is Working properly and be thorough.
+XX. Learn TanStack Query.
+04. Research through Appwrite documents.
+05. Make the app SEO friendly with meta tags and such.
+06. Fix the save post feature.
+07. Make a search feature like the one in the Explore page, but this time for All Users page.
+08. Make the following and unfollowing of a user a feature.
+09. Make loaders right and design skeleton loaders for pages.
+10. Code split everything make them lazy load.
