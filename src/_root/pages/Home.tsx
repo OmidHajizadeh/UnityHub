@@ -6,7 +6,7 @@ import UserCard from "@/components/shared/UserCard";
 import {
   useGetRecentPosts,
   useGetUsers,
-} from "@/lib/react-query/queriesAndMutaions";
+} from "@/hooks/react-query/queriesAndMutaions";
 import { useUserContext } from "@/context/AuthContext";
 
 const Home = () => {

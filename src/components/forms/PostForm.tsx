@@ -23,7 +23,7 @@ import { postValidationSchema } from "@/lib/validation";
 import {
   useCreatePost,
   useUpdatePost,
-} from "@/lib/react-query/queriesAndMutaions";
+} from "@/hooks/react-query/queriesAndMutaions";
 
 const PostForm = ({
   post,

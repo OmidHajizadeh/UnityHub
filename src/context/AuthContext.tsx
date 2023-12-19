@@ -1,8 +1,8 @@
 import { createContext, useContext, useEffect, useState } from "react";
 
 import { ContextType, User } from "@/types";
-import { getCurrentUser } from "@/lib/AppWirte/api";
 import { useNavigate } from "react-router-dom";
+import { getCurrentUser } from "@/api/userAPI";
 
 export const INITIAL_USER: User = {
   id: "",

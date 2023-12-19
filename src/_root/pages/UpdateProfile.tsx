@@ -18,7 +18,7 @@ import { ProfileValidation } from "@/lib/validation";
 import {
   useGetUserById,
   useUpdateUser,
-} from "@/lib/react-query/queriesAndMutaions";
+} from "@/hooks/react-query/queriesAndMutaions";
 import Loader from "@/components/shared/Loader";
 import ProfileUploader from "@/components/shared/ProfileUploader";
 import { Input } from "@/components/ui/input";

@@ -1,6 +1,7 @@
-import * as z from "zod";
+import { Link, useNavigate } from "react-router-dom";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
+import * as z from "zod";
 
 import { signupValidationSchema } from "@/lib/validation";
 
@@ -16,11 +17,10 @@ import {
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/components/ui/use-toast";
 import Loader from "@/components/shared/Loader";
-import { Link, useNavigate } from "react-router-dom";
 import {
   useCreateUserAccount,
   useSignInAccount,
-} from "@/lib/react-query/queriesAndMutaions";
+} from "@/hooks/react-query/queriesAndMutaions";
 import { useUserContext } from "@/context/AuthContext";
 
 const SignUpForm = () => {
@@ -30,8 +30,7 @@ const SignUpForm = () => {
 
   const { mutateAsync: createUserAccount, isPending: isCreatingUser } =
     useCreateUserAccount();
-  const { mutateAsync: signInAccount, isPending: isSigningInUser } =
-    useSignInAccount();
+  const { mutateAsync: signInAccount } = useSignInAccount();
 
   const form = useForm<z.infer<typeof signupValidationSchema>>({
     resolver: zodResolver(signupValidationSchema),
@@ -49,7 +48,7 @@ const SignUpForm = () => {
       return toast({
         title: "ثبت نام با خطا مواجه شد",
         description: "لطفا مجدداً امتحان کنید.",
-        variant: 'destructive'
+        variant: "destructive",
       });
     }
 
@@ -59,11 +58,7 @@ const SignUpForm = () => {
     });
 
     if (!session) {
-      return toast({
-        title: "ورود با خطا مواجه شد",
-        description: "لطفا مجدداً امتحان کنید.",
-        variant: 'destructive'
-      });
+      navigate("/sing-in");
     }
 
     const isLoggedIn = await checkAuthUser();
@@ -74,7 +69,7 @@ const SignUpForm = () => {
       return toast({
         title: "ثبت نام با خطا مواجه شد",
         description: "لطفا مجدداً امتحان کنید.",
-        variant: 'destructive'
+        variant: "destructive",
       });
     }
   }
@@ -147,7 +142,7 @@ const SignUpForm = () => {
           />
 
           <Button type="submit" className="shad-button_primary mt-3">
-            {isCreatingUser || isSigningInUser || isUserLoading ? (
+            {isCreatingUser || isUserLoading ? (
               <div className="flex-center gap-2">
                 <Loader />
                 در حال ارسال...

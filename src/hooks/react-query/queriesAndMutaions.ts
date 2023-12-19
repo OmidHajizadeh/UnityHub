@@ -6,46 +6,48 @@ import {
 } from "@tanstack/react-query";
 import {
   createPost,
-  createUserAccount,
   deletePost,
   deleteSavedPost,
-  getCurrentUser,
   getInfinitePosts,
   getPostById,
   getRecentPosts,
-  getUserById,
-  getUsers,
   likePost,
   savePost,
   searchPosts,
+  updatePost,
+} from "../../api/postsAPI";
+import { NewPost, NewUser, UpdatePost, UpdateUser } from "@/types";
+import { QUERY_KEYS } from "../../lib/react-query/QueryKeys";
+import {
+  createUserAccount,
+  getCurrentUser,
+  getUserById,
+  getUsers,
   signInAccount,
   signOutAccount,
-  updatePost,
   updateUser,
-} from "../AppWirte/api";
-import { NewPost, NewUser, UpdatePost, UpdateUser } from "@/types";
-import { QUERY_KEYS } from "./QueryKeys";
+} from "@/api/userAPI";
 
-export const useCreateUserAccount = () => {
+export function useCreateUserAccount() {
   return useMutation({
     mutationFn: (user: NewUser) => createUserAccount(user),
   });
-};
+}
 
-export const useSignInAccount = () => {
+export function useSignInAccount() {
   return useMutation({
     mutationFn: (user: { email: string; password: string }) =>
       signInAccount(user),
   });
-};
+}
 
-export const useSignOutAccount = () => {
+export function useSignOutAccount() {
   return useMutation({
     mutationFn: () => signOutAccount(),
   });
-};
+}
 
-export const useCreatePost = () => {
+export function useCreatePost() {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: (post: NewPost) => createPost(post),
@@ -55,7 +57,7 @@ export const useCreatePost = () => {
       });
     },
   });
-};
+}
 
 export function useGetRecentPosts() {
   return useQuery({
@@ -191,22 +193,22 @@ export function useSearchPosts(searchTerm: string) {
   });
 }
 
-export const useGetUsers = (limit?: number) => {
+export function useGetUsers(limit?: number) {
   return useQuery({
     queryKey: [QUERY_KEYS.GET_USERS],
     queryFn: () => getUsers(limit),
   });
-};
+}
 
-export const useGetUserById = (userId: string) => {
+export function useGetUserById(userId: string) {
   return useQuery({
     queryKey: [QUERY_KEYS.GET_USER_BY_ID, userId],
     queryFn: () => getUserById(userId),
     enabled: !!userId,
   });
-};
+}
 
-export const useUpdateUser = () => {
+export function useUpdateUser() {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: (user: UpdateUser) => updateUser(user),
@@ -219,4 +221,4 @@ export const useUpdateUser = () => {
       });
     },
   });
-};
+}

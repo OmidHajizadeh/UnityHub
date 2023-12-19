@@ -9,7 +9,7 @@ import useDebounce from "@/hooks/use-debounce";
 import {
   useGetPosts,
   useSearchPosts,
-} from "@/lib/react-query/queriesAndMutaions";
+} from "@/hooks/react-query/queriesAndMutaions";
 
 const Explore = () => {
   const { ref, inView } = useInView();
