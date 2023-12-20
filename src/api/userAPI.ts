@@ -30,6 +30,9 @@ export async function createUserAccount(user: NewUser) {
       username: user.username,
       imageUrl: avatarUrl,
     });
+    
+    console.log(newAccount);
+    console.log(newUser);
 
     return newUser;
   } catch (error) {
@@ -193,4 +196,3 @@ export async function updateUser(user: UpdateUser) {
     console.log(error);
   }
 }
-

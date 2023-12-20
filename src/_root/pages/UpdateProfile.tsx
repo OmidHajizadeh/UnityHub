@@ -65,7 +65,9 @@ const UpdateProfile = () => {
 
     if (!updatedUser) {
       toast({
-        title: `Update user failed. Please try again.`,
+        title: "ویرایش با خطا مواجه شد",
+        description: "لطفا مجدداً امتحان کنید.",
+        variant: "destructive",
       });
     }
 
@@ -89,7 +91,7 @@ const UpdateProfile = () => {
             alt="edit"
             className="invert-white"
           />
-          <h2 className="h3-bold md:h2-bold text-left w-full">Edit Profile</h2>
+          <h2 className="h3-bold md:h2-bold w-full">ویرایش پروفایل</h2>
         </div>
 
         <Form {...form}>
@@ -118,7 +120,7 @@ const UpdateProfile = () => {
               name="name"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="shad-form_label">Name</FormLabel>
+                  <FormLabel className="shad-form_label">اسم</FormLabel>
                   <FormControl>
                     <Input type="text" className="shad-input" {...field} />
                   </FormControl>
@@ -132,7 +134,7 @@ const UpdateProfile = () => {
               name="username"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="shad-form_label">Username</FormLabel>
+                  <FormLabel className="shad-form_label">نام کاربری</FormLabel>
                   <FormControl>
                     <Input
                       type="text"
@@ -151,7 +153,7 @@ const UpdateProfile = () => {
               name="email"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="shad-form_label">Email</FormLabel>
+                  <FormLabel className="shad-form_label">ایمیل</FormLabel>
                   <FormControl>
                     <Input
                       type="text"
@@ -170,7 +172,7 @@ const UpdateProfile = () => {
               name="bio"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="shad-form_label">Bio</FormLabel>
+                  <FormLabel className="shad-form_label">بیوگرافی</FormLabel>
                   <FormControl>
                     <Textarea
                       className="shad-textarea custom-scrollbar"
@@ -188,7 +190,7 @@ const UpdateProfile = () => {
                 className="shad-button_dark_4"
                 onClick={() => navigate(-1)}
               >
-                Cancel
+                کنسل
               </Button>
               <Button
                 type="submit"
@@ -196,7 +198,7 @@ const UpdateProfile = () => {
                 disabled={isLoadingUpdate}
               >
                 {isLoadingUpdate && <Loader />}
-                Update Profile
+                ویرایش پروفایل
               </Button>
             </div>
           </form>
