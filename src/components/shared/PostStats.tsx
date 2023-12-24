@@ -1,12 +1,10 @@
 import {
-  useDeleteSavedPost,
-  useGetCurrentUser,
   useLikePost,
   useSavePost,
 } from "@/hooks/react-query/queriesAndMutaions";
-import { checkIsLiked } from "@/lib/utils";
+import { checkIsLiked, checkIsSaved } from "@/lib/utils";
 import { Models } from "appwrite";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import Loader from "./Loader";
 
 type PostStatsProps = {
@@ -18,22 +16,13 @@ const PostStats = ({ post, userId }: PostStatsProps) => {
   const [likes, setLikes] = useState<string[]>(
     post?.likes.map((user: Models.Document) => user.$id)
   );
-  const [isSaved, setIsSaved] = useState(false);
 
-  const { mutate: likePost } = useLikePost();
-  const { mutate: savePost, isPending: isSavingPost } = useSavePost();
-  const { mutate: deleteSavedPost, isPending: isDeletingSavedPost } =
-    useDeleteSavedPost();
-
-  const { data: currentUser } = useGetCurrentUser();
-
-  const savedPostRecord = currentUser?.save.find(
-    (record: Models.Document) => record.post?.$id === post?.$id
+  const [saves, setSaves] = useState<string[]>(
+    post?.saves.map((user: Models.Document) => user.$id)
   );
 
-  useEffect(() => {
-    setIsSaved(!!savedPostRecord);
-  }, [currentUser]);
+  const { mutate: likePost, isPending: isLikingPost } = useLikePost();
+  const { mutate: savePost, isPending: isSavingPost } = useSavePost();
 
   function likeHandler(e: React.MouseEvent<HTMLImageElement, MouseEvent>) {
     e.stopPropagation();
@@ -46,43 +35,50 @@ const PostStats = ({ post, userId }: PostStatsProps) => {
     }
 
     setLikes(newLikes);
-    likePost({ postId: post?.$id || '', likesArray: newLikes });
+    likePost({ postId: post?.$id || "", likesArray: newLikes });
   }
 
   function saveHandler(e: React.MouseEvent<HTMLImageElement, MouseEvent>) {
     e.stopPropagation();
-    //!  04:30:00
+    let newSaves = [...saves];
 
-    if (savedPostRecord) {
-      setIsSaved(false);
-      deleteSavedPost(savedPostRecord.$id);
+    if (newSaves.includes(userId)) {
+      newSaves = newSaves.filter((id) => id !== userId);
     } else {
-      setIsSaved(true);
-      savePost({ postId: post?.$id || '', userId });
+      newSaves.push(userId);
     }
+
+    setSaves(newSaves);
+    savePost({ postId: post?.$id || "", savesArray: newSaves });
   }
 
   return (
     <div className="flex-between z-20 relative">
       <div className="flex gap-2">
-        <img
-          src={`/assets/icons/${
-            checkIsLiked(likes, userId) ? "liked" : "like"
-          }.svg`}
-          alt="like"
-          width={20}
-          height={20}
-          onClick={likeHandler}
-          className="cursor-pointer"
-        />
-        <p className="small-medium lg:base-medium">{likes.length}</p>
-      </div>
-      <div className="flex gap-2">
-        {isSavingPost || isDeletingSavedPost ? (
+        {isLikingPost ? (
           <Loader />
         ) : (
           <img
-            src={`/assets/icons/${isSaved ? "saved" : "save"}.svg`}
+            src={`/assets/icons/${
+              checkIsLiked(likes, userId) ? "liked" : "like"
+            }.svg`}
+            alt="like"
+            width={20}
+            height={20}
+            onClick={likeHandler}
+            className="cursor-pointer"
+          />
+        )}
+        <p className="small-medium lg:base-medium">{likes.length}</p>
+      </div>
+      <div className="flex gap-2">
+        {isSavingPost ? (
+          <Loader />
+        ) : (
+          <img
+            src={`/assets/icons/${
+              checkIsSaved(saves, userId) ? "saved" : "save"
+            }.svg`}
             alt="save"
             width={20}
             height={20}

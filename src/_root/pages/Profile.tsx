@@ -13,6 +13,7 @@ import { useGetUserById } from "@/hooks/react-query/queriesAndMutaions";
 import Loader from "@/components/shared/Loader";
 import { Button } from "@/components/ui/button";
 import GridPostList from "@/components/shared/GridPostList";
+import { Helmet } from "react-helmet";
 
 interface StabBlockProps {
   value: string | number;
@@ -42,6 +43,9 @@ const Profile = () => {
 
   return (
     <div className="profile-container">
+      <Helmet>
+        <title>{currentUser.name} صفحه</title>
+      </Helmet>
       <div className="profile-inner_container">
         <div className="flex xl:flex-row flex-col max-xl:items-center flex-1 gap-7">
           <img
@@ -139,11 +143,7 @@ const Profile = () => {
       <Routes>
         <Route
           index
-          element={
-            <ul className="grid-container">
-              <GridPostList posts={currentUser.posts} showUser={false} />
-            </ul>
-          }
+          element={<GridPostList posts={currentUser.posts} showUser={false} />}
         />
         {currentUser.$id === user.id && (
           <Route path="/liked-posts" element={<LikedPosts />} />

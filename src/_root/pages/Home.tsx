@@ -8,6 +8,7 @@ import {
   useGetUsers,
 } from "@/hooks/react-query/queriesAndMutaions";
 import { useUserContext } from "@/context/AuthContext";
+import { Helmet } from "react-helmet";
 
 const Home = () => {
   const {
@@ -15,6 +16,7 @@ const Home = () => {
     isPending: isPostLoading,
     isError: isErrorPosts,
   } = useGetRecentPosts();
+
   const {
     data: creators,
     isPending: isUserLoading,
@@ -26,6 +28,9 @@ const Home = () => {
   if (isErrorPosts || isErrorCreators) {
     return (
       <div className="flex flex-1">
+        <Helmet>
+        <title>خطا</title>
+      </Helmet>
         <div className="home-container">
           <p className="body-medium text-light-1">خطایی رخ داد</p>
         </div>
@@ -38,6 +43,9 @@ const Home = () => {
 
   return (
     <div className="flex flex-1">
+      <Helmet>
+        <title>خانه سیرکلیفای</title>
+      </Helmet>
       <div className="home-container">
         <div className="home-posts">
           <h2 className="h3-bold md:h2-bold w-full">پست های دنبال کنندگان</h2>

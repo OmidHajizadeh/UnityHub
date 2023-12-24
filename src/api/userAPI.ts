@@ -30,7 +30,7 @@ export async function createUserAccount(user: NewUser) {
       username: user.username,
       imageUrl: avatarUrl,
     });
-    
+
     console.log(newAccount);
     console.log(newUser);
 
@@ -81,7 +81,7 @@ export async function signOutAccount() {
   }
 }
 
-export async function getCurrentUser(): Promise<Record<string, string> | null> {
+export async function getCurrentUser() {
   try {
     const currentAccount = await account.get();
 

@@ -7,7 +7,6 @@ import {
 import {
   createPost,
   deletePost,
-  deleteSavedPost,
   getInfinitePosts,
   getPostById,
   getRecentPosts,
@@ -96,26 +95,8 @@ export function useLikePost() {
 export function useSavePost() {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: ({ postId, userId }: { postId: string; userId: string }) =>
-      savePost(userId, postId),
-    onSuccess: () => {
-      queryClient.invalidateQueries({
-        queryKey: [QUERY_KEYS.GET_RECENT_POSTS],
-      });
-      queryClient.invalidateQueries({
-        queryKey: [QUERY_KEYS.GET_POSTS],
-      });
-      queryClient.invalidateQueries({
-        queryKey: [QUERY_KEYS.GET_CURRENT_USER],
-      });
-    },
-  });
-}
-
-export function useDeleteSavedPost() {
-  const queryClient = useQueryClient();
-  return useMutation({
-    mutationFn: (savedRecordId: string) => deleteSavedPost(savedRecordId),
+    mutationFn: ({ postId, savesArray }: { postId: string; savesArray: string[] }) =>
+      savePost(postId, savesArray),
     onSuccess: () => {
       queryClient.invalidateQueries({
         queryKey: [QUERY_KEYS.GET_RECENT_POSTS],

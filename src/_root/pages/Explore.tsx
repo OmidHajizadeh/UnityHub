@@ -10,6 +10,8 @@ import {
   useGetPosts,
   useSearchPosts,
 } from "@/hooks/react-query/queriesAndMutaions";
+import ExplorerGridList from "@/components/shared/ExplorerGridList";
+import { Helmet } from "react-helmet";
 
 const Explore = () => {
   const { ref, inView } = useInView();
@@ -38,6 +40,9 @@ const Explore = () => {
     posts.pages.every((item) => item?.documents.length === 0);
   return (
     <div className="explore-container">
+      <Helmet>
+        <title>اکسپلورر</title>
+      </Helmet>
       <div className="explore-inner_container">
         <div className="flex gap-2 w-full max-w-5xl">
           <img
@@ -92,7 +97,7 @@ const Explore = () => {
         ) : (
           <ul className="grid-container">
             {posts.pages.map((item, index) => (
-              <GridPostList key={index} posts={item.documents} />
+              <ExplorerGridList key={index} posts={item.documents} />
             ))}
           </ul>
         )}

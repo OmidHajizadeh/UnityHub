@@ -24,6 +24,7 @@ import ProfileUploader from "@/components/shared/ProfileUploader";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
+import { Helmet } from "react-helmet";
 
 const UpdateProfile = () => {
   const { toast } = useToast();
@@ -82,6 +83,9 @@ const UpdateProfile = () => {
 
   return (
     <div className="flex flex-1">
+      <Helmet>
+        <title>ویرایش پروفایل</title>
+      </Helmet>
       <div className="common-container">
         <div className="flex-start gap-3 justify-start w-full max-w-5xl">
           <img

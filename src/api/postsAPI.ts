@@ -23,7 +23,7 @@ export async function createPost(post: NewPost) {
     const tags = Array.from(new Set(rawTags)) || [];
 
     // Create post
-    const newPost = await databases.createDocument(
+    const newPost1 = await databases.createDocument(
       appwriteConfig.databaseId,
       appwriteConfig.postCollectionId,
       ID.unique(),
@@ -37,12 +37,21 @@ export async function createPost(post: NewPost) {
       }
     );
 
-    if (!newPost) {
+    const newPost2 = await databases.updateDocument(
+      appwriteConfig.databaseId,
+      appwriteConfig.postCollectionId,
+      newPost1.$id,
+      {
+        postId: newPost1.$id,
+      }
+    );
+
+    if (!newPost1 || !newPost2) {
       await deleteFile(uploadedFile.$id);
       throw Error;
     }
 
-    return newPost;
+    return newPost2;
   } catch (error) {
     console.log(error);
   }
@@ -148,15 +157,14 @@ export async function likePost(postId: string, likesArray: string[]) {
   }
 }
 
-export async function savePost(userId: string, postId: string) {
+export async function savePost(postId: string, savesArray: string[]) {
   try {
-    const updatedPost = await databases.createDocument(
+    const updatedPost = await databases.updateDocument(
       appwriteConfig.databaseId,
       appwriteConfig.postCollectionId,
-      ID.unique(),
+      postId,
       {
-        user: userId,
-        post: postId,
+        saves: savesArray,
       }
     );
 
@@ -167,20 +175,23 @@ export async function savePost(userId: string, postId: string) {
   }
 }
 
-export async function deleteSavedPost(savedRecordId: string) {
-  try {
-    const statusCode = await databases.deleteDocument(
-      appwriteConfig.databaseId,
-      appwriteConfig.postCollectionId,
-      savedRecordId
-    );
+// export async function getSavedPosts(userId: string) {
+//   try {
+//     const updatedPost = await databases.(
+//       appwriteConfig.databaseId,
+//       appwriteConfig.postCollectionId,
+//       postId,
+//       {
+//         saves: savesArray,
+//       }
+//     );
 
-    if (!statusCode) throw Error;
-    return { status: "ok" };
-  } catch (error) {
-    console.log(error);
-  }
-}
+//     if (!updatedPost) throw Error;
+//     return updatedPost;
+//   } catch (error) {
+//     console.log(error);
+//   }
+// }
 
 export async function getPostById(postId: string) {
   try {

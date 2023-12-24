@@ -1,8 +1,12 @@
 import PostForm from "@/components/forms/PostForm";
+import { Helmet } from "react-helmet";
 
 const CreatePost = () => {
   return (
     <div className="flex flex-1">
+      <Helmet>
+        <title>افزودن پست جدید</title>
+      </Helmet>
       <div className="common-container">
         <div className="max-w-5xl flex-start gap-3 justify-start w-full">
           <img

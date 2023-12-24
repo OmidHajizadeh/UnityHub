@@ -3,6 +3,7 @@ import UserCard from "@/components/shared/UserCard";
 import { useToast } from "@/components/ui/use-toast";
 import { useUserContext } from "@/context/AuthContext";
 import { useGetUsers } from "@/hooks/react-query/queriesAndMutaions";
+import { Helmet } from "react-helmet";
 
 const AllUsers = () => {
   const { toast } = useToast();
@@ -17,6 +18,9 @@ const AllUsers = () => {
 
   return (
     <div className="common-container">
+      <Helmet>
+        <title>همه کاربران</title>
+      </Helmet>
       <div className="user-container">
         <div className="flex gap-2 w-full max-w-5xl">
           <img

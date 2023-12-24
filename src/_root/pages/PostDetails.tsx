@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { useUserContext } from "@/context/AuthContext";
 import { useGetPostById } from "@/hooks/react-query/queriesAndMutaions";
 import { multiFormatDateString } from "@/lib/utils";
+import { Helmet } from "react-helmet";
 import { Link, useParams } from "react-router-dom";
 
 const PostDetails = () => {
@@ -18,6 +19,17 @@ const PostDetails = () => {
         <Loader />
       ) : (
         <div className="post_details-card">
+          <Helmet>
+            <title>{post?.caption}</title>
+            <meta name="description" content={post?.caption} />
+            <meta name="author" content={post?.creator.name} />
+
+            <meta name="og:title" content="شبکه اجتماعی سیرکلیفای" />
+            <meta name="og:type" content="post"/>
+            <meta name="og:image" content={post?.imageUrl}/>
+            <meta name="og:site_name" content="Circlify"/>
+            <meta name="og:description" content={post?.caption} />
+          </Helmet>
           <img
             src={post?.imageUrl}
             alt="creator"
@@ -98,7 +110,6 @@ const PostDetails = () => {
             <div className="w-full">
               <PostStats post={post} userId={user.id} />
             </div>
-
           </div>
         </div>
       )}
