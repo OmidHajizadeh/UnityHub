@@ -12,9 +12,9 @@ const bottombarLinks = [
     label: "اکسپلورر",
   },
   {
-    imageUrl: "/assets/icons/bookmark.svg",
-    route: "/saved",
-    label: "ذخیره شده",
+    imageUrl: "/assets/icons/people.svg",
+    route: "/all-users",
+    label: "کاربران"
   },
   {
     imageUrl: "/assets/icons/gallery-add.svg",

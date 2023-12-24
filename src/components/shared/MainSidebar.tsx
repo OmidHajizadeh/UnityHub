@@ -21,18 +21,13 @@ const sidebarLinks = [
     label: "کاربران",
   },
   {
-    imageUrl: "/assets/icons/bookmark.svg",
-    route: "/saved",
-    label: "پست های ذخیره شده",
-  },
-  {
     imageUrl: "/assets/icons/add-post.svg",
     route: "/create-post",
     label: "پست جدید",
   },
 ];
 
-const RightSidebar = () => {
+const MainSidebar = () => {
   const { mutate: signOutHandler, isSuccess } = useSignOutAccount();
   const { user } = useUserContext();
   const navigate = useNavigate();
@@ -96,4 +91,4 @@ const RightSidebar = () => {
   );
 };
 
-export default RightSidebar;
+export default MainSidebar;

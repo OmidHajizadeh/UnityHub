@@ -6,14 +6,18 @@ import {
   useParams,
   useLocation,
 } from "react-router-dom";
+import { Helmet } from "react-helmet";
+import { Suspense, lazy } from "react";
 
-import { LikedPosts } from "@/_root/pages";
 import { useUserContext } from "@/context/AuthContext";
 import { useGetUserById } from "@/hooks/react-query/queriesAndMutaions";
-import Loader from "@/components/shared/Loader";
+import Loader from "@/components/loaders/Spinner";
 import { Button } from "@/components/ui/button";
 import GridPostList from "@/components/shared/GridPostList";
-import { Helmet } from "react-helmet";
+import SmallPostsFallback from "@/components/suspense-fallbacks/SmallPostsFallback";
+import ProfileFallback from "@/components/suspense-fallbacks/ProfileFallback";
+
+const InteractedPosts = lazy(() => import("./InteractedPosts"));
 
 interface StabBlockProps {
   value: string | number;
@@ -34,12 +38,7 @@ const Profile = () => {
 
   const { data: currentUser } = useGetUserById(id || "");
 
-  if (!currentUser)
-    return (
-      <div className="flex-center w-full h-full">
-        <Loader />
-      </div>
-    );
+  if (!currentUser) return <ProfileFallback />;
 
   return (
     <div className="profile-container">
@@ -74,7 +73,7 @@ const Profile = () => {
               <StatBlock value={20} label="دنبال کننده" />
             </div>
 
-            <p className="small-medium md:base-medium text-center xl:text-left mt-7 max-w-screen-sm">
+            <p className="small-medium md:base-medium text-center xl:text-start mt-7 max-w-screen-sm">
               {currentUser.bio}
             </p>
           </div>
@@ -137,6 +136,20 @@ const Profile = () => {
             />
             پست های لایک شده
           </Link>
+          <Link
+            to={`/profile/${id}/saved-posts`}
+            className={`profile-tab rounded-lg ${
+              pathname === `/profile/${id}/saved-posts` && "!bg-dark-3"
+            }`}
+          >
+            <img
+              src={"/assets/icons/bookmark.svg"}
+              alt="like"
+              width={20}
+              height={20}
+            />
+            پست های ذخیره شده
+          </Link>
         </div>
       )}
 
@@ -146,7 +159,32 @@ const Profile = () => {
           element={<GridPostList posts={currentUser.posts} showUser={false} />}
         />
         {currentUser.$id === user.id && (
-          <Route path="/liked-posts" element={<LikedPosts />} />
+          <>
+            <Route
+              path="/liked-posts"
+              element={
+                <Suspense fallback={<SmallPostsFallback count={6} />}>
+                  <InteractedPosts
+                    type="liked"
+                    title="پست های لایک شده"
+                    noResultText="شما هیچ پستی را لایک نکرده اید"
+                  />
+                </Suspense>
+              }
+            />
+            <Route
+              path="/saved-posts"
+              element={
+                <Suspense fallback={<SmallPostsFallback count={6} />}>
+                  <InteractedPosts
+                    type="saved"
+                    title="پست های ذخیره شده"
+                    noResultText="شما هیچ پستی را ذخیره نکرده اید"
+                  />
+                </Suspense>
+              }
+            />
+          </>
         )}
       </Routes>
       <Outlet />

@@ -1,6 +1,6 @@
 import { Models } from "appwrite";
 import React from "react";
-import Loader from "./Loader";
+import Loader from "../loaders/Spinner";
 import GridPostList from "./GridPostList";
 
 type SearchResultsProps = {

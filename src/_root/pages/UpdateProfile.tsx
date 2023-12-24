@@ -19,7 +19,7 @@ import {
   useGetUserById,
   useUpdateUser,
 } from "@/hooks/react-query/queriesAndMutaions";
-import Loader from "@/components/shared/Loader";
+import Loader from "@/components/loaders/Spinner";
 import ProfileUploader from "@/components/shared/ProfileUploader";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";

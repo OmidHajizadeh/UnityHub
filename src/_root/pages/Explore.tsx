@@ -1,8 +1,7 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useInView } from "react-intersection-observer";
 
-import GridPostList from "@/components/shared/GridPostList";
-import Loader from "@/components/shared/Loader";
+import Loader from "@/components/loaders/Spinner";
 import SearchResults from "@/components/shared/SearchResults";
 import { Input } from "@/components/ui/input";
 import useDebounce from "@/hooks/use-debounce";
@@ -12,6 +11,8 @@ import {
 } from "@/hooks/react-query/queriesAndMutaions";
 import ExplorerGridList from "@/components/shared/ExplorerGridList";
 import { Helmet } from "react-helmet";
+import ExploreFallback from "@/components/suspense-fallbacks/ExploreFallback";
+import SmallPostSkeleton from "@/components/loaders/SmallPostSkeleton";
 
 const Explore = () => {
   const { ref, inView } = useInView();
@@ -27,12 +28,7 @@ const Explore = () => {
     }
   }, [inView, searchValue]);
 
-  if (!posts)
-    return (
-      <div className="flex-center w-ful h-bold">
-        <Loader />
-      </div>
-    );
+  if (!posts) return <ExploreFallback />;
 
   const shouldShowSearchResults = searchValue !== "";
   const shouldShowPosts =
@@ -104,9 +100,13 @@ const Explore = () => {
       </div>
 
       {hasNextPage && !searchValue && (
-        <div ref={ref} className="mt-10">
-          <Loader />
-        </div>
+        <section ref={ref} className="grid-container mt-7">
+          {Array.from({ length: 3 }).map((_, index) => (
+            <React.Fragment key={index}>
+              <SmallPostSkeleton />
+            </React.Fragment>
+          ))}
+        </section>
       )}
     </div>
   );

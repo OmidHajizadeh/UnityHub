@@ -1,6 +1,6 @@
 import { Models } from "appwrite";
 
-import Loader from "@/components/shared/Loader";
+import Loader from "@/components/loaders/Spinner";
 import PostCard from "@/components/shared/PostCard";
 import UserCard from "@/components/shared/UserCard";
 import {

@@ -17,7 +17,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "../ui/textarea";
 import FileUploader from "../shared/FileUploader";
 import { useToast } from "../ui/use-toast";
-import Loader from "../shared/Loader";
+import Loader from "../loaders/Spinner";
 import { useUserContext } from "@/context/AuthContext";
 import { postValidationSchema } from "@/lib/validation";
 import {

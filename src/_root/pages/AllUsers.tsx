@@ -1,4 +1,5 @@
-import Loader from "@/components/shared/Loader";
+import UsersCardSkeleton from "@/components/loaders/UsersCardSkeleton";
+import GlowingCard from "@/components/shared/GlowingCard";
 import UserCard from "@/components/shared/UserCard";
 import { useToast } from "@/components/ui/use-toast";
 import { useUserContext } from "@/context/AuthContext";
@@ -33,7 +34,20 @@ const AllUsers = () => {
           <h2 className="h3-bold md:h2-bold w-full">همه کاربران</h2>
         </div>
         {isLoading && !creators ? (
-          <Loader />
+          <section className="user-grid">
+            {Array.from({ length: 9 }).map((_, index) => {
+              return (
+                <div key={index} className="flex-1 min-w-[200px] w-full">
+                  <GlowingCard
+                    size="small"
+                    className="rounded-xl after:rounded-[11px]"
+                  >
+                    <UsersCardSkeleton />
+                  </GlowingCard>
+                </div>
+              );
+            })}
+          </section>
         ) : (
           <ul className="user-grid">
             {creators?.documents.map((creator) => {

@@ -5,14 +5,15 @@ import {
 import { checkIsLiked, checkIsSaved } from "@/lib/utils";
 import { Models } from "appwrite";
 import React, { useState } from "react";
-import Loader from "./Loader";
+import Loader from "../loaders/Spinner";
 
 type PostStatsProps = {
   post?: Models.Document;
   userId: string;
+  showLikeCount?: boolean;
 };
 
-const PostStats = ({ post, userId }: PostStatsProps) => {
+const PostStats = ({ post, userId, showLikeCount = true }: PostStatsProps) => {
   const [likes, setLikes] = useState<string[]>(
     post?.likes.map((user: Models.Document) => user.$id)
   );
@@ -53,7 +54,7 @@ const PostStats = ({ post, userId }: PostStatsProps) => {
   }
 
   return (
-    <div className="flex-between z-20 relative">
+    <div className="flex-between gap-3 z-20 relative">
       <div className="flex gap-2">
         {isLikingPost ? (
           <Loader />
@@ -69,9 +70,12 @@ const PostStats = ({ post, userId }: PostStatsProps) => {
             className="cursor-pointer"
           />
         )}
-        <p className="small-medium lg:base-medium">{likes.length}</p>
+
+        {showLikeCount && (
+          <p className="small-medium lg:base-medium">{likes.length}</p>
+        )}
       </div>
-      <div className="flex gap-2">
+      <div className="flex">
         {isSavingPost ? (
           <Loader />
         ) : (
