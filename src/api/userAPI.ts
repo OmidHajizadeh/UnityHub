@@ -1,3 +1,5 @@
+import { ID, Query } from "appwrite";
+
 import {
   account,
   appwriteConfig,
@@ -5,7 +7,6 @@ import {
   databases,
 } from "@/lib/AppWirte/config";
 import { NewUser, UpdateUser } from "@/types";
-import { ID, Query } from "appwrite";
 import { deleteFile, getFilePreview, uploadFile } from "./fileAPI";
 
 export async function createUserAccount(user: NewUser) {

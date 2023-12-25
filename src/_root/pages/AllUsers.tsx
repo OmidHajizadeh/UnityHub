@@ -38,12 +38,7 @@ const AllUsers = () => {
             {Array.from({ length: 9 }).map((_, index) => {
               return (
                 <div key={index} className="flex-1 min-w-[200px] w-full">
-                  <GlowingCard
-                    size="small"
-                    className="rounded-xl after:rounded-[11px]"
-                  >
-                    <UsersCardSkeleton />
-                  </GlowingCard>
+                  <UsersCardSkeleton />
                 </div>
               );
             })}

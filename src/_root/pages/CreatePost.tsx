@@ -1,5 +1,6 @@
-import PostForm from "@/components/forms/PostForm";
 import { Helmet } from "react-helmet";
+
+import PostForm from "@/components/forms/PostForm";
 
 const CreatePost = () => {
   return (

@@ -1,36 +1,68 @@
 import { Helmet } from "react-helmet";
-import { Link, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
+import { Suspense, lazy } from "react";
 
 import PostStats from "@/components/shared/PostStats";
 import PostDetailsFallback from "@/components/suspense-fallbacks/PostDetailsFallback";
 import { Button } from "@/components/ui/button";
 import { useUserContext } from "@/context/AuthContext";
-import { useGetPostById } from "@/hooks/react-query/queriesAndMutaions";
+import {
+  useDeletePost,
+  useGetPostById,
+} from "@/hooks/react-query/queriesAndMutaions";
 import { multiFormatDateString } from "@/lib/utils";
+import { useToast } from "@/components/ui/use-toast";
+import Spinner from "@/components/loaders/Spinner";
+
+const Alert = lazy(() => import("@/components/shared/Alert"));
 
 const PostDetails = () => {
   const { id } = useParams();
   const { data: post, isPending } = useGetPostById(id || "");
   const { user } = useUserContext();
+  const { toast } = useToast();
+  const navigate = useNavigate();
+  const { mutateAsync: deletePost } = useDeletePost();
 
   if (isPending) return <PostDetailsFallback />;
 
-  function deletePostHandler() {}
+  if (!post) {
+    return <p>پست پیدا نشد</p>;
+  }
+
+  async function deletePostHandler() {
+    console.log(post?.$id, post?.imageId);
+
+    const deletedPost = await deletePost({
+      postId: post?.$id,
+      imageId: post?.imageId,
+    });
+
+    if (!deletedPost) {
+      return toast({
+        variant: "destructive",
+        title: "حذف پست با خطا مواجه شد",
+        description: "لطفاً دوباره امتحان کنید.",
+      });
+    }
+
+    navigate(-1);
+  }
 
   return (
     <div className="post_details-container">
-      <div className="post_details-card">
-        <Helmet>
-          <title>{post?.caption}</title>
-          <meta name="description" content={post?.caption} />
-          <meta name="author" content={post?.creator.name} />
+      <Helmet>
+        <title>{post?.caption}</title>
+        <meta name="description" content={post?.caption} />
+        <meta name="author" content={post?.creator.name} />
 
-          <meta name="og:title" content="شبکه اجتماعی سیرکلیفای" />
-          <meta name="og:type" content="post" />
-          <meta name="og:image" content={post?.imageUrl} />
-          <meta name="og:site_name" content="Circlify" />
-          <meta name="og:description" content={post?.caption} />
-        </Helmet>
+        <meta name="og:title" content="شبکه اجتماعی سیرکلیفای" />
+        <meta name="og:type" content="post" />
+        <meta name="og:image" content={post?.imageUrl} />
+        <meta name="og:site_name" content="Circlify" />
+        <meta name="og:description" content={post?.caption} />
+      </Helmet>
+      <div className="post_details-card">
         <img src={post?.imageUrl} alt="creator" className="post_details-img" />
         <div className="post_details-info">
           <div className="flex-between w-full">
@@ -72,18 +104,25 @@ const PostDetails = () => {
                       height={24}
                     />
                   </Link>
-                  <Button
-                    onClick={deletePostHandler}
-                    variant="ghost"
-                    className="ghost_details-delete-btn"
-                  >
-                    <img
-                      src="/assets/icons/delete.svg"
-                      alt="edit"
-                      width={24}
-                      height={24}
-                    />
-                  </Button>
+                  <Suspense fallback={<Spinner />}>
+                    <Alert
+                      title="آیا مطمئن هستید ؟"
+                      description="این عملیات برگشت ناپذیر است و تمام اطلاعات مربوط به این پست بصورت کامل حذف خواهد شد."
+                      onSubmit={deletePostHandler}
+                    >
+                      <Button
+                        variant="ghost"
+                        className="ghost_details-delete-btn"
+                      >
+                        <img
+                          src="/assets/icons/delete.svg"
+                          alt="edit"
+                          width={24}
+                          height={24}
+                        />
+                      </Button>
+                    </Alert>
+                  </Suspense>
                 </>
               )}
             </div>

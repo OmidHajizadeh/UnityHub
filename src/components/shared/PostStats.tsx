@@ -1,10 +1,11 @@
+import { Models } from "appwrite";
+import React, { useState } from "react";
+
 import {
   useLikePost,
   useSavePost,
 } from "@/hooks/react-query/queriesAndMutaions";
 import { checkIsLiked, checkIsSaved } from "@/lib/utils";
-import { Models } from "appwrite";
-import React, { useState } from "react";
 import Loader from "../loaders/Spinner";
 
 type PostStatsProps = {

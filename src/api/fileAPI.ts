@@ -1,5 +1,6 @@
-import { appwriteConfig, storage } from "@/lib/AppWirte/config";
 import { ID } from "appwrite";
+
+import { appwriteConfig, storage } from "@/lib/AppWirte/config";
 
 export async function uploadFile(file: File) {
   try {

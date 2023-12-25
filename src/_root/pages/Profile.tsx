@@ -11,7 +11,6 @@ import { Suspense, lazy } from "react";
 
 import { useUserContext } from "@/context/AuthContext";
 import { useGetUserById } from "@/hooks/react-query/queriesAndMutaions";
-import Loader from "@/components/loaders/Spinner";
 import { Button } from "@/components/ui/button";
 import GridPostList from "@/components/shared/GridPostList";
 import SmallPostsFallback from "@/components/suspense-fallbacks/SmallPostsFallback";
@@ -36,77 +35,77 @@ const Profile = () => {
   const { user } = useUserContext();
   const { pathname } = useLocation();
 
-  const { data: currentUser } = useGetUserById(id || "");
+  const { data: thisUser, isError } = useGetUserById(id || "");
 
-  if (!currentUser) return <ProfileFallback />;
+  if (isError) {
+    return <p>کاربر مورد نظر یافت نشد</p>;
+  }
+
+  if (!thisUser) return <ProfileFallback />;
 
   return (
     <div className="profile-container">
       <Helmet>
-        <title>{currentUser.name} صفحه</title>
+        <title>{thisUser.name} صفحه</title>
       </Helmet>
       <div className="profile-inner_container">
         <div className="flex xl:flex-row flex-col max-xl:items-center flex-1 gap-7">
           <img
-            src={
-              currentUser.imageUrl || "/assets/icons/profile-placeholder.svg"
-            }
+            src={thisUser.imageUrl || "/assets/icons/profile-placeholder.svg"}
             alt="profile"
             className="w-28 h-28 lg:h-36 lg:w-36 rounded-full"
           />
           <div className="flex flex-col flex-1 justify-between md:mt-2">
             <div className="flex flex-col w-full">
               <h1 className="text-center xl:text-start h3-bold md:h1-semibold w-full">
-                {currentUser.name}
+                {thisUser.name}
               </h1>
               <p
                 dir="auto"
                 className="small-regular md:body-medium text-light-3 text-center xl:text-right"
               >
-                @{currentUser.username}
+                @{thisUser.username}
               </p>
             </div>
 
             <div className="flex gap-8 mt-10 items-center justify-center xl:justify-start flex-wrap z-20">
-              <StatBlock value={currentUser.posts.length} label="پست" />
+              <StatBlock value={thisUser.posts.length} label="پست" />
               <StatBlock value={20} label="دنبال شونده" />
               <StatBlock value={20} label="دنبال کننده" />
             </div>
 
             <p className="small-medium md:base-medium text-center xl:text-start mt-7 max-w-screen-sm">
-              {currentUser.bio}
+              {thisUser.bio}
             </p>
           </div>
 
-          <div className="flex justify-center gap-4">
-            <div className={`${user.id !== currentUser.$id && "hidden"}`}>
-              <Link
-                to={`/update-profile/${currentUser.$id}`}
-                className={`h-12 bg-dark-4 px-5 text-light-1 flex-center gap-2 rounded-lg ${
-                  user.id !== currentUser.$id && "hidden"
-                }`}
-              >
-                <img
-                  src={"/assets/icons/edit.svg"}
-                  alt="edit"
-                  width={20}
-                  height={20}
-                />
-                <p className="flex whitespace-nowrap small-medium">
-                  ویرایش پروفایل
-                </p>
-              </Link>
-            </div>
-            <div className={`${user.id === id && "hidden"}`}>
-              <Button type="button" className="shad-button_primary px-8">
-                دنبال کردن
-              </Button>
-            </div>
-          </div>
+          {user.id === thisUser.$id && (
+            <Link
+              to={`/update-profile/${thisUser.$id}`}
+              className={`h-12 bg-dark-4 px-5 text-light-1 flex-center gap-2 rounded-lg ${
+                user.id !== thisUser.$id && "hidden"
+              }`}
+            >
+              <img
+                src={"/assets/icons/edit.svg"}
+                alt="edit"
+                width={20}
+                height={20}
+              />
+              <p className="flex whitespace-nowrap small-medium">
+                ویرایش پروفایل
+              </p>
+            </Link>
+          )}
+          {user.id !== id && (
+            <Button type="button" className="shad-button_primary px-8">
+              دنبال کردن
+            </Button>
+          )}
         </div>
       </div>
 
-      {currentUser.$id === user.id && (
+      {thisUser.$id === user.id && (
         <div className="flex max-w-5xl w-full">
           <Link
             to={`/profile/${id}`}
@@ -156,9 +155,9 @@ const Profile = () => {
       <Routes>
         <Route
           index
-          element={<GridPostList posts={currentUser.posts} showUser={false} />}
+          element={<GridPostList posts={thisUser.posts} showUser={false} />}
         />
-        {currentUser.$id === user.id && (
+        {thisUser.$id === user.id && (
           <>
             <Route
               path="/liked-posts"

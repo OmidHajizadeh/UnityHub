@@ -7,6 +7,6 @@ XX. Make the app SEO friendly with meta tags and such.
 XX. Fix the save post feature.
 07. Make a search feature like the one in the Explore page, but this time for All Users page.
 08. Make the following and unfollowing of a user a feature.
-09. Make loaders right and design skeleton loaders for pages.
+XX. Make loaders right and design skeleton loaders for pages.
 10. Code split everything make them lazy load.
 11. make the app SSR.

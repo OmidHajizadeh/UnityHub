@@ -1,7 +1,8 @@
-import { useUserContext } from "@/context/AuthContext";
-import { multiFormatDateString } from "@/lib/utils";
 import { Models } from "appwrite";
 import { Link } from "react-router-dom";
+
+import { useUserContext } from "@/context/AuthContext";
+import { multiFormatDateString } from "@/lib/utils";
 import PostStats from "./PostStats";
 import GlowingCard from "./GlowingCard";
 

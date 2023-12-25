@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useInView } from "react-intersection-observer";
+import { Helmet } from "react-helmet";
 
-import Loader from "@/components/loaders/Spinner";
 import SearchResults from "@/components/shared/SearchResults";
 import { Input } from "@/components/ui/input";
 import useDebounce from "@/hooks/use-debounce";
@@ -10,7 +10,6 @@ import {
   useSearchPosts,
 } from "@/hooks/react-query/queriesAndMutaions";
 import ExplorerGridList from "@/components/shared/ExplorerGridList";
-import { Helmet } from "react-helmet";
 import ExploreFallback from "@/components/suspense-fallbacks/ExploreFallback";
 import SmallPostSkeleton from "@/components/loaders/SmallPostSkeleton";
 

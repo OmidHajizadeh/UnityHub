@@ -110,7 +110,7 @@ export async function updatePost(post: UpdatePost) {
 
 export async function deletePost(postId: string, imageId: string) {
   try {
-    if (postId || imageId) throw Error;
+    if (!postId || !imageId) throw Error;
     await databases.deleteDocument(
       appwriteConfig.databaseId,
       appwriteConfig.postCollectionId,
