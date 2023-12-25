@@ -19,10 +19,6 @@ const ProfileFallback = () => {
               <div className="w-full max-w-[5rem] h-5 rounded-md bg-light-4 animate-pulse" />
             </div>
 
-            <div className="flex flex-col mt-7 gap-3">
-              <div className="w-full rounded-sm h-3 bg-light-2 animate-pulse" />
-              <div className="w-full rounded-sm max-w-sm h-3 bg-light-2 animate-pulse" />
-            </div>
           </div>
 
           <div className="max-w-[10rem] w-full h-12 bg-dark-4 rounded-lg animate-pulse" />

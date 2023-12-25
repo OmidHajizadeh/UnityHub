@@ -11,10 +11,10 @@ import { Suspense, lazy } from "react";
 
 import { useUserContext } from "@/context/AuthContext";
 import { useGetUserById } from "@/hooks/react-query/queriesAndMutaions";
-import { Button } from "@/components/ui/button";
 import GridPostList from "@/components/shared/GridPostList";
 import SmallPostsFallback from "@/components/suspense-fallbacks/SmallPostsFallback";
 import ProfileFallback from "@/components/suspense-fallbacks/ProfileFallback";
+import FollowUserButton from "@/components/shared/FollowUserButton";
 
 const InteractedPosts = lazy(() => import("./InteractedPosts"));
 
@@ -37,7 +37,7 @@ const Profile = () => {
 
   const { data: thisUser, isError } = useGetUserById(id || "");
 
-  if (isError) {
+  if (isError || !id) {
     return <p>کاربر مورد نظر یافت نشد</p>;
   }
 
@@ -70,8 +70,14 @@ const Profile = () => {
 
             <div className="flex gap-8 mt-10 items-center justify-center xl:justify-start flex-wrap z-20">
               <StatBlock value={thisUser.posts.length} label="پست" />
-              <StatBlock value={20} label="دنبال شونده" />
-              <StatBlock value={20} label="دنبال کننده" />
+              <StatBlock
+                value={thisUser.followings.length}
+                label="دنبال شونده"
+              />
+              <StatBlock
+                value={thisUser.followers.length}
+                label="دنبال کننده"
+              />
             </div>
 
             <p className="small-medium md:base-medium text-center xl:text-start mt-7 max-w-screen-sm">
@@ -98,9 +104,11 @@ const Profile = () => {
             </Link>
           )}
           {user.id !== id && (
-            <Button type="button" className="shad-button_primary px-8">
-              دنبال کردن
-            </Button>
+            <FollowUserButton
+              className="shad-button_primary px-8"
+              currentUserFollowings={user.followings}
+              targetUserId={id}
+            />
           )}
         </div>
       </div>

@@ -1,7 +1,7 @@
 import { Dispatch, SetStateAction } from "react";
 
 export type ContextType = {
-  user: User;
+  user: User & { followings: string[] };
   isLoading: boolean;
   isAuthenticated: boolean;
   setUser: Dispatch<SetStateAction<User>>;
@@ -12,7 +12,6 @@ export type ContextType = {
 export type UpdateUser = {
   userId: string;
   name: string;
-  bio: string;
   imageId: string;
   imageUrl: URL | string;
   file: File[];
@@ -42,7 +41,6 @@ export type User = {
   email: string;
   username: string;
   imageUrl: string;
-  bio: string;
 };
 
 export type NewUser = {

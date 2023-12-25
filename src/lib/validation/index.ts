@@ -59,5 +59,4 @@ export const ProfileValidation = z.object({
     .string()
     .email({ message: "ایمیل وارد شده معتبر نمی باشد" })
     .min(8, { message: "ایمیل نمیتواند کمتر از 8 کارکتر باشد" }),
-  bio: z.string(),
 });

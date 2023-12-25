@@ -23,7 +23,6 @@ import {
 import Loader from "@/components/loaders/Spinner";
 import ProfileUploader from "@/components/shared/ProfileUploader";
 import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 
 const UpdateProfile = () => {
@@ -38,12 +37,11 @@ const UpdateProfile = () => {
       name: user.name,
       username: user.username,
       email: user.email,
-      bio: user.bio || "",
     },
   });
 
-  // Queries
   const { data: currentUser } = useGetUserById(id || "");
+
   const { mutateAsync: updateUser, isPending: isLoadingUpdate } =
     useUpdateUser();
   if (!currentUser)
@@ -53,12 +51,10 @@ const UpdateProfile = () => {
       </div>
     );
 
-  // Handler
   const handleUpdate = async (value: z.infer<typeof ProfileValidation>) => {
     const updatedUser = await updateUser({
       userId: currentUser.$id,
       name: value.name,
-      bio: value.bio,
       file: value.file,
       imageUrl: currentUser.imageUrl,
       imageId: currentUser.imageId,
@@ -75,7 +71,6 @@ const UpdateProfile = () => {
     setUser({
       ...user,
       name: updatedUser?.name,
-      bio: updatedUser?.bio,
       imageUrl: updatedUser?.imageUrl,
     });
     return navigate(`/profile/${id}`);
@@ -167,23 +162,6 @@ const UpdateProfile = () => {
                     />
                   </FormControl>
                   <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <FormField
-              control={form.control}
-              name="bio"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel className="shad-form_label">بیوگرافی</FormLabel>
-                  <FormControl>
-                    <Textarea
-                      className="shad-textarea custom-scrollbar"
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormMessage className="shad-form_message" />
                 </FormItem>
               )}
             />

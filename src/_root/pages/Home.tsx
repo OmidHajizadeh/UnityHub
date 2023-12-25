@@ -1,7 +1,6 @@
 import { Models } from "appwrite";
 import { Helmet } from "react-helmet";
 
-
 import PostCard from "@/components/shared/PostCard";
 import UserCard from "@/components/shared/UserCard";
 import {

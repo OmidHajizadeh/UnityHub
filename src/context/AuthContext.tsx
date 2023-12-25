@@ -4,13 +4,15 @@ import { ContextType, User } from "@/types";
 import { useNavigate } from "react-router-dom";
 import { getCurrentUser } from "@/api/userAPI";
 
-export const INITIAL_USER: User = {
+export const INITIAL_USER: User & {
+  followings: string[];
+} = {
   id: "",
   name: "",
   username: "",
   email: "",
   imageUrl: "",
-  bio: "",
+  followings: [],
 };
 
 const INITIAL_STATE = {
@@ -35,6 +37,7 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       setIsLoading(true);
 
       const currentAccount = await getCurrentUser();
+      
       if (currentAccount) {
         setUser({
           id: currentAccount.$id,
@@ -42,7 +45,7 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
           username: currentAccount.username,
           email: currentAccount.email,
           imageUrl: currentAccount.imageUrl,
-          bio: currentAccount.bio,
+          followings: currentAccount.followings,
         });
         setIsAuthenticated(true);
         return true;

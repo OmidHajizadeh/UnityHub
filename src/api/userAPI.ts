@@ -32,9 +32,6 @@ export async function createUserAccount(user: NewUser) {
       imageUrl: avatarUrl,
     });
 
-    console.log(newAccount);
-    console.log(newUser);
-
     return newUser;
   } catch (error) {
     console.log(error);
@@ -171,7 +168,6 @@ export async function updateUser(user: UpdateUser) {
       user.userId,
       {
         name: user.name,
-        bio: user.bio,
         imageUrl: image.imageUrl,
         imageId: image.imageId,
       }
@@ -193,6 +189,56 @@ export async function updateUser(user: UpdateUser) {
     }
 
     return updatedUser;
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+export async function followUser(action: string, targetUserId: string) {
+  try {
+    const currentUser = await getCurrentUser();
+    if (!currentUser) throw Error;
+
+    let currentUserFollowings = currentUser.followings;
+    if (action === "follow") {
+      currentUserFollowings.push(targetUserId);
+    } else {
+      currentUserFollowings = currentUserFollowings.filter(
+        (id: string) => id !== targetUserId
+      );
+    }
+
+    const targetUser = await getUserById(targetUserId);
+    if (!targetUser) throw Error;
+
+    let targetUserFollowers = targetUser.followers;
+    if (action === "follow") {
+      targetUserFollowers.push(currentUser.$id);
+    } else {
+      targetUserFollowers = targetUserFollowers.filter(
+        (id: string) => id !== currentUser.$id
+      );
+    }
+
+    const updateCurrentUser = databases.updateDocument(
+      appwriteConfig.databaseId,
+      appwriteConfig.userCollectionId,
+      currentUser.$id,
+      {
+        followings: currentUserFollowings,
+      }
+    );
+
+    const updateTargetUser = databases.updateDocument(
+      appwriteConfig.databaseId,
+      appwriteConfig.userCollectionId,
+      targetUser.$id,
+      {
+        followers: targetUserFollowers,
+      }
+    );
+
+    await Promise.all([updateCurrentUser, updateTargetUser]);
   } catch (error) {
     console.log(error);
   }

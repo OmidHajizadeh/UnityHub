@@ -1,14 +1,17 @@
 import { Models } from "appwrite";
 import { Link } from "react-router-dom";
 
-import { Button } from "../ui/button";
 import GlowingCard from "./GlowingCard";
+import FollowUserButton from "./FollowUserButton";
+import { useUserContext } from "@/context/AuthContext";
 
 type UserCardProps = {
   user: Models.Document;
 };
 
 const UserCard = ({ user }: UserCardProps) => {
+  const { user: currentUser } = useUserContext();
+  
   return (
     <GlowingCard size="small" className="rounded-xl after:rounded-[11px]">
       <Link to={`/profile/${user.$id}`} className="user-card">
@@ -32,10 +35,11 @@ const UserCard = ({ user }: UserCardProps) => {
             @{user.username}
           </p>
         </div>
-
-        <Button type="button" size="sm" className="shad-button_primary px-5">
-          دنبال کردن
-        </Button>
+        <FollowUserButton
+          className="shad-button_primary px-5"
+          targetUserId={user.$id}
+          currentUserFollowings={currentUser.followings}
+        />
       </Link>
     </GlowingCard>
   );

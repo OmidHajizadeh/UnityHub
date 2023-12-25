@@ -1,6 +1,7 @@
 import { Route, Routes } from "react-router-dom";
 import { Helmet } from "react-helmet";
 import { Suspense, lazy } from "react";
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 
 import AuthLayout from "./_auth/AuthLayout";
 import RootLayout from "./_root/RootLayout";
@@ -12,6 +13,7 @@ import AllUsersFallback from "./components/suspense-fallbacks/AllUsersFallback";
 import PostDetailsFallback from "./components/suspense-fallbacks/PostDetailsFallback";
 import Spinner from "./components/loaders/Spinner";
 import ProfileFallback from "./components/suspense-fallbacks/ProfileFallback";
+import { queryClient } from "./lib/react-query/QueryProvider";
 
 const SignInForm = lazy(() => import("./_auth/forms/SignInForm"));
 const SignUpForm = lazy(() => import("./_auth/forms/SignUpForm"));
@@ -26,8 +28,9 @@ const UpdateProfile = lazy(() => import("./_root/pages/UpdateProfile"));
 function App() {
   return (
     <main className="flex min-h-screen">
+      <ReactQueryDevtools client={queryClient} />
       <Helmet>
-        <title>سیرکلیفای</title>
+        <title>یونیتی هاب</title>
         <meta
           name="description"
           content="بر پایهٔ Circlify، ارتباطات و گفتگوهایتان را تقویت کنید؛ این پلتفرم پویا، تعاملات بی‌درنگ، جوامع پرانرژی، و فرصت‌های شبکه‌سازی بی‌حد را برای هر کاربر فراهم می‌کند"
@@ -38,7 +41,8 @@ function App() {
         />
         <meta name="subject" content="شبکه اجتماعی سیرکلیفای" />
         <meta name="copyright" content="Omid Hajizadeh" />
-        <meta name="language" content="fa"></meta>
+        <meta name="language" content="fa" />
+        <meta name="theme-color" content="#877EFF" />
       </Helmet>
       <Routes>
         {/* Public Routes */}

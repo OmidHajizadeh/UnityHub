@@ -1,5 +1,4 @@
 import UsersCardSkeleton from "@/components/loaders/UsersCardSkeleton";
-import GlowingCard from "@/components/shared/GlowingCard";
 import UserCard from "@/components/shared/UserCard";
 import { useToast } from "@/components/ui/use-toast";
 import { useUserContext } from "@/context/AuthContext";
