@@ -101,7 +101,14 @@ export async function getCurrentUser() {
 }
 
 export async function getUsers(limit?: number) {
-  const queries: string[] = [Query.orderDesc("$createdAt")];
+  const currentUser = await getCurrentUser();
+
+  if (!currentUser) throw Error;
+
+  const queries: string[] = [
+    Query.orderDesc("$createdAt"),
+    Query.notEqual("$id", currentUser.$id),
+  ];
 
   if (limit) {
     queries.push(Query.limit(limit));

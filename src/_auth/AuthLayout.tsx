@@ -1,3 +1,4 @@
+import PageWrapper from "@/lib/framer-motion/PageWrapper";
 import { Navigate, Outlet } from "react-router-dom";
 
 const AuthLayout = () => {
@@ -10,7 +11,9 @@ const AuthLayout = () => {
       ) : (
         <>
           <section className="flex flex-1 justify-center items-center flex-col py-10">
-            <Outlet />
+            <PageWrapper>
+              <Outlet />
+            </PageWrapper>
           </section>
           <img
             src="/assets/images/side-img.svg"

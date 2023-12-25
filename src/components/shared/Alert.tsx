@@ -12,7 +12,7 @@ import {
 
 type AlertProps = {
   title: string;
-  description: string;
+  description?: string;
   onSubmit: () => void;
   children: React.ReactNode;
 };
@@ -29,7 +29,9 @@ export default function Alert({
       <AlertDialogContent>
         <AlertDialogHeader>
           <AlertDialogTitle>{title}</AlertDialogTitle>
-          <AlertDialogDescription>{description}</AlertDialogDescription>
+          {description && (
+            <AlertDialogDescription>{description}</AlertDialogDescription>
+          )}
         </AlertDialogHeader>
         <AlertDialogFooter>
           <AlertDialogCancel>کنسل</AlertDialogCancel>

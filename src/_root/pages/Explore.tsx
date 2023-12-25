@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useInView } from "react-intersection-observer";
 import { Helmet } from "react-helmet";
+import { AnimatePresence } from "framer-motion";
 
 import SearchResults from "@/components/shared/SearchResults";
 import { Input } from "@/components/ui/input";
@@ -15,11 +16,12 @@ import SmallPostSkeleton from "@/components/loaders/SmallPostSkeleton";
 
 const Explore = () => {
   const { ref, inView } = useInView();
-  const { data: posts, fetchNextPage, hasNextPage } = useGetPosts();
   const [searchValue, setSearchValue] = useState("");
   const debouncedSearchValue = useDebounce(searchValue, 500);
   const { data: searchedPosts, isPending: isFetching } =
     useSearchPosts(debouncedSearchValue);
+
+  const { data: posts, fetchNextPage, hasNextPage } = useGetPosts();
 
   useEffect(() => {
     if (inView && !searchValue) {
@@ -91,22 +93,22 @@ const Explore = () => {
           </p>
         ) : (
           <ul className="grid-container">
-            {posts.pages.map((item, index) => (
-              <ExplorerGridList key={index} posts={item.documents} />
-            ))}
+            <AnimatePresence mode="popLayout">
+              {posts.pages.map((item, index) => (
+                <ExplorerGridList key={index} posts={item.documents} />
+              ))}
+              {hasNextPage &&
+                !searchValue &&
+                Array.from({ length: 3 }).map((_, index) => (
+                  <React.Fragment key={index}>
+                    <SmallPostSkeleton />
+                  </React.Fragment>
+                ))}
+            </AnimatePresence>
           </ul>
         )}
       </div>
-
-      {hasNextPage && !searchValue && (
-        <section ref={ref} className="grid-container mt-7">
-          {Array.from({ length: 3 }).map((_, index) => (
-            <React.Fragment key={index}>
-              <SmallPostSkeleton />
-            </React.Fragment>
-          ))}
-        </section>
-      )}
+      <section ref={ref} className="mt-7" />
     </div>
   );
 };

@@ -1,15 +1,16 @@
 import UsersCardSkeleton from "@/components/loaders/UsersCardSkeleton";
 import UserCard from "@/components/shared/UserCard";
 import { useToast } from "@/components/ui/use-toast";
-import { useUserContext } from "@/context/AuthContext";
 import { useGetUsers } from "@/hooks/react-query/queriesAndMutaions";
 import { Helmet } from "react-helmet";
 
 const AllUsers = () => {
   const { toast } = useToast();
-
-  const { data: creators, isLoading, isError: isErrorCreators } = useGetUsers();
-  const { user } = useUserContext();
+  const {
+    data: creators,
+    isLoading,
+    isError: isErrorCreators,
+  } = useGetUsers();
 
   if (isErrorCreators) {
     toast({ title: "Something went wrong." });
@@ -45,8 +46,6 @@ const AllUsers = () => {
         ) : (
           <ul className="user-grid">
             {creators?.documents.map((creator) => {
-              if (user.id === creator.$id) return;
-
               return (
                 <li
                   key={creator?.$id}

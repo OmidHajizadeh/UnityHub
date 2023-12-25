@@ -1,5 +1,7 @@
-import { Models } from "appwrite";
+import React, { useEffect } from "react";
 import { Helmet } from "react-helmet";
+import { AnimatePresence, motion } from "framer-motion";
+import { useInView } from "react-intersection-observer";
 
 import PostCard from "@/components/shared/PostCard";
 import UserCard from "@/components/shared/UserCard";
@@ -7,9 +9,7 @@ import {
   useGetRecentPosts,
   useGetUsers,
 } from "@/hooks/react-query/queriesAndMutaions";
-import { useUserContext } from "@/context/AuthContext";
 import MediumPostSkeleton from "@/components/loaders/MediumPostSkeleton";
-import React from "react";
 import UsersCardSkeleton from "@/components/loaders/UsersCardSkeleton";
 
 const Home = () => {
@@ -17,15 +17,26 @@ const Home = () => {
     data: posts,
     isPending: isPostLoading,
     isError: isErrorPosts,
+    fetchNextPage,
+    hasNextPage,
   } = useGetRecentPosts();
 
+  const { ref, inView } = useInView();
   const {
     data: creators,
     isPending: isUserLoading,
     isError: isErrorCreators,
   } = useGetUsers(10);
 
-  const { user } = useUserContext();
+  useEffect(() => {
+    if (inView) {
+      fetchNextPage();
+    }
+  }, [inView]);
+
+  // const shouldShowPosts = posts.pages.every(
+  //   (item) => item?.documents.length === 0
+  // );
 
   if (isErrorPosts || isErrorCreators) {
     return (
@@ -61,14 +72,33 @@ const Home = () => {
             </section>
           ) : (
             <ul className="flex flex-col flex-1 gap-9 w-full">
-              {posts?.documents.map((post: Models.Document) => {
-                return (
-                  <li key={post.$id}>
-                    <PostCard post={post} />
-                  </li>
-                );
-              })}
+              <AnimatePresence mode="popLayout">
+                {posts?.pages.map((item) => {
+                  return item?.documents.map((post) => {
+                    return (
+                      <motion.li
+                        layout
+                        exit={{ scale: 0.8, opacity: 0 }}
+                        animate={{ scale: 1, opacity: 1 }}
+                        key={post.$id}
+                        transition={{ duration: 0.2 }}
+                      >
+                        <PostCard post={post} />
+                      </motion.li>
+                    );
+                  });
+                })}
+              </AnimatePresence>
             </ul>
+          )}
+          {hasNextPage && (
+            <section ref={ref} className="flex flex-col flex-1 gap-9 w-full">
+              {Array.from({ length: 3 }).map((_, index) => (
+                <React.Fragment key={index}>
+                  <MediumPostSkeleton />
+                </React.Fragment>
+              ))}
+            </section>
           )}
         </div>
       </div>
@@ -85,7 +115,6 @@ const Home = () => {
         ) : (
           <ul className="grid 2xl:grid-cols-2 gap-6">
             {creators?.documents.map((creator) => {
-              if (user.id === creator.$id) return;
               return (
                 <li key={creator?.$id}>
                   <UserCard user={creator} />

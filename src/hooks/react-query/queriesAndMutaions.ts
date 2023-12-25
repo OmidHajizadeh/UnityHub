@@ -53,16 +53,24 @@ export function useCreatePost() {
     mutationFn: (post: NewPost) => createPost(post),
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: [QUERY_KEYS.GET_RECENT_POSTS],
+        queryKey: [QUERY_KEYS.GET_INFINITE_RECENT_POSTS],
       });
     },
   });
 }
 
 export function useGetRecentPosts() {
-  return useQuery({
-    queryKey: [QUERY_KEYS.GET_RECENT_POSTS],
+  return useInfiniteQuery({
+    queryKey: [QUERY_KEYS.GET_INFINITE_RECENT_POSTS],
     queryFn: getRecentPosts,
+    getNextPageParam: (lastPage) => {
+      if (lastPage && lastPage.documents.length === 0) {
+        return null;
+      } else {
+        const lastId = lastPage?.documents.at(-1).$id;
+        return lastId;
+      }
+    },
   });
 }
 
@@ -81,7 +89,7 @@ export function useLikePost() {
         queryKey: [QUERY_KEYS.GET_POST_BY_ID, data?.$id],
       });
       queryClient.invalidateQueries({
-        queryKey: [QUERY_KEYS.GET_RECENT_POSTS],
+        queryKey: [QUERY_KEYS.GET_INFINITE_RECENT_POSTS],
       });
       queryClient.invalidateQueries({
         queryKey: [QUERY_KEYS.GET_POSTS],
@@ -105,7 +113,7 @@ export function useSavePost() {
     }) => savePost(postId, savesArray),
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: [QUERY_KEYS.GET_RECENT_POSTS],
+        queryKey: [QUERY_KEYS.GET_INFINITE_RECENT_POSTS],
       });
       queryClient.invalidateQueries({
         queryKey: [QUERY_KEYS.GET_POSTS],
@@ -151,7 +159,7 @@ export function useDeletePost() {
       deletePost(postId, imageId),
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: [QUERY_KEYS.GET_RECENT_POSTS],
+        queryKey: [QUERY_KEYS.GET_INFINITE_RECENT_POSTS],
       });
     },
   });
@@ -213,7 +221,8 @@ export function useUpdateUser() {
 export function useFollowUser(targetUserId: string) {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: (action: 'follow' | 'unfollow') => followUser(action, targetUserId),
+    mutationFn: (action: "follow" | "unfollow") =>
+      followUser(action, targetUserId),
     onSuccess: () => {
       queryClient.invalidateQueries({
         queryKey: [QUERY_KEYS.GET_CURRENT_USER],

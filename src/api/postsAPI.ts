@@ -123,12 +123,17 @@ export async function deletePost(postId: string, imageId: string) {
   }
 }
 
-export async function getRecentPosts() {
+export async function getRecentPosts({ pageParam }: { pageParam: number }) {
+  const queries: string[] = [Query.orderDesc("$createdAt"), Query.limit(5)];
+  if (pageParam) {
+    queries.push(Query.cursorAfter(pageParam.toString()));
+  }
+
   try {
     const posts = await databases.listDocuments(
       appwriteConfig.databaseId,
       appwriteConfig.postCollectionId,
-      [Query.orderDesc("$createdAt"), Query.limit(20)]
+      queries
     );
 
     if (!posts) throw Error;
@@ -210,7 +215,7 @@ export async function getPostById(postId: string) {
 }
 
 export async function getInfinitePosts({ pageParam }: { pageParam: number }) {
-  const queries: string[] = [Query.orderDesc("$updatedAt"), Query.limit(10)];
+  const queries: string[] = [Query.orderDesc("$createdAt"), Query.limit(10)];
   if (pageParam) {
     queries.push(Query.cursorAfter(pageParam.toString()));
   }

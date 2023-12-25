@@ -114,7 +114,7 @@ const Profile = () => {
       </div>
 
       {thisUser.$id === user.id && (
-        <div className="flex max-w-5xl w-full">
+        <div className="flex-center gap-3 w-full">
           <Link
             to={`/profile/${id}`}
             className={`profile-tab rounded-lg ${
@@ -127,7 +127,7 @@ const Profile = () => {
               width={20}
               height={20}
             />
-            پست ها
+            <span className="hidden lg:inline">پست های من</span>
           </Link>
           <Link
             to={`/profile/${id}/liked-posts`}
@@ -141,7 +141,7 @@ const Profile = () => {
               width={20}
               height={20}
             />
-            پست های لایک شده
+            <span className="hidden lg:inline">لایک شده ها</span>
           </Link>
           <Link
             to={`/profile/${id}/saved-posts`}
@@ -155,7 +155,7 @@ const Profile = () => {
               width={20}
               height={20}
             />
-            پست های ذخیره شده
+            <span className="hidden lg:inline">ذخیره شده ها</span>
           </Link>
         </div>
       )}

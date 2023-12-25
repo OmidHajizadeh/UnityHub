@@ -1,7 +1,9 @@
+import { Outlet } from "react-router-dom";
+
 import Bottombar from "@/components/shared/Bottombar";
 import MainSidebar from "@/components/shared/MainSidebar";
 import Topbar from "@/components/shared/Topbar";
-import { Outlet } from "react-router-dom";
+import PageWrapper from "@/lib/framer-motion/PageWrapper";
 
 const RootLayout = () => {
   return (
@@ -9,7 +11,9 @@ const RootLayout = () => {
       <Topbar />
       <section className="flex flex-1 h-full">
         <MainSidebar />
-        <Outlet />
+        <PageWrapper>
+          <Outlet />
+        </PageWrapper>
       </section>
 
       <Bottombar />

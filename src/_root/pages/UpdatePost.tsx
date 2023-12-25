@@ -7,7 +7,7 @@ import { useParams } from "react-router-dom";
 const UpdatePost = () => {
   const { id } = useParams();
   const { data: post, isPending } = useGetPostById(id || "");
-  if (isPending) return <Loader />;
+  if (isPending) return <Loader size={50} />;
 
   return (
     <div className="flex flex-1">
@@ -24,7 +24,7 @@ const UpdatePost = () => {
           />
           <h2 className="h3-bol md:h2-bold w-full">ویرایش پست</h2>
         </div>
-        <PostForm action='update' post={post} />
+        <PostForm action="update" post={post} />
       </div>
     </div>
   );
