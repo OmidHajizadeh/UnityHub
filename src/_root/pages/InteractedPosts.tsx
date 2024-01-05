@@ -1,7 +1,8 @@
+import { Helmet } from "react-helmet";
+
 import GridPostList from "@/components/shared/GridPostList";
 import SmallPostsFallback from "@/components/suspense-fallbacks/SmallPostsFallback";
-import { useGetCurrentUser } from "@/hooks/react-query/queriesAndMutaions";
-import { Helmet } from "react-helmet";
+import { useGetCurrentUser } from "@/hooks/react-query/queries";
 
 type InteractedPostsProps = {
   type: "liked" | "saved";
@@ -40,7 +41,7 @@ const InteractedPosts = ({
         <title>{title}</title>
       </Helmet>
       {currentUser.liked.length === 0 && (
-        <p className="text-light-4">{noResultText}</p>
+        <p className="text-light-4 text-center w-full mt-10">{noResultText}</p>
       )}
       <GridPostList posts={posts} showStats={false} />
     </>

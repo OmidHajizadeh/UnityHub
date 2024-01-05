@@ -3,6 +3,7 @@ import { ID, Query } from "appwrite";
 import { NewPost, UpdatePost } from "@/types";
 import { appwriteConfig, databases } from "../lib/AppWirte/config";
 import { deleteFile, getFilePreview, uploadFile } from "./fileAPI";
+import { getCurrentUser } from "./userAPI";
 
 export async function createPost(post: NewPost) {
   try {
@@ -123,27 +124,6 @@ export async function deletePost(postId: string, imageId: string) {
   }
 }
 
-export async function getRecentPosts({ pageParam }: { pageParam: number }) {
-  const queries: string[] = [Query.orderDesc("$createdAt"), Query.limit(5)];
-  if (pageParam) {
-    queries.push(Query.cursorAfter(pageParam.toString()));
-  }
-
-  try {
-    const posts = await databases.listDocuments(
-      appwriteConfig.databaseId,
-      appwriteConfig.postCollectionId,
-      queries
-    );
-
-    if (!posts) throw Error;
-
-    return posts;
-  } catch (error) {
-    console.log(error);
-  }
-}
-
 export async function likePost(postId: string, likesArray: string[]) {
   try {
     const updatedPost = await databases.updateDocument(
@@ -180,24 +160,6 @@ export async function savePost(postId: string, savesArray: string[]) {
   }
 }
 
-// export async function getSavedPosts(userId: string) {
-//   try {
-//     const updatedPost = await databases.(
-//       appwriteConfig.databaseId,
-//       appwriteConfig.postCollectionId,
-//       postId,
-//       {
-//         saves: savesArray,
-//       }
-//     );
-
-//     if (!updatedPost) throw Error;
-//     return updatedPost;
-//   } catch (error) {
-//     console.log(error);
-//   }
-// }
-
 export async function getPostById(postId: string) {
   try {
     const post = await databases.getDocument(
@@ -214,8 +176,8 @@ export async function getPostById(postId: string) {
   }
 }
 
-export async function getInfinitePosts({ pageParam }: { pageParam: number }) {
-  const queries: string[] = [Query.orderDesc("$createdAt"), Query.limit(10)];
+export async function getExplorerPosts({ pageParam }: { pageParam: number }) {
+  const queries: string[] = [Query.orderDesc("$createdAt"), Query.limit(6)];
   if (pageParam) {
     queries.push(Query.cursorAfter(pageParam.toString()));
   }
@@ -226,6 +188,38 @@ export async function getInfinitePosts({ pageParam }: { pageParam: number }) {
       appwriteConfig.postCollectionId,
       queries
     );
+
+    if (!posts) throw Error;
+
+    return posts;
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+export async function getHomeFeed({ pageParam }: { pageParam: number }) {
+  const user = await getCurrentUser();
+  if (!user) throw Error;
+
+  const usersId = [user.$id, ...user.followings];
+
+  const queries: string[] = [
+    Query.orderDesc("$createdAt"),
+    Query.limit(6),
+    Query.equal("creator", usersId),
+  ];
+
+  if (pageParam) {
+    queries.push(Query.cursorAfter(pageParam.toString()));
+  }
+
+  try {
+    const posts = await databases.listDocuments(
+      appwriteConfig.databaseId,
+      appwriteConfig.postCollectionId,
+      queries
+    );
+
     if (!posts) throw Error;
 
     return posts;

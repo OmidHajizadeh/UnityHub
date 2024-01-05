@@ -7,12 +7,12 @@ import PostDetailsFallback from "@/components/suspense-fallbacks/PostDetailsFall
 import { Button } from "@/components/ui/button";
 import { useUserContext } from "@/context/AuthContext";
 import {
-  useDeletePost,
   useGetPostById,
-} from "@/hooks/react-query/queriesAndMutaions";
+} from "@/hooks/react-query/queries";
 import { multiFormatDateString } from "@/lib/utils";
 import { useToast } from "@/components/ui/use-toast";
 import Spinner from "@/components/loaders/Spinner";
+import { useDeletePost } from "@/hooks/react-query/mutations";
 
 const Alert = lazy(() => import("@/components/shared/Alert"));
 

@@ -6,9 +6,9 @@ import { useInView } from "react-intersection-observer";
 import PostCard from "@/components/shared/PostCard";
 import UserCard from "@/components/shared/UserCard";
 import {
-  useGetRecentPosts,
+  useGetHomeFeed,
   useGetUsers,
-} from "@/hooks/react-query/queriesAndMutaions";
+} from "@/hooks/react-query/queries";
 import MediumPostSkeleton from "@/components/loaders/MediumPostSkeleton";
 import UsersCardSkeleton from "@/components/loaders/UsersCardSkeleton";
 
@@ -19,7 +19,7 @@ const Home = () => {
     isError: isErrorPosts,
     fetchNextPage,
     hasNextPage,
-  } = useGetRecentPosts();
+  } = useGetHomeFeed();
 
   const { ref, inView } = useInView();
   const {
@@ -33,10 +33,6 @@ const Home = () => {
       fetchNextPage();
     }
   }, [inView]);
-
-  // const shouldShowPosts = posts.pages.every(
-  //   (item) => item?.documents.length === 0
-  // );
 
   if (isErrorPosts || isErrorCreators) {
     return (
@@ -88,6 +84,17 @@ const Home = () => {
                     );
                   });
                 })}
+                {posts?.pages[0].total === 0 && (
+                  <motion.li
+                    layout
+                    exit={{ scale: 0.8, opacity: 0 }}
+                    animate={{ scale: 1, opacity: 1 }}
+                    transition={{ duration: 0.2 }}
+                    className="text-light-4 text-center w-full mt-10"
+                  >
+                    پستی برای نمایش پیدا نشد
+                  </motion.li>
+                )}
               </AnimatePresence>
             </ul>
           )}

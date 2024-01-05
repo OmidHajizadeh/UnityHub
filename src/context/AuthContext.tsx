@@ -1,7 +1,7 @@
 import { createContext, useContext, useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 import { ContextType, User } from "@/types";
-import { useNavigate } from "react-router-dom";
 import { getCurrentUser } from "@/api/userAPI";
 
 export const INITIAL_USER: User & {
@@ -37,7 +37,7 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       setIsLoading(true);
 
       const currentAccount = await getCurrentUser();
-      
+
       if (currentAccount) {
         setUser({
           id: currentAccount.$id,

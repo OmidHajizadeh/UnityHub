@@ -1,10 +1,10 @@
 import { Suspense, lazy, useEffect } from "react";
 import { Link, NavLink, useNavigate } from "react-router-dom";
 
-import { useSignOutAccount } from "@/hooks/react-query/queriesAndMutaions";
 import { useUserContext } from "@/context/AuthContext";
 import { Button } from "../ui/button";
 import Spinner from "../loaders/Spinner";
+import { useSignOutAccount } from "@/hooks/react-query/mutations";
 
 const Alert = lazy(() => import("@/components/shared/Alert"));
 

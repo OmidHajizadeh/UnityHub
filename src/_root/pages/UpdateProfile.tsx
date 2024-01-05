@@ -18,12 +18,12 @@ import { useUserContext } from "@/context/AuthContext";
 import { ProfileValidation } from "@/lib/validation";
 import {
   useGetUserById,
-  useUpdateUser,
-} from "@/hooks/react-query/queriesAndMutaions";
+} from "@/hooks/react-query/queries";
 import Loader from "@/components/loaders/Spinner";
 import ProfileUploader from "@/components/shared/ProfileUploader";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { useUpdateUser } from "@/hooks/react-query/mutations";
 
 const UpdateProfile = () => {
   const { toast } = useToast();

@@ -10,7 +10,7 @@ import { Helmet } from "react-helmet";
 import { Suspense, lazy } from "react";
 
 import { useUserContext } from "@/context/AuthContext";
-import { useGetUserById } from "@/hooks/react-query/queriesAndMutaions";
+import { useGetUserById } from "@/hooks/react-query/queries";
 import GridPostList from "@/components/shared/GridPostList";
 import SmallPostsFallback from "@/components/suspense-fallbacks/SmallPostsFallback";
 import ProfileFallback from "@/components/suspense-fallbacks/ProfileFallback";
@@ -163,7 +163,17 @@ const Profile = () => {
       <Routes>
         <Route
           index
-          element={<GridPostList posts={thisUser.posts} showUser={false} />}
+          element={
+            thisUser.posts.length === 0 ? (
+              <p
+              className="text-light-4 text-center w-full mt-10"
+              >
+                شما هیچ پستی ندارید
+              </p>
+            ) : (
+              <GridPostList posts={thisUser.posts} showUser={false} />
+            )
+          }
         />
         {thisUser.$id === user.id && (
           <>

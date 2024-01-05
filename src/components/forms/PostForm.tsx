@@ -20,10 +20,7 @@ import { useToast } from "../ui/use-toast";
 import Loader from "../loaders/Spinner";
 import { useUserContext } from "@/context/AuthContext";
 import { postValidationSchema } from "@/lib/validation";
-import {
-  useCreatePost,
-  useUpdatePost,
-} from "@/hooks/react-query/queriesAndMutaions";
+import { useCreatePost, useUpdatePost } from "@/hooks/react-query/mutations";
 
 const PostForm = ({
   post,

@@ -1,8 +1,10 @@
-import PageWrapper from "@/lib/framer-motion/PageWrapper";
 import { Navigate, Outlet } from "react-router-dom";
 
+import PageWrapper from "@/lib/framer-motion/PageWrapper";
+import { useUserContext } from "@/context/AuthContext";
+
 const AuthLayout = () => {
-  const isAuthenticated = false;
+  const { isAuthenticated } = useUserContext();
 
   return (
     <>

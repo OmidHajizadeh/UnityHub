@@ -16,7 +16,7 @@ const AllUsersFallback = () => {
           <h2 className="h3-bold md:h2-bold w-full">همه کاربران</h2>
         </div>
         <section className="user-grid">
-          {Array.from({ length: 9 }).map((_, index) => {
+          {Array.from({ length: 6 }).map((_, index) => {
             return (
               <div key={index} className="flex-1 min-w-[200px] w-full">
                 <GlowingCard

@@ -1,9 +1,11 @@
 import { Link, useNavigate } from "react-router-dom";
-import { useEffect } from "react";
+import { Suspense, lazy, useEffect } from "react";
 
 import { Button } from "../ui/button";
-import { useSignOutAccount } from "@/hooks/react-query/queriesAndMutaions";
 import { useUserContext } from "@/context/AuthContext";
+import { useSignOutAccount } from "@/hooks/react-query/mutations";
+import Spinner from "../loaders/Spinner";
+const Alert = lazy(() => import("@/components/shared/Alert"));
 
 const Topbar = () => {
   const { mutate: signOutHandler, isSuccess } = useSignOutAccount();
@@ -28,6 +30,16 @@ const Topbar = () => {
           />
         </Link>
         <div className="flex gap-4">
+          <Suspense fallback={<Spinner />}>
+            <Alert title="آیا مطمئن هستید ؟" onSubmit={signOutHandler}>
+              <Button variant="ghost" className="shad-button_ghost mt-4">
+                <img src="/assets/icons/logout.svg" alt="logout" />
+                <p className="small-medium lg:base-medium">
+                  خروج از حساب کاربری
+                </p>
+              </Button>
+            </Alert>
+          </Suspense>
           <Button
             variant="ghost"
             className="shad-button_ghost"

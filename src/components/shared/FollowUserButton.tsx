@@ -1,8 +1,8 @@
 import { useState } from "react";
 
-import { useFollowUser } from "@/hooks/react-query/queriesAndMutaions";
 import { Button } from "../ui/button";
 import Spinner from "../loaders/Spinner";
+import { useFollowUser } from "@/hooks/react-query/mutations";
 
 type FollowUserButtonProps = {
   className: string;

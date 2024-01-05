@@ -1,15 +1,15 @@
 import React, { useEffect, useState } from "react";
-import { useInView } from "react-intersection-observer";
 import { Helmet } from "react-helmet";
 import { AnimatePresence } from "framer-motion";
+import { useInView } from "react-intersection-observer";
 
-import SearchResults from "@/components/shared/SearchResults";
+import SearchPostResults from "@/components/shared/SearchPostResults";
 import { Input } from "@/components/ui/input";
 import useDebounce from "@/hooks/use-debounce";
 import {
-  useGetPosts,
+  useGetExplorerPosts,
   useSearchPosts,
-} from "@/hooks/react-query/queriesAndMutaions";
+} from "@/hooks/react-query/queries";
 import ExplorerGridList from "@/components/shared/ExplorerGridList";
 import ExploreFallback from "@/components/suspense-fallbacks/ExploreFallback";
 import SmallPostSkeleton from "@/components/loaders/SmallPostSkeleton";
@@ -21,7 +21,7 @@ const Explore = () => {
   const { data: searchedPosts, isPending: isFetching } =
     useSearchPosts(debouncedSearchValue);
 
-  const { data: posts, fetchNextPage, hasNextPage } = useGetPosts();
+  const { data: posts, fetchNextPage, hasNextPage } = useGetExplorerPosts();
 
   useEffect(() => {
     if (inView && !searchValue) {
@@ -32,9 +32,10 @@ const Explore = () => {
   if (!posts) return <ExploreFallback />;
 
   const shouldShowSearchResults = searchValue !== "";
-  const shouldShowPosts =
-    !shouldShowSearchResults &&
-    posts.pages.every((item) => item?.documents.length === 0);
+  // const shouldShowPosts =
+  //   !shouldShowSearchResults &&
+  //   posts.pages.every((item) => item?.documents.length === 0);
+
   return (
     <div className="explore-container">
       <Helmet>
@@ -68,35 +69,23 @@ const Explore = () => {
         </div>
       </div>
 
-      <div className="flex-between w-full max-w-5xl mt-16 mb-7">
-        <h3 className="body-bold md:h3-bold">همه پست ها</h3>
-        <div className="flex-center gap-3 bg-dark-3 rounded-xl px-4 py-3 cursor-pointer">
-          <p className="small-medium md:base-medium text-light-2">همه</p>
-          <img
-            src="/assets/icons/filter.svg"
-            alt="filter"
-            width={20}
-            height={20}
-          />
-        </div>
-      </div>
-
-      <div className="flex flex-wrap-gap-9 w-full max-w-5xl">
-        {shouldShowSearchResults ? (
-          <SearchResults
-            isFetching={isFetching}
-            searchedPosts={searchedPosts}
-          />
-        ) : shouldShowPosts ? (
-          <p className="text-light-4 mt-10 text-center w-full">
-            پست ها تمام شد
-          </p>
-        ) : (
+      <div className="relative w-full max-w-5xl mt-16 mb-7">
+        <h3 className="body-bold md:h3-bold">
+          {searchValue.trim() !== "" ? "" : "همه پست ها"}
+        </h3>
+        <div className="flex flex-wrap mt-8 gap-9">
           <ul className="grid-container">
             <AnimatePresence mode="popLayout">
-              {posts.pages.map((item, index) => (
-                <ExplorerGridList key={index} posts={item.documents} />
-              ))}
+              {shouldShowSearchResults && (
+                <SearchPostResults
+                  isFetching={isFetching}
+                  searchedPosts={searchedPosts}
+                />
+              )}
+              {!searchedPosts &&
+                posts.pages.map((item, index) => (
+                  <ExplorerGridList key={index} posts={item.documents} />
+                ))}
               {hasNextPage &&
                 !searchValue &&
                 Array.from({ length: 3 }).map((_, index) => (
@@ -106,7 +95,7 @@ const Explore = () => {
                 ))}
             </AnimatePresence>
           </ul>
-        )}
+        </div>
       </div>
       <section ref={ref} className="mt-7" />
     </div>

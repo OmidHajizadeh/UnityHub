@@ -13,7 +13,7 @@ const GlowingCard = ({
 }: GlowingCardProps) => {
   const card = useRef<HTMLDivElement>(null!);
 
-  let classes = `before:w-[${size}px] before:h-[${size}px]`;
+  let classes: string;
 
   switch (size) {
     case "extra-large":

@@ -4,7 +4,7 @@ type SpinnerProps = {
 
 const Spinner = ({ size = 24 }: SpinnerProps) => {
   return (
-    <div className="flex-center w-full ">
+    <div className="flex-center w-full">
       <img
         src="/assets/icons/loader.svg"
         alt="loader"

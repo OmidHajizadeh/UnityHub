@@ -35,13 +35,13 @@ function App() {
         <title>یونیتی هاب</title>
         <meta
           name="description"
-          content="بر پایهٔ Circlify، ارتباطات و گفتگوهایتان را تقویت کنید؛ این پلتفرم پویا، تعاملات بی‌درنگ، جوامع پرانرژی، و فرصت‌های شبکه‌سازی بی‌حد را برای هر کاربر فراهم می‌کند"
+          content="بر پایهٔ UnityHub، ارتباطات و گفتگوهایتان را تقویت کنید؛ این پلتفرم پویا، تعاملات بی‌درنگ، جوامع پرانرژی، و فرصت‌های شبکه‌سازی بی‌حد را برای هر کاربر فراهم می‌کند"
         />
         <meta
           name="keywords"
-          content="Circlify, سیرکلیفای, social media, react app, vite, Social networking, Online community, Social platform, Connectivity, Interaction, User engagement, Sharing experiences, Networking opportunities, Digital connections, Community building, Online conversations, Collaborative spaces, Virtual communities, User-generated content, User-generated content"
+          content="UnityHub, یونیتی هاب, social media, react app, vite, Social networking, Online community, Social platform, Connectivity, Interaction, User engagement, Sharing experiences, Networking opportunities, Digital connections, Community building, Online conversations, Collaborative spaces, Virtual communities, User-generated content, User-generated content"
         />
-        <meta name="subject" content="شبکه اجتماعی سیرکلیفای" />
+        <meta name="subject" content="شبکه اجتماعی یونیتی هاب" />
         <meta name="copyright" content="Omid Hajizadeh" />
         <meta name="language" content="fa" />
         <meta name="theme-color" content="#877EFF" />

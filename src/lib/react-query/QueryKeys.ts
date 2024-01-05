@@ -8,14 +8,15 @@ export enum QUERY_KEYS {
   GET_USER_BY_ID = "getUserById",
 
   // POST KEYS
-  GET_POSTS = "getPosts",
-  GET_INFINITE_POSTS_HOME = "getInfinitePostsHome",
-  GET_INFINITE_POSTS = "getInfinitePosts",
-  GET_INFINITE_RECENT_POSTS = "getInfiniteRecentPosts",
+  // GET_POSTS = "getPosts",
+  // GET_INFINITE_POSTS_HOME = "getInfinitePostsHome",
+  GET_EXPLORER_POSTS = "getExplorerPosts",
+  GET_HOME_FEED = "getHomeFeed",
   GET_POST_BY_ID = "getPostById",
   GET_USER_POSTS = "getUserPosts",
   GET_FILE_PREVIEW = "getFilePreview",
 
   //  SEARCH KEYS
   SEARCH_POSTS = "getSearchPosts",
+  SEARCH_USER = "getSearchUser",
 }

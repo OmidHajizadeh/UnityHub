@@ -1,32 +1,21 @@
-import {
-  useInfiniteQuery,
-  useMutation,
-  useQuery,
-  useQueryClient,
-} from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+
 import {
   createPost,
   deletePost,
-  getInfinitePosts,
-  getPostById,
-  getRecentPosts,
   likePost,
   savePost,
-  searchPosts,
   updatePost,
-} from "../../api/postsAPI";
-import { NewPost, NewUser, UpdatePost, UpdateUser } from "@/types";
-import { QUERY_KEYS } from "../../lib/react-query/QueryKeys";
+} from "@/api/postsAPI";
 import {
   createUserAccount,
   followUser,
-  getCurrentUser,
-  getUserById,
-  getUsers,
   signInAccount,
   signOutAccount,
   updateUser,
 } from "@/api/userAPI";
+import { QUERY_KEYS } from "@/lib/react-query/QueryKeys";
+import { NewPost, NewUser, UpdatePost, UpdateUser } from "@/types";
 
 export function useCreateUserAccount() {
   return useMutation({
@@ -53,23 +42,11 @@ export function useCreatePost() {
     mutationFn: (post: NewPost) => createPost(post),
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: [QUERY_KEYS.GET_INFINITE_RECENT_POSTS],
+        queryKey: [QUERY_KEYS.GET_HOME_FEED],
       });
-    },
-  });
-}
-
-export function useGetRecentPosts() {
-  return useInfiniteQuery({
-    queryKey: [QUERY_KEYS.GET_INFINITE_RECENT_POSTS],
-    queryFn: getRecentPosts,
-    getNextPageParam: (lastPage) => {
-      if (lastPage && lastPage.documents.length === 0) {
-        return null;
-      } else {
-        const lastId = lastPage?.documents.at(-1).$id;
-        return lastId;
-      }
+      queryClient.invalidateQueries({
+        queryKey: [QUERY_KEYS.GET_EXPLORER_POSTS],
+      });
     },
   });
 }
@@ -89,10 +66,10 @@ export function useLikePost() {
         queryKey: [QUERY_KEYS.GET_POST_BY_ID, data?.$id],
       });
       queryClient.invalidateQueries({
-        queryKey: [QUERY_KEYS.GET_INFINITE_RECENT_POSTS],
+        queryKey: [QUERY_KEYS.GET_HOME_FEED],
       });
       queryClient.invalidateQueries({
-        queryKey: [QUERY_KEYS.GET_POSTS],
+        queryKey: [QUERY_KEYS.GET_EXPLORER_POSTS],
       });
       queryClient.invalidateQueries({
         queryKey: [QUERY_KEYS.GET_CURRENT_USER],
@@ -111,32 +88,20 @@ export function useSavePost() {
       postId: string;
       savesArray: string[];
     }) => savePost(postId, savesArray),
-    onSuccess: () => {
+    onSuccess: (data) => {
       queryClient.invalidateQueries({
-        queryKey: [QUERY_KEYS.GET_INFINITE_RECENT_POSTS],
+        queryKey: [QUERY_KEYS.GET_POST_BY_ID, data?.$id],
       });
       queryClient.invalidateQueries({
-        queryKey: [QUERY_KEYS.GET_POSTS],
+        queryKey: [QUERY_KEYS.GET_HOME_FEED],
+      });
+      queryClient.invalidateQueries({
+        queryKey: [QUERY_KEYS.GET_EXPLORER_POSTS],
       });
       queryClient.invalidateQueries({
         queryKey: [QUERY_KEYS.GET_CURRENT_USER],
       });
     },
-  });
-}
-
-export function useGetCurrentUser() {
-  return useQuery({
-    queryKey: [QUERY_KEYS.GET_CURRENT_USER],
-    queryFn: getCurrentUser,
-  });
-}
-
-export function useGetPostById(postId: string) {
-  return useQuery({
-    queryKey: [QUERY_KEYS.GET_POST_BY_ID, postId],
-    queryFn: () => getPostById(postId),
-    enabled: !!postId,
   });
 }
 
@@ -147,6 +112,12 @@ export function useUpdatePost() {
     onSuccess: (data) => {
       queryClient.invalidateQueries({
         queryKey: [QUERY_KEYS.GET_POST_BY_ID, data?.$id],
+      });
+      queryClient.invalidateQueries({
+        queryKey: [QUERY_KEYS.GET_HOME_FEED],
+      });
+      queryClient.invalidateQueries({
+        queryKey: [QUERY_KEYS.GET_EXPLORER_POSTS],
       });
     },
   });
@@ -159,47 +130,12 @@ export function useDeletePost() {
       deletePost(postId, imageId),
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: [QUERY_KEYS.GET_INFINITE_RECENT_POSTS],
+        queryKey: [QUERY_KEYS.GET_HOME_FEED],
+      });
+      queryClient.invalidateQueries({
+        queryKey: [QUERY_KEYS.GET_EXPLORER_POSTS],
       });
     },
-  });
-}
-
-export function useGetPosts() {
-  return useInfiniteQuery({
-    queryKey: [QUERY_KEYS.GET_INFINITE_POSTS],
-    queryFn: getInfinitePosts,
-    getNextPageParam: (lastPage) => {
-      if (lastPage && lastPage.documents.length === 0) {
-        return null;
-      } else {
-        const lastId = lastPage?.documents.at(-1).$id;
-        return lastId;
-      }
-    },
-  });
-}
-
-export function useSearchPosts(searchTerm: string) {
-  return useQuery({
-    queryKey: [QUERY_KEYS.SEARCH_POSTS, searchTerm],
-    queryFn: () => searchPosts({ searchTerm }),
-    enabled: !!searchTerm,
-  });
-}
-
-export function useGetUsers(limit?: number) {
-  return useQuery({
-    queryKey: [QUERY_KEYS.GET_USERS],
-    queryFn: () => getUsers(limit),
-  });
-}
-
-export function useGetUserById(userId: string) {
-  return useQuery({
-    queryKey: [QUERY_KEYS.GET_USER_BY_ID, userId],
-    queryFn: () => getUserById(userId),
-    enabled: !!userId,
   });
 }
 
@@ -228,10 +164,16 @@ export function useFollowUser(targetUserId: string) {
         queryKey: [QUERY_KEYS.GET_CURRENT_USER],
       });
       queryClient.invalidateQueries({
+        queryKey: [QUERY_KEYS.GET_HOME_FEED],
+      });
+      queryClient.invalidateQueries({
         queryKey: [QUERY_KEYS.GET_USER_BY_ID, targetUserId],
       });
       queryClient.invalidateQueries({
         queryKey: [QUERY_KEYS.GET_USERS],
+      });
+      queryClient.invalidateQueries({
+        queryKey: [QUERY_KEYS.SEARCH_USER, targetUserId],
       });
     },
   });

@@ -204,7 +204,8 @@ export async function updateUser(user: UpdateUser) {
 export async function followUser(action: string, targetUserId: string) {
   try {
     const currentUser = await getCurrentUser();
-    if (!currentUser) throw Error;
+
+    if (!currentUser || currentUser.$id === targetUserId) throw Error;
 
     let currentUserFollowings = currentUser.followings;
     if (action === "follow") {
@@ -246,6 +247,21 @@ export async function followUser(action: string, targetUserId: string) {
     );
 
     await Promise.all([updateCurrentUser, updateTargetUser]);
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+export async function searchUser({ searchTerm }: { searchTerm: string }) {
+  try {
+    const posts = await databases.listDocuments(
+      appwriteConfig.databaseId,
+      appwriteConfig.userCollectionId,
+      [Query.search("username", searchTerm)]
+    );
+    if (!posts) throw Error;
+
+    return posts;
   } catch (error) {
     console.log(error);
   }

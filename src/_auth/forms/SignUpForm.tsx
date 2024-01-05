@@ -17,11 +17,11 @@ import {
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/components/ui/use-toast";
 import Loader from "@/components/loaders/Spinner";
+import { useUserContext } from "@/context/AuthContext";
 import {
   useCreateUserAccount,
   useSignInAccount,
-} from "@/hooks/react-query/queriesAndMutaions";
-import { useUserContext } from "@/context/AuthContext";
+} from "@/hooks/react-query/mutations";
 
 const SignUpForm = () => {
   const { toast } = useToast();

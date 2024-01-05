@@ -17,4 +17,5 @@ const UsersCardSkeleton = () => {
   );
 };
 
+
 export default UsersCardSkeleton;

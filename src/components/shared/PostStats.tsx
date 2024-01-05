@@ -1,11 +1,9 @@
 import { Models } from "appwrite";
-import React, { useState } from "react";
-import {
-  useLikePost,
-  useSavePost,
-} from "@/hooks/react-query/queriesAndMutaions";
+import { useState } from "react";
+
 import { checkIsLiked, checkIsSaved } from "@/lib/utils";
 import Loader from "../loaders/Spinner";
+import { useLikePost, useSavePost } from "@/hooks/react-query/mutations";
 
 type PostStatsProps = {
   post?: Models.Document;
