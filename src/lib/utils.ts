@@ -60,3 +60,10 @@ export const checkIsLiked = (likeList: string[], userId: string) => {
 export const checkIsSaved = (saveList: string[], userId: string) => {
   return saveList.includes(userId);
 };
+
+export class UnityHubError extends Error {
+  constructor(public title: string, public message: string) {
+    super(message);
+    this.name = "UnityHubError";
+  }
+}

@@ -16,14 +16,14 @@ import { useToast } from "@/components/ui/use-toast";
 
 import { useUserContext } from "@/context/AuthContext";
 import { ProfileValidation } from "@/lib/validation";
-import {
-  useGetUserById,
-} from "@/hooks/react-query/queries";
-import Loader from "@/components/loaders/Spinner";
+import { useGetUserById } from "@/hooks/react-query/queries";
+import Spinner from "@/components/loaders/Spinner";
 import ProfileUploader from "@/components/shared/ProfileUploader";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useUpdateUser } from "@/hooks/react-query/mutations";
+import { UnityHubError } from "@/lib/utils";
+import { AppwriteException } from "appwrite";
 
 const UpdateProfile = () => {
   const { toast } = useToast();
@@ -47,33 +47,51 @@ const UpdateProfile = () => {
   if (!currentUser)
     return (
       <div className="flex-center w-full h-full">
-        <Loader />
+        <Spinner size={50} />
       </div>
     );
 
-  const handleUpdate = async (value: z.infer<typeof ProfileValidation>) => {
-    const updatedUser = await updateUser({
-      userId: currentUser.$id,
-      name: value.name,
-      file: value.file,
-      imageUrl: currentUser.imageUrl,
-      imageId: currentUser.imageId,
-    });
-
-    if (!updatedUser) {
-      toast({
-        title: "ویرایش با خطا مواجه شد",
-        description: "لطفا مجدداً امتحان کنید.",
-        variant: "destructive",
+  const updateUserHandler = async (
+    value: z.infer<typeof ProfileValidation>
+  ) => {
+    try {
+      const updatedUser = await updateUser({
+        userId: currentUser.$id,
+        name: value.name,
+        file: value.file,
+        imageUrl: currentUser.imageUrl,
+        imageId: currentUser.imageId,
       });
-    }
 
-    setUser({
-      ...user,
-      name: updatedUser?.name,
-      imageUrl: updatedUser?.imageUrl,
-    });
-    return navigate(`/profile/${id}`);
+      setUser({
+        ...user,
+        name: updatedUser?.name,
+        imageUrl: updatedUser?.imageUrl,
+      });
+
+      navigate(`/profile/${id}`);
+    } catch (error) {
+      if (error instanceof UnityHubError) {
+        return toast({
+          title: error.title,
+          description: error.message,
+          variant: "destructive",
+        });
+      } else if (error instanceof AppwriteException) {
+        return toast({
+          title: error.name,
+          description: error.message,
+          variant: "destructive",
+        });
+      } else {
+        console.log(error);
+        return toast({
+          title: "خطا در ویرایش اطلاعات",
+          description: "لطفا دوباره امتحان کنید.",
+          variant: "destructive",
+        });
+      }
+    }
   };
 
   return (
@@ -95,7 +113,7 @@ const UpdateProfile = () => {
 
         <Form {...form}>
           <form
-            onSubmit={form.handleSubmit(handleUpdate)}
+            onSubmit={form.handleSubmit(updateUserHandler)}
             className="flex flex-col gap-7 w-full mt-4 max-w-5xl"
           >
             <FormField
@@ -179,7 +197,7 @@ const UpdateProfile = () => {
                 className="shad-button_primary whitespace-nowrap"
                 disabled={isLoadingUpdate}
               >
-                {isLoadingUpdate && <Loader />}
+                {isLoadingUpdate && <Spinner />}
                 ویرایش پروفایل
               </Button>
             </div>

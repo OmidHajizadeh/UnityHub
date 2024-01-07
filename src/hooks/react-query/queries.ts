@@ -18,7 +18,7 @@ export function useGetHomeFeed() {
   return useInfiniteQuery({
     queryKey: [QUERY_KEYS.GET_HOME_FEED],
     queryFn: getHomeFeed,
-    getNextPageParam: (lastPage) => {
+    getNextPageParam: (lastPage: any) => {
       if (lastPage && lastPage.documents.length === 0) {
         return null;
       } else {
@@ -26,6 +26,7 @@ export function useGetHomeFeed() {
         return lastId;
       }
     },
+    initialPageParam: null,
   });
 }
 
@@ -33,7 +34,7 @@ export function useGetExplorerPosts() {
   return useInfiniteQuery({
     queryKey: [QUERY_KEYS.GET_EXPLORER_POSTS],
     queryFn: getExplorerPosts,
-    getNextPageParam: (lastPage) => {
+    getNextPageParam: (lastPage: any) => {
       if (lastPage && lastPage.documents.length === 0) {
         return null;
       } else {
@@ -41,6 +42,7 @@ export function useGetExplorerPosts() {
         return lastId;
       }
     },
+    initialPageParam: null,
   });
 }
 

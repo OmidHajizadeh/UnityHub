@@ -17,6 +17,21 @@ export type UpdateUser = {
   file: File[];
 };
 
+export type User = {
+  id: string;
+  name: string;
+  email: string;
+  username: string;
+  imageUrl: string;
+};
+
+export type NewUser = {
+  name: string;
+  email: string;
+  username: string;
+  password: string;
+};
+
 export type NewPost = {
   userId: string;
   caption: string;
@@ -33,19 +48,4 @@ export type UpdatePost = {
   files: File[];
   location?: string;
   tags?: string;
-};
-
-export type User = {
-  id: string;
-  name: string;
-  email: string;
-  username: string;
-  imageUrl: string;
-};
-
-export type NewUser = {
-  name: string;
-  email: string;
-  username: string;
-  password: string;
 };

@@ -1,4 +1,5 @@
-import { ID, Query } from "appwrite";
+import { Query } from "appwrite";
+import { v4 as uuidv4 } from "uuid";
 
 import {
   account,
@@ -8,102 +9,132 @@ import {
 } from "@/lib/AppWirte/config";
 import { NewUser, UpdateUser } from "@/types";
 import { deleteFile, getFilePreview, uploadFile } from "./fileAPI";
+import { UnityHubError } from "@/lib/utils";
 
 export async function createUserAccount(user: NewUser) {
-  try {
-    const newAccount = await account.create(
-      ID.unique(),
-      user.email,
-      user.password,
-      user.name
+  // Getting all users
+  const users = await databases.listDocuments(
+    appwriteConfig.databaseId,
+    appwriteConfig.userCollectionId
+  );
+
+  if (!users) throw new UnityHubError("خطای سرور", "لطفا دوباره امتحان کنید.");
+
+  // Checking if username exists
+  const usernameExists = users.documents.some((prevUser) => {
+    return user.username === prevUser.username;
+  });
+
+  if (usernameExists)
+    throw new UnityHubError(
+      "خطای ثبت نام",
+      "نام کاربری وارد شده ثبلا ثبت شده است."
     );
 
-    if (!newAccount) {
-      throw Error;
-    }
+  // checking id email exists
+  const emailExists = users.documents.some((prevUser) => {
+    return user.email === prevUser.email;
+  });
 
-    const avatarUrl = avatars.getInitials(user.name);
-
-    const newUser = await saveUserToDB({
-      accountId: newAccount.$id,
-      name: newAccount.name,
-      email: newAccount.email,
-      username: user.username,
-      imageUrl: avatarUrl,
-    });
-
-    return newUser;
-  } catch (error) {
-    console.log(error);
-    return error;
-  }
-}
-
-export async function saveUserToDB(user: {
-  accountId: string;
-  email: string;
-  name: string;
-  imageUrl: URL;
-  username?: string;
-}) {
-  try {
-    const newUser = await databases.createDocument(
-      appwriteConfig.databaseId,
-      appwriteConfig.userCollectionId,
-      ID.unique(),
-      user
+  if (emailExists)
+    throw new UnityHubError(
+      "خطای ثبت نام",
+      "ایمیل وارد شده قبلاً ثبت شده است."
     );
-    return newUser;
-  } catch (error) {
-    console.log(error);
-    return error;
-  }
+
+  // Creating a user to Appwrite Auth service
+  const uniqueId = uuidv4();
+  const newAccount = await account.create(
+    uniqueId,
+    user.email,
+    user.password,
+    user.name
+  );
+
+  if (!newAccount)
+    throw new UnityHubError("خطای سرور", "لطفا دوباره امتحان کنید.");
+
+  // Setting intial avatar for user
+  const avatarUrl = avatars.getInitials(user.name);
+
+  // Adding user to our database
+  const newUserInfo = {
+    accountId: newAccount.$id,
+    name: newAccount.name,
+    email: newAccount.email,
+    username: user.username,
+    imageUrl: avatarUrl,
+  };
+
+  const newUser = await databases.createDocument(
+    appwriteConfig.databaseId,
+    appwriteConfig.userCollectionId,
+    newUserInfo.accountId,
+    newUserInfo
+  );
+
+  if (!newUser)
+    throw new UnityHubError("خطای سرور", "لطفا دوباره امتحان کنید.");
+
+  return newUser;
 }
 
-export async function signInAccount(user: { email: string; password: string }) {
-  try {
-    const session = await account.createEmailSession(user.email, user.password);
-    return session;
-  } catch (error) {
-    console.log(error);
-    return error;
-  }
+export async function signInAccount(email: string, password: string) {
+  const session = await account.createEmailSession(email, password);
+
+  if (!session)
+    throw new UnityHubError(
+      "خطای ورود به حساب کاربری",
+      "لطفاً اطلاعات وارد شده را چک و دوباره امتحان کنید."
+    );
+  return session;
 }
 
 export async function signOutAccount() {
-  try {
-    const session = await account.deleteSession("current");
-    return session;
-  } catch (error) {
-    console.log(error);
-  }
+  const session = await account.deleteSession("current");
+
+  if (!session)
+    throw new UnityHubError(
+      "خطای خروج از حساب کاربری",
+      "لطفاً دوباره امتحان کنید."
+    );
+
+  window.location.href = "/sign-in";
+  return session;
 }
 
 export async function getCurrentUser() {
-  try {
-    const currentAccount = await account.get();
-
-    if (!currentAccount) throw Error;
-
-    const currentUser = await databases.listDocuments(
-      appwriteConfig.databaseId,
-      appwriteConfig.userCollectionId,
-      [Query.equal("accountId", currentAccount.$id)]
+  const currentAccount = await account.get();
+  
+  if (!currentAccount)
+    throw new UnityHubError(
+      "خطا در دریافت اطلاعات کاربر",
+      "لطفاً دوباره امتحان کنید"
     );
 
-    if (!currentUser) throw Error;
+  const currentUser = await databases.listDocuments(
+    appwriteConfig.databaseId,
+    appwriteConfig.userCollectionId,
+    [Query.equal("accountId", currentAccount.$id)]
+  );
+    
+  if (!currentUser)
+    throw new UnityHubError(
+      "خطا در دریافت اطلاعات کاربر",
+      "لطفاً دوباره امتحان کنید"
+    );
 
-    return currentUser.documents[0];
-  } catch (error) {
-    console.log(error);
-    return null;
-  }
+  return currentUser.documents[0];
 }
 
 export async function getUsers(limit?: number) {
   const currentUser = await getCurrentUser();
 
-  if (!currentUser) throw Error;
+  if (!currentUser)
+    throw new UnityHubError(
+      "خطا در دریافت اطلاعات کاربر",
+      "لطفاً دوباره امتحان کنید"
+    );
 
   const queries: string[] = [
     Query.orderDesc("$createdAt"),
@@ -114,155 +145,156 @@ export async function getUsers(limit?: number) {
     queries.push(Query.limit(limit));
   }
 
-  try {
-    const users = await databases.listDocuments(
-      appwriteConfig.databaseId,
-      appwriteConfig.userCollectionId,
-      queries
+  const users = await databases.listDocuments(
+    appwriteConfig.databaseId,
+    appwriteConfig.userCollectionId,
+    queries
+  );
+
+  if (!users)
+    throw new UnityHubError(
+      "خطا در دریافت اطلاعات کاربران",
+      "لطفاً دوباره امتحان کنید"
     );
 
-    if (!users) throw Error;
-
-    return users;
-  } catch (error) {
-    console.log(error);
-  }
+  return users;
 }
 
 export async function getUserById(userId: string) {
-  try {
-    const user = await databases.getDocument(
-      appwriteConfig.databaseId,
-      appwriteConfig.userCollectionId,
-      userId
+  const user = await databases.getDocument(
+    appwriteConfig.databaseId,
+    appwriteConfig.userCollectionId,
+    userId
+  );
+
+  if (!user)
+    throw new UnityHubError(
+      "خطا در دریافت اطلاعات کاربر",
+      "لطفاً دوباره امتحان کنید"
     );
 
-    if (!user) throw Error;
-
-    return user;
-  } catch (error) {
-    console.log(error);
-  }
+  return user;
 }
 
 export async function updateUser(user: UpdateUser) {
   const hasFileToUpdate = user.file.length > 0;
-  try {
-    let image = {
-      imageUrl: user.imageUrl,
-      imageId: user.imageId,
-    };
 
-    if (hasFileToUpdate) {
-      // Upload new file to appwrite storage
-      const uploadedFile = await uploadFile(user.file[0]);
-      if (!uploadedFile) throw Error;
+  let image = {
+    imageUrl: user.imageUrl,
+    imageId: user.imageId,
+  };
 
-      // Get new file url
-      const fileUrl = getFilePreview(uploadedFile.$id);
-      if (!fileUrl) {
-        await deleteFile(uploadedFile.$id);
-        throw Error;
-      }
+  // Upload new file to Appwrite storage if there is any
+  if (hasFileToUpdate) {
+    const uploadedFile = await uploadFile(user.file[0]);
 
-      image = { ...image, imageUrl: fileUrl, imageId: uploadedFile.$id };
+    // Get new file url for preview in update profile page
+    const fileUrl = getFilePreview(uploadedFile.$id);
+    if (!fileUrl) {
+      await deleteFile(uploadedFile.$id);
+      throw new UnityHubError("خطای سرور", "لطفاً دوباره امتحان کنید");
     }
 
-    //  Update user
-    const updatedUser = await databases.updateDocument(
-      appwriteConfig.databaseId,
-      appwriteConfig.userCollectionId,
-      user.userId,
-      {
-        name: user.name,
-        imageUrl: image.imageUrl,
-        imageId: image.imageId,
-      }
-    );
-
-    // Failed to update
-    if (!updatedUser) {
-      // Delete new file that has been recently uploaded
-      if (hasFileToUpdate) {
-        await deleteFile(image.imageId);
-      }
-      // If no new file uploaded, just throw error
-      throw Error;
-    }
-
-    // Safely delete old file after successful update
-    if (user.imageId && hasFileToUpdate) {
-      await deleteFile(user.imageId);
-    }
-
-    return updatedUser;
-  } catch (error) {
-    console.log(error);
+    image = { ...image, imageUrl: fileUrl, imageId: uploadedFile.$id };
   }
+
+  //  Update user
+  const updatedUser = await databases.updateDocument(
+    appwriteConfig.databaseId,
+    appwriteConfig.userCollectionId,
+    user.userId,
+    {
+      name: user.name,
+      imageUrl: image.imageUrl,
+      imageId: image.imageId,
+    }
+  );
+
+  // Failed to update
+  if (!updatedUser) {
+    // Delete new file that has been recently uploaded
+    if (hasFileToUpdate) {
+      await deleteFile(image.imageId);
+    }
+    // If no new file uploaded, throw error
+    throw new UnityHubError(
+      "خطا در بارگذاری تصویر",
+      "لطفاً دوباره امتحان کنید"
+    );
+  }
+
+  // Safely delete old file after successful update
+  if (user.imageId && hasFileToUpdate) {
+    await deleteFile(user.imageId);
+  }
+
+  return updatedUser;
 }
 
 export async function followUser(action: string, targetUserId: string) {
-  try {
-    const currentUser = await getCurrentUser();
+  const currentUser = await getCurrentUser();
 
-    if (!currentUser || currentUser.$id === targetUserId) throw Error;
+  if (!currentUser || currentUser.$id === targetUserId) throw Error;
 
-    let currentUserFollowings = currentUser.followings;
-    if (action === "follow") {
-      currentUserFollowings.push(targetUserId);
-    } else {
-      currentUserFollowings = currentUserFollowings.filter(
-        (id: string) => id !== targetUserId
-      );
-    }
-
-    const targetUser = await getUserById(targetUserId);
-    if (!targetUser) throw Error;
-
-    let targetUserFollowers = targetUser.followers;
-    if (action === "follow") {
-      targetUserFollowers.push(currentUser.$id);
-    } else {
-      targetUserFollowers = targetUserFollowers.filter(
-        (id: string) => id !== currentUser.$id
-      );
-    }
-
-    const updateCurrentUser = databases.updateDocument(
-      appwriteConfig.databaseId,
-      appwriteConfig.userCollectionId,
-      currentUser.$id,
-      {
-        followings: currentUserFollowings,
-      }
+  let currentUserFollowings = currentUser.followings;
+  if (action === "follow") {
+    currentUserFollowings.push(targetUserId);
+  } else {
+    currentUserFollowings = currentUserFollowings.filter(
+      (id: string) => id !== targetUserId
     );
-
-    const updateTargetUser = databases.updateDocument(
-      appwriteConfig.databaseId,
-      appwriteConfig.userCollectionId,
-      targetUser.$id,
-      {
-        followers: targetUserFollowers,
-      }
-    );
-
-    await Promise.all([updateCurrentUser, updateTargetUser]);
-  } catch (error) {
-    console.log(error);
   }
+
+  const targetUser = await getUserById(targetUserId);
+  if (!targetUser)
+    throw new UnityHubError(
+      "خطا در دریافت اطلاعات کاربر",
+      "لطفاً دوباره امتحان کنید"
+    );
+
+  let targetUserFollowers = targetUser.followers;
+  if (action === "follow") {
+    targetUserFollowers.push(currentUser.$id);
+  } else {
+    targetUserFollowers = targetUserFollowers.filter(
+      (id: string) => id !== currentUser.$id
+    );
+  }
+
+  const updateCurrentUser = databases.updateDocument(
+    appwriteConfig.databaseId,
+    appwriteConfig.userCollectionId,
+    currentUser.$id,
+    {
+      followings: currentUserFollowings,
+    }
+  );
+
+  const updateTargetUser = databases.updateDocument(
+    appwriteConfig.databaseId,
+    appwriteConfig.userCollectionId,
+    targetUser.$id,
+    {
+      followers: targetUserFollowers,
+    }
+  );
+
+  const resp = await Promise.all([updateCurrentUser, updateTargetUser]);
+
+  if (!resp) throw new UnityHubError("خطای سرور", "لطفاً دوباره امتحان کنید");
 }
 
 export async function searchUser({ searchTerm }: { searchTerm: string }) {
-  try {
-    const posts = await databases.listDocuments(
-      appwriteConfig.databaseId,
-      appwriteConfig.userCollectionId,
-      [Query.search("username", searchTerm)]
+  const posts = await databases.listDocuments(
+    appwriteConfig.databaseId,
+    appwriteConfig.userCollectionId,
+    [Query.search("username", searchTerm)]
+  );
+  if (!posts)
+    throw new UnityHubError(
+      "خطا در پیدا کردن کاربر",
+      "لطفاً دوباره امتحان کنید"
     );
-    if (!posts) throw Error;
 
-    return posts;
-  } catch (error) {
-    console.log(error);
-  }
+  return posts;
 }

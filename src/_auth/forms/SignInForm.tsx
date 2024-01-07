@@ -18,6 +18,8 @@ import Loader from "@/components/loaders/Spinner";
 import { signinValidationSchema } from "@/lib/validation";
 import { useUserContext } from "@/context/AuthContext";
 import { useSignInAccount } from "@/hooks/react-query/mutations";
+import { UnityHubError } from "@/lib/utils";
+import { AppwriteException } from "appwrite";
 
 const SignInForm = () => {
   const { toast } = useToast();
@@ -35,37 +37,51 @@ const SignInForm = () => {
   });
 
   async function onSubmit(values: z.infer<typeof signinValidationSchema>) {
-    const session = await signInAccount({
-      email: values.email,
-      password: values.password,
-    });
-
-    if (!session) {
-      toast({
-        title: "ورود با خطا مواجه شد",
-        description: "لطفا مجدداً امتحان کنید.",
-        variant: "destructive",
+    try {
+      await signInAccount({
+        email: values.email,
+        password: values.password,
       });
-    }
 
-    const isLoggedIn = await checkAuthUser();
-    if (isLoggedIn) {
-      form.reset();
-      navigate("/");
-    } else {
-      toast({
-        title: "ورود با خطا مواجه شد",
-        description: "لطفا مجدداً امتحان کنید.",
-        variant: "destructive",
-      });
+      const isLoggedIn = await checkAuthUser();
+
+      if (isLoggedIn) {
+        form.reset();
+        navigate("/");
+      }
+    } catch (error) {
+      if (error instanceof UnityHubError) {
+        return toast({
+          title: error.title,
+          description: error.message,
+          variant: "destructive",
+        });
+      } else if (error instanceof AppwriteException) {
+        return toast({
+          title: error.name,
+          description: error.message,
+          variant: "destructive",
+        });
+      } else {
+        console.log(error);
+        return toast({
+          title: "ورود با خطا مواجه شد",
+          description: "لطفاً دوباره امتحان کنید.",
+          variant: "destructive",
+        });
+      }
     }
   }
 
   return (
     <Form {...form}>
       <div className="sm:w-420 flex-center flex-col px-4 sm:px-0">
-        <img src="/assets/images/logo.svg" alt="logo" />
-        <h2 className="h3-bold md:h2-bold font-bold pt-5 sm-pt-12">
+        <img
+          src="/assets/images/icon.svg"
+          alt="logo"
+          className="max-w-[5rem]"
+        />
+        <h2 className="h3-bold mt-3 md:h2-bold font-bold pt-5 sm-pt-12">
           ورود به حساب کاربری
         </h2>
         <p className="text-light-3 small-medium md:base-regular">

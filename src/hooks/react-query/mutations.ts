@@ -1,4 +1,5 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { toast } from "sonner";
 
 import {
   createPost,
@@ -26,7 +27,7 @@ export function useCreateUserAccount() {
 export function useSignInAccount() {
   return useMutation({
     mutationFn: (user: { email: string; password: string }) =>
-      signInAccount(user),
+      signInAccount(user.email, user.password),
   });
 }
 
@@ -41,6 +42,7 @@ export function useCreatePost() {
   return useMutation({
     mutationFn: (post: NewPost) => createPost(post),
     onSuccess: () => {
+      toast("در حال بروز رسانی پست ها...");
       queryClient.invalidateQueries({
         queryKey: [QUERY_KEYS.GET_HOME_FEED],
       });
@@ -110,6 +112,7 @@ export function useUpdatePost() {
   return useMutation({
     mutationFn: (post: UpdatePost) => updatePost(post),
     onSuccess: (data) => {
+      toast("در حال بروز رسانی پست شما...");
       queryClient.invalidateQueries({
         queryKey: [QUERY_KEYS.GET_POST_BY_ID, data?.$id],
       });
@@ -129,6 +132,7 @@ export function useDeletePost() {
     mutationFn: ({ postId, imageId }: { postId: string; imageId: string }) =>
       deletePost(postId, imageId),
     onSuccess: () => {
+      toast("در حال بروز رسانی پست ها...");
       queryClient.invalidateQueries({
         queryKey: [QUERY_KEYS.GET_HOME_FEED],
       });
@@ -144,6 +148,7 @@ export function useUpdateUser() {
   return useMutation({
     mutationFn: (user: UpdateUser) => updateUser(user),
     onSuccess: (data) => {
+      toast("در حال بروز رسانی حساب کاربری...");
       queryClient.invalidateQueries({
         queryKey: [QUERY_KEYS.GET_CURRENT_USER],
       });
@@ -160,6 +165,7 @@ export function useFollowUser(targetUserId: string) {
     mutationFn: (action: "follow" | "unfollow") =>
       followUser(action, targetUserId),
     onSuccess: () => {
+      toast("در حال بروز رسانی پست ها...");
       queryClient.invalidateQueries({
         queryKey: [QUERY_KEYS.GET_CURRENT_USER],
       });

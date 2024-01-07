@@ -168,7 +168,7 @@ const Profile = () => {
               <p
               className="text-light-4 text-center w-full mt-10"
               >
-                شما هیچ پستی ندارید
+                شما هیچ پستی آپلود نکرده اید
               </p>
             ) : (
               <GridPostList posts={thisUser.posts} showUser={false} />

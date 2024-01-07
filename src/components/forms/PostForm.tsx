@@ -1,6 +1,6 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { Models } from "appwrite";
+import { AppwriteException, Models } from "appwrite";
 import { useNavigate } from "react-router-dom";
 import * as z from "zod";
 
@@ -21,6 +21,7 @@ import Loader from "../loaders/Spinner";
 import { useUserContext } from "@/context/AuthContext";
 import { postValidationSchema } from "@/lib/validation";
 import { useCreatePost, useUpdatePost } from "@/hooks/react-query/mutations";
+import { UnityHubError } from "@/lib/utils";
 
 const PostForm = ({
   post,
@@ -46,36 +47,46 @@ const PostForm = ({
   });
 
   async function onSubmit(values: z.infer<typeof postValidationSchema>) {
-    if (post && action === "update") {
-      const updatedPost = await updatePost({
+    try {
+      if (post && action === "update") {
+        await updatePost({
+          ...values,
+          postId: post.$id,
+          imageId: post.imageId,
+          imageUrl: post.imageUrl,
+        });
+
+        return navigate("/posts/" + post.$id);
+      }
+
+      await createPost({
         ...values,
-        postId: post.$id,
-        imageId: post.imageId,
-        imageUrl: post.imageUrl,
+        userId: user.id,
       });
-      if (!updatedPost) {
+
+      return navigate("/");
+    } catch (error) {
+      if (error instanceof UnityHubError) {
         return toast({
+          title: error.title,
+          description: error.message,
           variant: "destructive",
+        });
+      } else if (error instanceof AppwriteException) {
+        return toast({
+          title: error.name,
+          description: error.message,
+          variant: "destructive",
+        });
+      } else {
+        console.log(error);
+        return toast({
           title: "ویرایش پست با خطا مواجه شد",
           description: "لطفاً دوباره امتحان کنید.",
+          variant: "destructive",
         });
       }
-      return navigate("/posts/" + post.$id);
     }
-
-    const newPost = await createPost({
-      ...values,
-      userId: user.id,
-    });
-
-    if (!newPost) {
-      return toast({
-        variant: "destructive",
-        title: "آپلود پست با خطا مواجه شد",
-        description: "لطفاً دوباره امتحان کنید.",
-      });
-    }
-    navigate("/");
   }
 
   return (

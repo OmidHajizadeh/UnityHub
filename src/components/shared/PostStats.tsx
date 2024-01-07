@@ -1,9 +1,10 @@
-import { Models } from "appwrite";
+import { AppwriteException, Models } from "appwrite";
 import { useState } from "react";
 
-import { checkIsLiked, checkIsSaved } from "@/lib/utils";
-import Loader from "../loaders/Spinner";
+import { UnityHubError, checkIsLiked, checkIsSaved } from "@/lib/utils";
+import Spinner from "../loaders/Spinner";
 import { useLikePost, useSavePost } from "@/hooks/react-query/mutations";
+import { useToast } from "../ui/use-toast";
 
 type PostStatsProps = {
   post?: Models.Document;
@@ -19,43 +20,93 @@ const PostStats = ({ post, userId, showLikeCount = true }: PostStatsProps) => {
   const [saves, setSaves] = useState<string[]>(
     post?.saves.map((user: Models.Document) => user.$id)
   );
+  const { toast } = useToast();
+  const { mutateAsync: likePost, isPending: isLikingPost } = useLikePost();
+  const { mutateAsync: savePost, isPending: isSavingPost } = useSavePost();
 
-  const { mutate: likePost, isPending: isLikingPost } = useLikePost();
-  const { mutate: savePost, isPending: isSavingPost } = useSavePost();
+  async function likeHandler(
+    e: React.MouseEvent<HTMLImageElement, MouseEvent>
+  ) {
+    try {
+      e.stopPropagation();
+      let newLikes = [...likes];
 
-  function likeHandler(e: React.MouseEvent<HTMLImageElement, MouseEvent>) {
-    e.stopPropagation();
-    let newLikes = [...likes];
+      if (newLikes.includes(userId)) {
+        newLikes = newLikes.filter((id) => id !== userId);
+      } else {
+        newLikes.push(userId);
+      }
 
-    if (newLikes.includes(userId)) {
-      newLikes = newLikes.filter((id) => id !== userId);
-    } else {
-      newLikes.push(userId);
+      setLikes(newLikes);
+      await likePost({ postId: post?.$id || "", likesArray: newLikes });
+    } catch (error) {
+      if (error instanceof UnityHubError) {
+        return toast({
+          title: error.title,
+          description: error.message,
+          variant: "destructive",
+        });
+      } else if (error instanceof AppwriteException) {
+        return toast({
+          title: error.name,
+          description: error.message,
+          variant: "destructive",
+        });
+      } else {
+        console.log(error);
+        return toast({
+          title: "لایک پست با خطا مواجه شد",
+          description: "لطفاً دوباره امتحان کنید.",
+          variant: "destructive",
+        });
+      }
     }
-
-    setLikes(newLikes);
-    likePost({ postId: post?.$id || "", likesArray: newLikes });
   }
 
-  function saveHandler(e: React.MouseEvent<HTMLImageElement, MouseEvent>) {
-    e.stopPropagation();
-    let newSaves = [...saves];
+  async function saveHandler(
+    e: React.MouseEvent<HTMLImageElement, MouseEvent>
+  ) {
+    try {
+      e.stopPropagation();
+      let newSaves = [...saves];
 
-    if (newSaves.includes(userId)) {
-      newSaves = newSaves.filter((id) => id !== userId);
-    } else {
-      newSaves.push(userId);
+      if (newSaves.includes(userId)) {
+        newSaves = newSaves.filter((id) => id !== userId);
+      } else {
+        newSaves.push(userId);
+      }
+
+      setSaves(newSaves);
+      await savePost({ postId: post?.$id || "", savesArray: newSaves });
+    } catch (error) {
+      if (error instanceof UnityHubError) {
+        return toast({
+          title: error.title,
+          description: error.message,
+          variant: "destructive",
+        });
+      } else if (error instanceof AppwriteException) {
+        return toast({
+          title: error.name,
+          description: error.message,
+          variant: "destructive",
+        });
+      } else {
+        console.log(error);
+        return toast({
+          title: "ذخیره پست با خطا مواجه شد",
+          description: "لطفاً دوباره امتحان کنید.",
+          variant: "destructive",
+        });
+      }
     }
-
-    setSaves(newSaves);
-    savePost({ postId: post?.$id || "", savesArray: newSaves });
   }
 
   return (
     <div className="flex-between gap-3 z-20 relative">
       <div className="flex gap-2">
         {isLikingPost ? (
-          <Loader />
+          <Spinner />
         ) : (
           <img
             src={`/assets/icons/${
@@ -75,7 +126,7 @@ const PostStats = ({ post, userId, showLikeCount = true }: PostStatsProps) => {
       </div>
       <div className="flex">
         {isSavingPost ? (
-          <Loader />
+          <Spinner />
         ) : (
           <img
             src={`/assets/icons/${

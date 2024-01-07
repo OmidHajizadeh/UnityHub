@@ -33,30 +33,20 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const navigate = useNavigate();
 
   const checkAuthUser = async () => {
-    try {
-      setIsLoading(true);
+    const currentAccount = await getCurrentUser();
 
-      const currentAccount = await getCurrentUser();
+    setUser({
+      id: currentAccount.$id,
+      name: currentAccount.name,
+      username: currentAccount.username,
+      email: currentAccount.email,
+      imageUrl: currentAccount.imageUrl,
+      followings: currentAccount.followings,
+    });
 
-      if (currentAccount) {
-        setUser({
-          id: currentAccount.$id,
-          name: currentAccount.name,
-          username: currentAccount.username,
-          email: currentAccount.email,
-          imageUrl: currentAccount.imageUrl,
-          followings: currentAccount.followings,
-        });
-        setIsAuthenticated(true);
-        return true;
-      }
-      return false;
-    } catch (error) {
-      console.log(error);
-      return false;
-    } finally {
-      setIsLoading(false);
-    }
+    setIsAuthenticated(true);
+
+    return true;
   };
 
   useEffect(() => {

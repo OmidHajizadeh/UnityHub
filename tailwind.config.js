@@ -18,11 +18,11 @@ module.exports = {
     extend: {
       backgroundImage: {
         "post-card":
-          "radial-gradient(rgb(59 130 246), transparent, transparent)",
+          "radial-gradient(rgb(253, 101, 13), transparent, transparent)",
       },
       colors: {
-        "primary-500": "#877EFF",
-        "primary-600": "#5D5FEF",
+        "primary-500": "#fd650d",
+        "primary-600": "#fc8f50",
         "secondary-500": "#FFB620",
         "off-white": "#D0DFFF",
         red: "#FF5A5A",

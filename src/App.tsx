@@ -7,6 +7,7 @@ import { AnimatePresence } from "framer-motion";
 import AuthLayout from "./_auth/AuthLayout";
 import RootLayout from "./_root/RootLayout";
 import { Toaster } from "@/components/ui/toaster";
+import { Toaster as SonnerToaster } from "@/components/ui/sonner"
 import "./globals.css";
 import Home from "./_root/pages/Home";
 import ExploreFallback from "./components/suspense-fallbacks/ExploreFallback";
@@ -131,6 +132,7 @@ function App() {
         </Routes>
       </AnimatePresence>
       <Toaster />
+      <SonnerToaster />
     </main>
   );
 }

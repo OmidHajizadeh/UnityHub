@@ -40,7 +40,7 @@ const FileUploader = ({ fieldChange, mediaUrl }: FileUploaderProps) => {
             <img src={fileUrl} alt="image" className="file_uploader-img" />
           </div>
           <p className="file_uploader-label">
-            برای تغییر، یک عکس جدید را درگ کنید یا روی این عکس کلیک کنید
+            برای تغییر، یک عکس جدید را درگ کنید یا روی عکس کلیک کنید
           </p>
         </>
       ) : (

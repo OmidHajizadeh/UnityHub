@@ -29,24 +29,14 @@ const Topbar = () => {
             height={325}
           />
         </Link>
-        <div className="flex gap-4">
+        <div className="flex items-center gap-4">
           <Suspense fallback={<Spinner />}>
             <Alert title="آیا مطمئن هستید ؟" onSubmit={signOutHandler}>
-              <Button variant="ghost" className="shad-button_ghost mt-4">
+              <Button variant="ghost" className="shad-button_ghost">
                 <img src="/assets/icons/logout.svg" alt="logout" />
-                <p className="small-medium lg:base-medium">
-                  خروج از حساب کاربری
-                </p>
               </Button>
             </Alert>
           </Suspense>
-          <Button
-            variant="ghost"
-            className="shad-button_ghost"
-            onClick={() => signOutHandler()}
-          >
-            <img src="/assets/icons/logout.svg" alt="logout" />
-          </Button>
           <Link to={`/profile/${user.id}`} className="flex-center gap-3">
             <img
               src={user.imageUrl || "/assets/images/profile-placeholder.svg"}

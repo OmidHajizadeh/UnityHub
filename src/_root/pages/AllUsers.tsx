@@ -7,10 +7,7 @@ import SearchUserResults from "@/components/shared/SearchUserResults";
 import UserCard from "@/components/shared/UserCard";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/components/ui/use-toast";
-import {
-  useGetUsers,
-  useSearchUser,
-} from "@/hooks/react-query/queries";
+import { useGetUsers, useSearchUser } from "@/hooks/react-query/queries";
 import useDebounce from "@/hooks/use-debounce";
 
 const AllUsers = () => {
@@ -30,8 +27,11 @@ const AllUsers = () => {
   const shouldShowSearchResults = searchValue !== "";
 
   if (isErrorCreators) {
-    toast({ title: "Something went wrong." });
-    return;
+    toast({
+      title: "خطا در دریافت کاربران",
+      description: "لطفاً دوباره امتحان کنید.",
+      variant: "destructive",
+    });
   }
 
   return (
@@ -59,7 +59,7 @@ const AllUsers = () => {
           />
           <Input
             type="text"
-            placeholder="جستجو"
+            placeholder="جستجو نام کاربری..."
             className="explore-search"
             value={searchValue}
             onChange={(e) => setSearchValue(e.target.value)}

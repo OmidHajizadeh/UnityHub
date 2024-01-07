@@ -5,27 +5,30 @@ import { useInView } from "react-intersection-observer";
 
 import PostCard from "@/components/shared/PostCard";
 import UserCard from "@/components/shared/UserCard";
-import {
-  useGetHomeFeed,
-  useGetUsers,
-} from "@/hooks/react-query/queries";
+import { useGetHomeFeed, useGetUsers } from "@/hooks/react-query/queries";
 import MediumPostSkeleton from "@/components/loaders/MediumPostSkeleton";
 import UsersCardSkeleton from "@/components/loaders/UsersCardSkeleton";
+import { UnityHubError } from "@/lib/utils";
+import { useToast } from "@/components/ui/use-toast";
+import { AppwriteException } from "appwrite";
 
 const Home = () => {
   const {
     data: posts,
     isPending: isPostLoading,
     isError: isErrorPosts,
+    error: postsError,
     fetchNextPage,
     hasNextPage,
   } = useGetHomeFeed();
 
   const { ref, inView } = useInView();
+  const { toast } = useToast();
   const {
     data: creators,
     isPending: isUserLoading,
     isError: isErrorCreators,
+    error: creatorsError,
   } = useGetUsers(10);
 
   useEffect(() => {
@@ -35,6 +38,51 @@ const Home = () => {
   }, [inView]);
 
   if (isErrorPosts || isErrorCreators) {
+    if (postsError) {
+      if (postsError instanceof UnityHubError) {
+        toast({
+          title: postsError.title,
+          description: postsError.message,
+          variant: "destructive",
+        });
+      } else if (postsError instanceof AppwriteException) {
+        toast({
+          title: postsError.name,
+          description: postsError.message,
+          variant: "destructive",
+        });
+      } else {
+        console.log(postsError);
+        toast({
+          title: "خطا در دریافت پست ها",
+          description: "لطفاً دوباره امتحان کنید.",
+          variant: "destructive",
+        });
+      }
+    }
+    if (creatorsError) {
+      if (creatorsError instanceof UnityHubError) {
+        toast({
+          title: creatorsError.title,
+          description: creatorsError.message,
+          variant: "destructive",
+        });
+      } else if (creatorsError instanceof AppwriteException) {
+        toast({
+          title: creatorsError.name,
+          description: creatorsError.message,
+          variant: "destructive",
+        });
+      } else {
+        console.log(creatorsError);
+        toast({
+          title: "خطا در دریافت کاربران",
+          description: "لطفاً دوباره امتحان کنید.",
+          variant: "destructive",
+        });
+      }
+    }
+
     return (
       <div className="flex flex-1">
         <Helmet>
@@ -69,7 +117,7 @@ const Home = () => {
           ) : (
             <ul className="flex flex-col flex-1 gap-9 w-full">
               <AnimatePresence mode="popLayout">
-                {posts?.pages.map((item) => {
+                {posts.pages.map((item) => {
                   return item?.documents.map((post) => {
                     return (
                       <motion.li
@@ -84,7 +132,7 @@ const Home = () => {
                     );
                   });
                 })}
-                {posts?.pages[0].total === 0 && (
+                {posts.pages[0].total === 0 && (
                   <motion.li
                     layout
                     exit={{ scale: 0.8, opacity: 0 }}
