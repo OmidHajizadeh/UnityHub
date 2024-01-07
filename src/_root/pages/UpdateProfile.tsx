@@ -24,6 +24,7 @@ import { Button } from "@/components/ui/button";
 import { useUpdateUser } from "@/hooks/react-query/mutations";
 import { UnityHubError } from "@/lib/utils";
 import { AppwriteException } from "appwrite";
+import { Textarea } from "@/components/ui/textarea";
 
 const UpdateProfile = () => {
   const { toast } = useToast();
@@ -35,6 +36,7 @@ const UpdateProfile = () => {
     defaultValues: {
       file: [],
       name: user.name,
+      bio: user.bio,
       username: user.username,
       email: user.email,
     },
@@ -59,14 +61,16 @@ const UpdateProfile = () => {
         userId: currentUser.$id,
         name: value.name,
         file: value.file,
+        bio: value.bio,
         imageUrl: currentUser.imageUrl,
         imageId: currentUser.imageId,
       });
 
       setUser({
         ...user,
-        name: updatedUser?.name,
-        imageUrl: updatedUser?.imageUrl,
+        name: updatedUser.name,
+        imageUrl: updatedUser.imageUrl,
+        bio: updatedUser.bio,
       });
 
       navigate(`/profile/${id}`);
@@ -140,6 +144,24 @@ const UpdateProfile = () => {
                   <FormLabel className="shad-form_label">اسم</FormLabel>
                   <FormControl>
                     <Input type="text" className="shad-input" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="bio"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="shad-form_label">بیوگرافی</FormLabel>
+                  <FormControl>
+                    <Textarea
+                      dir="auto"
+                      className="shad-textarea custom-scrollbar"
+                      {...field}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>

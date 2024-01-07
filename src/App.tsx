@@ -1,13 +1,12 @@
 import { Route, Routes, useLocation } from "react-router-dom";
 import { Helmet } from "react-helmet";
 import { Suspense, lazy } from "react";
-import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { AnimatePresence } from "framer-motion";
 
 import AuthLayout from "./_auth/AuthLayout";
 import RootLayout from "./_root/RootLayout";
 import { Toaster } from "@/components/ui/toaster";
-import { Toaster as SonnerToaster } from "@/components/ui/sonner"
+import { Toaster as SonnerToaster } from "@/components/ui/sonner";
 import "./globals.css";
 import Home from "./_root/pages/Home";
 import ExploreFallback from "./components/suspense-fallbacks/ExploreFallback";
@@ -15,7 +14,6 @@ import AllUsersFallback from "./components/suspense-fallbacks/AllUsersFallback";
 import PostDetailsFallback from "./components/suspense-fallbacks/PostDetailsFallback";
 import Spinner from "./components/loaders/Spinner";
 import ProfileFallback from "./components/suspense-fallbacks/ProfileFallback";
-import { queryClient } from "./lib/react-query/QueryProvider";
 
 const SignInForm = lazy(() => import("./_auth/forms/SignInForm"));
 const SignUpForm = lazy(() => import("./_auth/forms/SignUpForm"));
@@ -31,7 +29,6 @@ function App() {
   const location = useLocation();
   return (
     <main className="flex min-h-screen">
-      <ReactQueryDevtools client={queryClient} />
       <Helmet>
         <title>یونیتی هاب</title>
         <meta

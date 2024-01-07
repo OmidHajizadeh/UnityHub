@@ -15,6 +15,7 @@ export type UpdateUser = {
   imageId: string;
   imageUrl: URL | string;
   file: File[];
+  bio: string;
 };
 
 export type User = {
@@ -23,6 +24,7 @@ export type User = {
   email: string;
   username: string;
   imageUrl: string;
+  bio: string;
 };
 
 export type NewUser = {

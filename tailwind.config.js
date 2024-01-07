@@ -1,4 +1,4 @@
-  /** @type {import('tailwindcss').Config} */
+/** @type {import('tailwindcss').Config} */
 module.exports = {
   darkMode: ["class"],
   content: [
@@ -19,6 +19,7 @@ module.exports = {
       backgroundImage: {
         "post-card":
           "radial-gradient(rgb(253, 101, 13), transparent, transparent)",
+        auth: 'url("./assets/images/auth-bg.jpg")',
       },
       colors: {
         "primary-500": "#fd650d",

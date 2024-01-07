@@ -9,6 +9,7 @@ export const INITIAL_USER: User & {
 } = {
   id: "",
   name: "",
+  bio: "",
   username: "",
   email: "",
   imageUrl: "",
@@ -38,6 +39,7 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     setUser({
       id: currentAccount.$id,
       name: currentAccount.name,
+      bio: currentAccount.bio,
       username: currentAccount.username,
       email: currentAccount.email,
       imageUrl: currentAccount.imageUrl,

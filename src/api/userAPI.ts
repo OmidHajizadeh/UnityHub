@@ -28,7 +28,7 @@ export async function createUserAccount(user: NewUser) {
   if (usernameExists)
     throw new UnityHubError(
       "خطای ثبت نام",
-      "نام کاربری وارد شده ثبلا ثبت شده است."
+      "نام کاربری وارد شده قبلاً ثبت شده است."
     );
 
   // checking id email exists
@@ -51,15 +51,17 @@ export async function createUserAccount(user: NewUser) {
     user.name
   );
 
-  if (!newAccount)
+  if (!newAccount) {
+    await account.deleteIdentity(uniqueId);
     throw new UnityHubError("خطای سرور", "لطفا دوباره امتحان کنید.");
+  }
 
   // Setting intial avatar for user
   const avatarUrl = avatars.getInitials(user.name);
 
   // Adding user to our database
   const newUserInfo = {
-    accountId: newAccount.$id,
+    bio: "",
     name: newAccount.name,
     email: newAccount.email,
     username: user.username,
@@ -69,12 +71,14 @@ export async function createUserAccount(user: NewUser) {
   const newUser = await databases.createDocument(
     appwriteConfig.databaseId,
     appwriteConfig.userCollectionId,
-    newUserInfo.accountId,
+    uniqueId,
     newUserInfo
   );
 
-  if (!newUser)
+  if (!newUser) {
+    await account.deleteIdentity(uniqueId);
     throw new UnityHubError("خطای سرور", "لطفا دوباره امتحان کنید.");
+  }
 
   return newUser;
 }
@@ -105,7 +109,7 @@ export async function signOutAccount() {
 
 export async function getCurrentUser() {
   const currentAccount = await account.get();
-  
+
   if (!currentAccount)
     throw new UnityHubError(
       "خطا در دریافت اطلاعات کاربر",
@@ -115,9 +119,9 @@ export async function getCurrentUser() {
   const currentUser = await databases.listDocuments(
     appwriteConfig.databaseId,
     appwriteConfig.userCollectionId,
-    [Query.equal("accountId", currentAccount.$id)]
+    [Query.equal("$id", currentAccount.$id)]
   );
-    
+
   if (!currentUser)
     throw new UnityHubError(
       "خطا در دریافت اطلاعات کاربر",
@@ -205,6 +209,7 @@ export async function updateUser(user: UpdateUser) {
     user.userId,
     {
       name: user.name,
+      bio: user.bio,
       imageUrl: image.imageUrl,
       imageId: image.imageId,
     }

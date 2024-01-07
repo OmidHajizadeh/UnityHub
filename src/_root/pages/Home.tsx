@@ -29,7 +29,7 @@ const Home = () => {
     isPending: isUserLoading,
     isError: isErrorCreators,
     error: creatorsError,
-  } = useGetUsers(10);
+  } = useGetUsers(6);
 
   useEffect(() => {
     if (inView) {
@@ -105,7 +105,9 @@ const Home = () => {
       </Helmet>
       <div className="home-container">
         <div className="home-posts">
-          <h2 className="h3-bold md:h2-bold w-full">پست های دنبال کنندگان</h2>
+          <h2 className="h3-bold text-center md:h2-bold w-full">
+            پست های کاربران دنبال شده
+          </h2>
           {isPostLoading && !posts ? (
             <section className="flex flex-col flex-1 gap-9 w-full">
               {Array.from({ length: 5 }).map((_, index) => (
@@ -123,6 +125,7 @@ const Home = () => {
                       <motion.li
                         layout
                         exit={{ scale: 0.8, opacity: 0 }}
+                        initial={{ scale: 0.8, opacity: 0 }}
                         animate={{ scale: 1, opacity: 1 }}
                         key={post.$id}
                         transition={{ duration: 0.2 }}
@@ -136,6 +139,7 @@ const Home = () => {
                   <motion.li
                     layout
                     exit={{ scale: 0.8, opacity: 0 }}
+                    initial={{ scale: 0.8, opacity: 0 }}
                     animate={{ scale: 1, opacity: 1 }}
                     transition={{ duration: 0.2 }}
                     className="text-light-4 text-center w-full mt-10"
@@ -158,7 +162,7 @@ const Home = () => {
         </div>
       </div>
       <div className="home-creators">
-        <h3 className="h3-bold text-light-1">اکانت های فعال</h3>
+        <h3 className="h3-bold text-center text-light-1">آخرین کاربران</h3>
         {isUserLoading && !creators ? (
           <section className="grid 2xl:grid-cols-2 gap-6">
             {Array.from({ length: 5 }).map((_, index) => (

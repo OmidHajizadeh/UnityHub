@@ -52,6 +52,9 @@ export const postValidationSchema = z.object({
 export const ProfileValidation = z.object({
   file: z.custom<File[]>(),
   name: z.string().min(2, { message: "اسم نمیتواند کمتر از 2 کارکتر باشد" }),
+  bio: z
+    .string()
+    .min(2, { message: "بیوگرافی نمیتواند کمتر از 2 کارکتر باشد" }),
   username: z
     .string()
     .min(2, { message: "نام کاربری نمیتواند کمتر از 2 کارکتر باشد" }),

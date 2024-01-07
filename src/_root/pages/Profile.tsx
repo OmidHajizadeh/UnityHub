@@ -36,6 +36,7 @@ const Profile = () => {
   const { pathname } = useLocation();
 
   const { data: thisUser, isError } = useGetUserById(id || "");
+  console.log(thisUser);
 
   if (isError || !id) {
     return <p>کاربر مورد نظر یافت نشد</p>;
@@ -165,9 +166,7 @@ const Profile = () => {
           index
           element={
             thisUser.posts.length === 0 ? (
-              <p
-              className="text-light-4 text-center w-full mt-10"
-              >
+              <p className="text-light-4 text-center w-full mt-10">
                 شما هیچ پستی آپلود نکرده اید
               </p>
             ) : (
