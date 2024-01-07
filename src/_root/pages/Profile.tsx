@@ -36,7 +36,6 @@ const Profile = () => {
   const { pathname } = useLocation();
 
   const { data: thisUser, isError } = useGetUserById(id || "");
-  console.log(thisUser);
 
   if (isError || !id) {
     return <p>کاربر مورد نظر یافت نشد</p>;

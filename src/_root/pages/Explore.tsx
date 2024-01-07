@@ -43,8 +43,6 @@ const Explore = () => {
     }
   }, [inView, searchValue]);
 
-  const shouldShowSearchResults = searchValue !== "";
-
   if (isPostsError) {
     if (postsError instanceof UnityHubError) {
       toast({
@@ -94,6 +92,8 @@ const Explore = () => {
 
   if (!posts) return <ExploreFallback />;
 
+  const shouldShowSearchResults = searchValue !== "";
+
   return (
     <div className="explore-container">
       <Helmet>
@@ -128,22 +128,23 @@ const Explore = () => {
       </div>
 
       <div className="relative w-full max-w-5xl mt-16 mb-7">
-        <h3 className="body-bold md:h3-bold">
-          {searchValue.trim() !== "" ? "" : "همه پست ها"}
-        </h3>
+        {!searchValue.trim() && (
+          <h3 className="body-bold md:h3-bold">همه پست ها</h3>
+        )}
         <div className="flex flex-wrap mt-8 gap-9">
           <ul className="grid-container">
             <AnimatePresence mode="popLayout">
-              {shouldShowSearchResults && (
+              {shouldShowSearchResults ? (
                 <SearchPostResults
                   isFetching={isFetching}
                   searchedPosts={searchedPosts}
                 />
-              )}
-              {!searchedPosts &&
+              ) : (
+                !searchedPosts &&
                 posts.pages.map((item, index) => (
                   <ExplorerGridList key={index} posts={item.documents} />
-                ))}
+                ))
+              )}
               {hasNextPage &&
                 !searchValue &&
                 Array.from({ length: 3 }).map((_, index) => (

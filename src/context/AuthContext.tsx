@@ -4,9 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { ContextType, User } from "@/types";
 import { getCurrentUser } from "@/api/userAPI";
 
-export const INITIAL_USER: User & {
-  followings: string[];
-} = {
+const INITIAL_USER: User = {
   id: "",
   name: "",
   bio: "",

@@ -25,6 +25,7 @@ export type User = {
   username: string;
   imageUrl: string;
   bio: string;
+  followings: string[]
 };
 
 export type NewUser = {

@@ -165,18 +165,18 @@ export function useFollowUser(targetUserId: string) {
     mutationFn: (action: "follow" | "unfollow") =>
       followUser(action, targetUserId),
     onSuccess: () => {
-      toast("در حال بروز رسانی پست ها...");
+      toast("در حال بروز رسانی...");
       queryClient.invalidateQueries({
         queryKey: [QUERY_KEYS.GET_CURRENT_USER],
       });
       queryClient.invalidateQueries({
-        queryKey: [QUERY_KEYS.GET_HOME_FEED],
+        queryKey: [QUERY_KEYS.GET_USERS],
       });
       queryClient.invalidateQueries({
         queryKey: [QUERY_KEYS.GET_USER_BY_ID, targetUserId],
       });
       queryClient.invalidateQueries({
-        queryKey: [QUERY_KEYS.GET_USERS],
+        queryKey: [QUERY_KEYS.GET_HOME_FEED],
       });
       queryClient.invalidateQueries({
         queryKey: [QUERY_KEYS.SEARCH_USER, targetUserId],

@@ -212,7 +212,6 @@ export async function getHomeFeed({ pageParam }: { pageParam: number }) {
     appwriteConfig.postCollectionId,
     queries
   );
-    console.log(posts);
     
   if (!posts)
     throw new UnityHubError(
