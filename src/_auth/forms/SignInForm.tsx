@@ -120,7 +120,7 @@ const SignInForm = () => {
 
           <Button
             type="submit"
-            className="shad-button_primary mt-3"
+            className="shad-button_primary bg-primary-500 mt-3"
             disabled={isPending}
           >
             {isUserLoading || isPending ? (

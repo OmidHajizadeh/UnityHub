@@ -216,7 +216,7 @@ const UpdateProfile = () => {
               </Button>
               <Button
                 type="submit"
-                className="shad-button_primary whitespace-nowrap"
+                className="shad-button_primary bg-primary-500 whitespace-nowrap"
                 disabled={isLoadingUpdate}
               >
                 {isLoadingUpdate && <Spinner />}
