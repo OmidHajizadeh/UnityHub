@@ -40,7 +40,7 @@ const InteractedPosts = ({
       <Helmet>
         <title>{title}</title>
       </Helmet>
-      {currentUser.liked.length === 0 && (
+      {posts.length === 0 && (
         <p className="text-light-4 text-center w-full mt-10">{noResultText}</p>
       )}
       <GridPostList posts={posts} showStats={false} />

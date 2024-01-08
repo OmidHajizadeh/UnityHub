@@ -11,7 +11,7 @@ const UsersCardSkeleton = () => {
           <div className="bg-light-3 rounded-md h-4 w-12 mt-3 animate-pulse" />
         </div>
 
-        <div className="shad-button_primary w-full max-w-[6rem] h-8 rounded-md animate-pulse" />
+        <div className="bg-primary-500 w-full max-w-[6rem] h-8 rounded-md animate-pulse" />
       </div>
     </GlowingCard>
   );

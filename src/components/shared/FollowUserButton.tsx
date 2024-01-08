@@ -41,7 +41,9 @@ const FollowUserButton = ({
       )}
       type="button"
       size="sm"
-      className={className}
+      className={`${className} ${
+        hadFollowedUser ? "bg-primary-400" : "bg-primary-500"
+      }`}
       disabled={isFollowActionOn}
     >
       {isFollowActionOn ? (

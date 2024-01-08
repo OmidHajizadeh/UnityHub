@@ -170,9 +170,9 @@ const PostDetails = () => {
           <hr className="border border-dark-4/80 w-full" />
 
           <div className="flex flex-1 flex-col w-full small-medium lg:base-regular">
-            <p>{post.caption}</p>
+            <p dir="auto" className="font-light">{post.caption}</p>
             {post.tags[0] !== "" && (
-              <ul className="flex gap-3 mt-3">
+              <ul dir="ltr" className="flex gap-2 mt-3">
                 {post.tags.map((tag: string) => {
                   return (
                     <li dir="auto" key={tag} className="text-light-3 ">

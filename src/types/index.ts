@@ -25,7 +25,7 @@ export type User = {
   username: string;
   imageUrl: string;
   bio: string;
-  followings: string[]
+  followings: string[];
 };
 
 export type NewUser = {
@@ -40,7 +40,7 @@ export type NewPost = {
   caption: string;
   files: File[];
   location?: string;
-  tags?: string;
+  tags?: string[];
 };
 
 export type UpdatePost = {
@@ -50,5 +50,5 @@ export type UpdatePost = {
   imageUrl: URL;
   files: File[];
   location?: string;
-  tags?: string;
+  tags?: string[];
 };

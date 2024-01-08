@@ -153,11 +153,11 @@
   }
 
   .post_details-card {
-    @apply w-full max-w-5xl rounded-[30px] flex-col flex xl:flex-row xl:rounded-l-[24px];
+    @apply w-full max-w-5xl rounded-[30px] gap-5 flex-col flex xl:flex-row xl:rounded-l-[24px];
   }
 
   .post_details-img {
-    @apply h-80 lg:h-[480px] xl:w-[48%] rounded-[30px] object-cover p-5 bg-dark-1;
+    @apply xl:w-[48%] max-h-[45rem] rounded-[30px] object-cover bg-dark-1;
   }
 
   .post_details-info {
@@ -200,7 +200,7 @@
 
   /* File uploader */
   .file_uploader-img {
-    @apply h-80 lg:h-[480px] w-full rounded-[24px] object-cover object-top;
+    @apply w-full rounded-[0.75rem] max-h-[45rem] object-cover object-top;
   }
 
   .file_uploader-label {
@@ -257,7 +257,7 @@
   }
 
   .post-card_img {
-    @apply h-64 xs:h-[400px] lg:h-[450px] w-full rounded-[24px] object-cover mb-5;
+    @apply w-full max-h-[45rem] rounded-[24px] mb-5 object-cover;
   }
 
   /* Topbar */
@@ -292,7 +292,7 @@
 
   /* Button */
   .shad-button_primary {
-    @apply bg-primary-500 hover:bg-primary-500 text-light-1 flex gap-2 !important;
+    @apply hover:bg-primary-600 text-light-1 flex gap-2 !important;
   }
 
   .shad-button_dark_4 {

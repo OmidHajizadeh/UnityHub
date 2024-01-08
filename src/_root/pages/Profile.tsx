@@ -80,9 +80,11 @@ const Profile = () => {
               />
             </div>
 
-            <p className="small-medium md:base-medium text-center xl:text-start mt-7 max-w-screen-sm">
-              {thisUser.bio}
-            </p>
+            {thisUser.bio && (
+              <p className="small-medium md:base-medium text-center xl:text-start mt-7 max-w-screen-sm">
+                {thisUser.bio}
+              </p>
+            )}
           </div>
 
           {user.id === thisUser.$id && (

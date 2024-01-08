@@ -22,6 +22,7 @@ import { useUserContext } from "@/context/AuthContext";
 import { postValidationSchema } from "@/lib/validation";
 import { useCreatePost, useUpdatePost } from "@/hooks/react-query/mutations";
 import { UnityHubError } from "@/lib/utils";
+import TagsInput from "../shared/TagsInput";
 
 const PostForm = ({
   post,
@@ -42,13 +43,17 @@ const PostForm = ({
       caption: post?.caption || "",
       files: [],
       location: post?.location || "",
-      tags: post?.tags.join(",") || "",
+      tags: post?.tags || [],
     },
   });
+
+  const { setValue } = form;
 
   async function onSubmit(values: z.infer<typeof postValidationSchema>) {
     try {
       if (post && action === "update") {
+        console.log(values.tags);
+
         await updatePost({
           ...values,
           postId: post.$id,
@@ -56,7 +61,7 @@ const PostForm = ({
           imageUrl: post.imageUrl,
         });
 
-        return navigate("/posts/" + post.$id);
+        return navigate(-1);
       }
 
       await createPost({
@@ -64,7 +69,7 @@ const PostForm = ({
         userId: user.id,
       });
 
-      return navigate("/");
+      return navigate(-1);
     } catch (error) {
       if (error instanceof UnityHubError) {
         return toast({
@@ -138,16 +143,10 @@ const PostForm = ({
               render={({ field }) => (
                 <FormItem>
                   <FormLabel className="shad-form_label">
-                    تگ (با کاما از هم جدا کنید)
+                      هشتگ ها
                   </FormLabel>
                   <FormControl>
-                    <Input
-                      dir="auto"
-                      type="text"
-                      className="shad-input"
-                      placeholder="Art, Expression, Learn"
-                      {...field}
-                    />
+                    <TagsInput field={field} setFormValue={setValue} />
                   </FormControl>
                   <FormMessage className="shad-form_message" />
                 </FormItem>
@@ -173,16 +172,9 @@ const PostForm = ({
         </div>
         <div className="flex gap-4 items-center justify-end">
           <Button
-            type="button"
-            className="shad-button_dark_4"
-            onClick={() => navigate(-1)}
-          >
-            کنسل
-          </Button>
-          <Button
             disabled={isCreating || isUpdating}
             type="submit"
-            className="shad-button_primary whitespace-nowrap"
+            className="shad-button_primary bg-primary-500 whitespace-nowrap"
           >
             {isCreating || isUpdating ? (
               <div className="flex-center gap-2">

@@ -19,8 +19,8 @@ export async function createPost(post: NewPost) {
   }
 
   // Convert tags into array
-  const rawTags = post.tags?.replace(/ /g, "").split(",");
-  const tags = Array.from(new Set(rawTags)) || [];
+  // const rawTags = post.tags?.replace(/ /g, "").split(",");
+  const tags = Array.from(new Set(post.tags)) || [];
   const uniqueId = uuidv4();
 
   // Create post
@@ -72,8 +72,8 @@ export async function updatePost(post: UpdatePost) {
   }
 
   // Convert tags into array
-  const rawTags = post.tags?.replace(/ /g, "").split(",");
-  const tags = Array.from(new Set(rawTags)) || [];
+  // const rawTags = post.tags?.replace(/ /g, "").split(",");
+  const tags = Array.from(new Set(post.tags)) || [];
 
   // Create post
   const updatedPost = await databases.updateDocument(
@@ -212,7 +212,7 @@ export async function getHomeFeed({ pageParam }: { pageParam: number }) {
     appwriteConfig.postCollectionId,
     queries
   );
-    
+
   if (!posts)
     throw new UnityHubError(
       "خطا در دریافت پست ها",

@@ -14,16 +14,17 @@ const PostCard = ({ post }: { post: Models.Document }) => {
   return (
     <GlowingCard className="post-card after:rounded-[23px]">
       <div className="flex flex-between">
-        <div className="flex items-center gap-3">
-          <Link to={`profile/${post.creator.$id}`}>
-            <img
-              src={
-                post.creator.imageUrl || "/assets/icons/profile-placeholder.svg"
-              }
-              alt={post.creator.name}
-              className="rounded-full w-12 lg:h-12"
-            />
-          </Link>
+        <Link
+          className="flex items-center gap-3"
+          to={`profile/${post.creator.$id}`}
+        >
+          <img
+            src={
+              post.creator.imageUrl || "/assets/icons/profile-placeholder.svg"
+            }
+            alt={post.creator.name}
+            className="rounded-full w-12 lg:h-12"
+          />
           <div className="flex flex-col">
             <p className="base-medium lg:body-bold text-light-1">
               {post.creator.name}
@@ -38,7 +39,7 @@ const PostCard = ({ post }: { post: Models.Document }) => {
               </p>
             </div>
           </div>
-        </div>
+        </Link>
         {user.id === post.creator.$id && (
           <Link to={`/update-post/${post.$id}`}>
             <img
@@ -50,24 +51,28 @@ const PostCard = ({ post }: { post: Models.Document }) => {
           </Link>
         )}
       </div>
+      <div className="small-medium lg:base-medium py-5">
+        <p dir="auto" className="font-light">
+          {post.caption}
+        </p>
+        {post.tags[0] !== "" && (
+          <ul dir="ltr" className="flex gap-2 mt-3">
+            {post.tags.map((tag: string) => {
+              return (
+                <li dir="auto" key={tag} className="text-light-3 ">
+                  #{tag}
+                </li>
+              );
+            })}
+          </ul>
+        )}
+      </div>
       <Link to={`/posts/${post.$id}`}>
-        <div className="small-medium lg:base-medium py-5">
-          <p>{post.caption}</p>
-          {post.tags[0] !== "" && (
-            <ul className="flex gap-3 mt-3">
-              {post.tags.map((tag: string) => {
-                return (
-                  <li dir="auto" key={tag} className="text-light-3 ">
-                    #{tag}
-                  </li>
-                );
-              })}
-            </ul>
-          )}
-        </div>
         <img
           src={post.imageUrl || "/assets/icons/profile-placeholder.svg"}
           alt={post.caption}
+          width="auto"
+          height="auto"
           className="post-card_img"
         />
       </Link>

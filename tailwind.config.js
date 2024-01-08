@@ -19,9 +19,10 @@ module.exports = {
       backgroundImage: {
         "post-card":
           "radial-gradient(rgb(253, 101, 13), transparent, transparent)",
-        auth: 'url("./assets/images/auth-bg.jpg")',
+        auth: 'url("./images/auth-bg.jpg")',
       },
       colors: {
+        "primary-400": "#963c04",
         "primary-500": "#fd650d",
         "primary-600": "#fc8f50",
         "secondary-500": "#FFB620",

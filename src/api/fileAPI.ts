@@ -4,7 +4,7 @@ import { appwriteConfig, storage } from "@/lib/AppWirte/config";
 import { UnityHubError } from "@/lib/utils";
 
 export async function uploadFile(file: File) {
-  const uniqueId = uuidv4()
+  const uniqueId = uuidv4();
   const uploadedFile = await storage.createFile(
     appwriteConfig.storageId,
     uniqueId,
@@ -18,14 +18,7 @@ export async function uploadFile(file: File) {
 }
 
 export function getFilePreview(fileId: string) {
-  const fileUrl = storage.getFilePreview(
-    appwriteConfig.storageId,
-    fileId,
-    2000,
-    2000,
-    "top",
-    100
-  );
+  const fileUrl = storage.getFilePreview(appwriteConfig.storageId, fileId);
 
   if (!fileUrl)
     throw new UnityHubError("خطا در دریافت تصویر", "لطفاً دوباره امتحان کنید.");
@@ -37,7 +30,7 @@ export async function deleteFile(fileId: string) {
   const deletedFile = await storage.deleteFile(
     appwriteConfig.storageId,
     fileId
-  );  
+  );
 
   if (!deletedFile)
     throw new UnityHubError("خطای سرور", "لطفاً دوباره امتحان کنید.");

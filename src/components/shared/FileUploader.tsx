@@ -36,7 +36,7 @@ const FileUploader = ({ fieldChange, mediaUrl }: FileUploaderProps) => {
       <input {...getInputProps()} className="cursor-pointer" />
       {fileUrl ? (
         <>
-          <div className="flex flex-1 justify-center w-full p-5 lg:p-10">
+          <div className="flex flex-1 justify-center w-full p-5">
             <img src={fileUrl} alt="image" className="file_uploader-img" />
           </div>
           <p className="file_uploader-label">
@@ -51,7 +51,7 @@ const FileUploader = ({ fieldChange, mediaUrl }: FileUploaderProps) => {
             width={96}
             height={77}
           />
-          <h3 className="base-medium text-light-2 mb-2 mt-6">
+          <h3 className="base-medium text-light-2 mb-2 mt-6"> 
             عکس خود را اینجا رها کنید
           </h3>
           <p className="text-light-4 small-regular mb-6">SVG, PNG, JPG, JPEG</p>

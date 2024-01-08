@@ -46,15 +46,13 @@ export const postValidationSchema = z.object({
     .max(100, {
       message: "لوکیشن نمیتواند بیشتر از 100 کارکتر باشد",
     }),
-  tags: z.string(),
+  tags: z.custom<string[]>(),
 });
 
 export const ProfileValidation = z.object({
   file: z.custom<File[]>(),
   name: z.string().min(2, { message: "اسم نمیتواند کمتر از 2 کارکتر باشد" }),
-  bio: z
-    .string()
-    .min(2, { message: "بیوگرافی نمیتواند کمتر از 2 کارکتر باشد" }),
+  bio: z.string(),
   username: z
     .string()
     .min(2, { message: "نام کاربری نمیتواند کمتر از 2 کارکتر باشد" }),
