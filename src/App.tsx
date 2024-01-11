@@ -24,6 +24,7 @@ const UpdatePost = lazy(() => import("./_root/pages/UpdatePost"));
 const PostDetails = lazy(() => import("./_root/pages/PostDetails"));
 const Profile = lazy(() => import("./_root/pages/Profile"));
 const UpdateProfile = lazy(() => import("./_root/pages/UpdateProfile"));
+const Audits = lazy(() => import("./_root/pages/Audits"));
 
 function App() {
   const location = useLocation();
@@ -90,6 +91,14 @@ function App() {
               element={
                 <Suspense fallback={<Spinner size={50} />}>
                   <CreatePost />
+                </Suspense>
+              }
+            />
+            <Route
+              path="/audits"
+              element={
+                <Suspense fallback={<Spinner size={50} />}>
+                  <Audits />
                 </Suspense>
               }
             />

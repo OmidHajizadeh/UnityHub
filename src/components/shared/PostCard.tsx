@@ -52,7 +52,7 @@ const PostCard = ({ post }: { post: Models.Document }) => {
         )}
       </div>
       <div className="small-medium lg:base-medium py-5">
-        <p dir="auto" className="font-light">
+        <p dir="auto" className="font-light whitespace-break-spaces">
           {post.caption}
         </p>
         {post.tags[0] !== "" && (
@@ -76,7 +76,7 @@ const PostCard = ({ post }: { post: Models.Document }) => {
           className="post-card_img"
         />
       </Link>
-      <PostStats post={post} userId={user.id} />
+      <PostStats post={post} user={user} showComments />
     </GlowingCard>
   );
 };

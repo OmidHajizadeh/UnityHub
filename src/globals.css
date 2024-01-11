@@ -149,7 +149,7 @@
 
   /* Post Details */
   .post_details-container {
-    @apply flex flex-col flex-1 gap-10 overflow-scroll py-10 px-5 md:p-14 custom-scrollbar items-center;
+    @apply flex flex-col flex-1 gap-5 px-3 lg:px-10 overflow-scroll my-8 custom-scrollbar items-center;
   }
 
   .post_details-card {
@@ -208,7 +208,7 @@
   }
 
   .file_uploader-box {
-    @apply flex-center flex-col p-7 h-80 lg:h-[336px];
+    @apply flex-center flex-col p-7 h-80 lg:h-[344px];
   }
 
   /* Grid Post List */

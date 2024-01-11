@@ -1,18 +1,21 @@
-import { Suspense, lazy, useEffect } from "react";
+import { useEffect } from "react";
 import { Link, NavLink, useNavigate } from "react-router-dom";
 
 import { useUserContext } from "@/context/AuthContext";
 import { Button } from "../ui/button";
-import Spinner from "../loaders/Spinner";
 import { useSignOutAccount } from "@/hooks/react-query/mutations";
-
-const Alert = lazy(() => import("@/components/shared/Alert"));
+import Alert from "./Alert";
 
 const sidebarLinks = [
   {
     imageUrl: "/assets/icons/home.svg",
     route: "/",
     label: "خانه",
+  },
+  {
+    imageUrl: "/assets/icons/notification.svg",
+    route: "/audits",
+    label: "گزارش ها",
   },
   {
     imageUrl: "/assets/icons/wallpaper.svg",
@@ -74,14 +77,12 @@ const MainSidebar = () => {
           ))}
         </ul>
       </div>
-      <Suspense fallback={<Spinner />}>
-        <Alert title="آیا مطمئن هستید ؟" onSubmit={signOutHandler}>
-          <Button variant="ghost" className="shad-button_ghost mt-4">
-            <img src="/assets/icons/logout.svg" alt="logout" />
-            <p className="small-medium lg:base-medium">خروج از حساب کاربری</p>
-          </Button>
-        </Alert>
-      </Suspense>
+      <Alert title="آیا مطمئن هستید ؟" onSubmit={signOutHandler}>
+        <Button variant="ghost" className="shad-button_ghost mt-4">
+          <img src="/assets/icons/logout.svg" alt="logout" />
+          <p className="small-medium lg:base-medium">خروج از حساب کاربری</p>
+        </Button>
+      </Alert>
     </nav>
   );
 };

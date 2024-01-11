@@ -13,6 +13,8 @@ import {
   getUsers,
   searchUser,
 } from "@/api/userAPI";
+import { getComments } from "@/api/commentAPI";
+import { getAudits } from "@/api/auditsAPI";
 
 export function useGetHomeFeed() {
   return useInfiniteQuery({
@@ -89,5 +91,19 @@ export function useGetUserById(userId: string) {
     queryKey: [QUERY_KEYS.GET_USER_BY_ID, userId],
     queryFn: () => getUserById(userId),
     enabled: !!userId,
+  });
+}
+
+export function useGetComments(postId: string) {
+  return useQuery({
+    queryKey: [QUERY_KEYS.GET_POST_COMMENTS, postId],
+    queryFn: () => getComments(postId),
+  });
+}
+
+export function useGetAudits() {
+  return useQuery({
+    queryKey: [QUERY_KEYS.GET_AUDITS],
+    queryFn: () => getAudits(),
   });
 }

@@ -52,8 +52,6 @@ const PostForm = ({
   async function onSubmit(values: z.infer<typeof postValidationSchema>) {
     try {
       if (post && action === "update") {
-        console.log(values.tags);
-
         await updatePost({
           ...values,
           postId: post.$id,
@@ -130,6 +128,7 @@ const PostForm = ({
                       dir="auto"
                       type="text"
                       className="shad-input"
+                      placeholder="تهران"
                       {...field}
                     />
                   </FormControl>
@@ -142,9 +141,7 @@ const PostForm = ({
               name="tags"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="shad-form_label">
-                      هشتگ ها
-                  </FormLabel>
+                  <FormLabel className="shad-form_label">هشتگ ها</FormLabel>
                   <FormControl>
                     <TagsInput field={field} setFormValue={setValue} />
                   </FormControl>

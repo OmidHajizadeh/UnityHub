@@ -17,6 +17,8 @@ const ExplorerGridList = ({
   showStats = true,
 }: ExplorerGridListProps) => {
   const { user } = useUserContext();
+  console.log(posts);
+  
   return posts.map((post) => {
     return (
       <motion.li
@@ -47,7 +49,7 @@ const ExplorerGridList = ({
             </div>
           )}
           {showStats && (
-            <PostStats post={post} userId={user.id} showLikeCount={false} />
+            <PostStats post={post} user={user} showLikeCount={false} />
           )}
         </div>
       </motion.li>

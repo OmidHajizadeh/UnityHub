@@ -171,7 +171,7 @@ const Profile = () => {
                 شما هیچ پستی آپلود نکرده اید
               </p>
             ) : (
-              <GridPostList posts={thisUser.posts} showUser={false} />
+              <GridPostList posts={thisUser.posts} showUser={false} showStats={false} />
             )
           }
         />

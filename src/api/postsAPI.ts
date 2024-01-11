@@ -1,11 +1,12 @@
 import { Query } from "appwrite";
 import { v4 as uuidv4 } from "uuid";
 
-import { NewPost, UpdatePost } from "@/types";
+import { LikePostParams, NewPost, UpdatePost } from "@/types";
 import { appwriteConfig, databases } from "../lib/AppWirte/config";
 import { deleteFile, getFilePreview, uploadFile } from "./fileAPI";
 import { getCurrentUser } from "./userAPI";
-import { UnityHubError } from "@/lib/utils";
+import { UnityHubError, generateAuditId } from "@/lib/utils";
+import { createAudit, deleteAudit } from "./auditsAPI";
 
 export async function createPost(post: NewPost) {
   // Upload file to Appwrite storage
@@ -116,15 +117,42 @@ export async function deletePost(postId: string, imageId: string) {
   return { status: "ok" };
 }
 
-export async function likePost(postId: string, likesArray: string[]) {
-  const updatedPost = await databases.updateDocument(
+export async function likePost({ action, likesArray, post }: LikePostParams) {
+  const currentUser = await getCurrentUser();
+  if (!currentUser) throw Error;
+
+  const updatedPostPromise = databases.updateDocument(
     appwriteConfig.databaseId,
     appwriteConfig.postCollectionId,
-    postId,
+    post.$id,
     {
       likes: likesArray,
     }
   );
+
+  let auditPromise = undefined;
+  const uniqueAuditId = generateAuditId("like", currentUser.$id, post.$id);
+
+  if (post.creator.$id !== currentUser.$id) {
+    if (action === "like") {
+      auditPromise = createAudit(
+        {
+          userId: post.creator.$id,
+          initiativeUserId: currentUser.$id,
+          initiativeUserImageUrl: currentUser.imageUrl,
+          initiativeUserUsername: currentUser.username,
+          message: "پست شما را لایک کرد.",
+          postImageUrl: post.imageUrl,
+          postId: post.$id,
+        },
+        uniqueAuditId
+      );
+    } else {
+      auditPromise = deleteAudit(uniqueAuditId);
+    }
+  }
+
+  const [updatedPost] = await Promise.all([updatedPostPromise, auditPromise]);
 
   if (!updatedPost)
     throw new UnityHubError(
@@ -236,21 +264,3 @@ export async function searchPosts({ searchTerm }: { searchTerm: string }) {
 
   return posts;
 }
-
-// export async function getUserPosts(userId?: string) {
-//   if (!userId) return;
-
-//   try {
-//     const post = await databases.listDocuments(
-//       appwriteConfig.databaseId,
-//       appwriteConfig.postCollectionId,
-//       [Query.equal("creator", userId), Query.orderDesc("$createdAt")]
-//     );
-
-//     if (!post) throw Error;
-
-//     return post;
-//   } catch (error) {
-//     console.log(error);
-//   }
-// }

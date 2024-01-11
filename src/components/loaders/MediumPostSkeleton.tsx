@@ -24,7 +24,10 @@ const MediumPostSkeleton = () => {
       </div>
       <div className="flex-between gap-3 z-20 relative">
         <div className="w-8 h-8 rounded-md animate-pulse bg-light-4" />
-        <div className="w-8 h-8 rounded-md animate-pulse bg-light-4" />
+        <div className="flex gap-4">
+          <div className="w-8 h-8 rounded-md animate-pulse bg-light-4" />
+          <div className="w-8 h-8 rounded-md animate-pulse bg-light-4" />
+        </div>
       </div>
     </GlowingCard>
   );

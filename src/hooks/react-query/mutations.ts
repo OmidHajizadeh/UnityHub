@@ -1,5 +1,6 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
+import { v4 as uuidv4 } from "uuid";
 
 import {
   createPost,
@@ -8,6 +9,7 @@ import {
   savePost,
   updatePost,
 } from "@/api/postsAPI";
+import { createComment, deleteComment, updateComment } from "@/api/commentAPI";
 import {
   createUserAccount,
   followUser,
@@ -16,7 +18,16 @@ import {
   updateUser,
 } from "@/api/userAPI";
 import { QUERY_KEYS } from "@/lib/react-query/QueryKeys";
-import { NewPost, NewUser, UpdatePost, UpdateUser } from "@/types";
+import {
+  LikePostParams,
+  NewComment,
+  NewPost,
+  NewUser,
+  UpdateComment,
+  UpdatePost,
+  UpdateUser,
+} from "@/types";
+import { Models } from "appwrite";
 
 export function useCreateUserAccount() {
   return useMutation({
@@ -56,13 +67,7 @@ export function useCreatePost() {
 export function useLikePost() {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: ({
-      postId,
-      likesArray,
-    }: {
-      postId: string;
-      likesArray: string[];
-    }) => likePost(postId, likesArray),
+    mutationFn: (likePostObj: LikePostParams) => likePost(likePostObj),
     onSuccess: (data) => {
       queryClient.invalidateQueries({
         queryKey: [QUERY_KEYS.GET_POST_BY_ID, data?.$id],
@@ -180,6 +185,54 @@ export function useFollowUser(targetUserId: string) {
       });
       queryClient.invalidateQueries({
         queryKey: [QUERY_KEYS.SEARCH_USER, targetUserId],
+      });
+    },
+  });
+}
+
+export function useCreateComment() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: ({
+      comment,
+      post,
+    }: {
+      comment: NewComment;
+      post: Models.Document;
+    }) => {
+      const uniqueCommentId = uuidv4();
+      return createComment(comment, post, uniqueCommentId);
+    },
+    onSuccess: (data) => {
+      toast("در حال بروز رسانی...");
+      queryClient.invalidateQueries({
+        queryKey: [QUERY_KEYS.GET_POST_COMMENTS, data.postId],
+      });
+    },
+  });
+}
+
+export function useUpdateComment() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (comment: UpdateComment) => updateComment(comment),
+    onSuccess: (data) => {
+      toast("در حال بروز رسانی...");
+      queryClient.invalidateQueries({
+        queryKey: [QUERY_KEYS.GET_POST_COMMENTS, data.postId],
+      });
+    },
+  });
+}
+
+export function useDeleteComment(postId: string) {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (commentId: string) => deleteComment(commentId),
+    onSuccess: () => {
+      toast("در حال بروز رسانی...");
+      queryClient.invalidateQueries({
+        queryKey: [QUERY_KEYS.GET_POST_COMMENTS, postId],
       });
     },
   });

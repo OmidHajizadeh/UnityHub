@@ -53,12 +53,25 @@ export const multiFormatDateString = (timestamp: string = ""): string => {
   }
 };
 
-export const checkIsLiked = (likeList: string[], userId: string) => {
-  return likeList.includes(userId);
-};
+export const generateAuditId = (
+  action: "like" | "comment" | "follow",
+  userId: string,
+  targetId: string
+) => {
+  let id = "";
+  switch (action) {
+    case "like":
+      id = `${userId.slice(0, 12)}_likes_${targetId.slice(0, 12)}`;
+      break;
+    case "comment":
+      id = `${userId.slice(0, 12)}_comment_${targetId.slice(0, 12)}`;
+      break;
+    case "follow":
+      id = `${userId.slice(0, 12)}_follow_${targetId.slice(0, 12)}`;
+      break;
+  }
 
-export const checkIsSaved = (saveList: string[], userId: string) => {
-  return saveList.includes(userId);
+  return id;
 };
 
 export class UnityHubError extends Error {

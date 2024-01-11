@@ -1,7 +1,8 @@
+import { Models } from "appwrite";
 import { Dispatch, SetStateAction } from "react";
 
 export type ContextType = {
-  user: User & { followings: string[] };
+  user: User;
   isLoading: boolean;
   isAuthenticated: boolean;
   setUser: Dispatch<SetStateAction<User>>;
@@ -26,6 +27,7 @@ export type User = {
   imageUrl: string;
   bio: string;
   followings: string[];
+  audits: string[];
 };
 
 export type NewUser = {
@@ -51,4 +53,33 @@ export type UpdatePost = {
   files: File[];
   location?: string;
   tags?: string[];
+};
+
+export type NewComment = {
+  text: string;
+  author: string;
+  postId: string;
+};
+
+export type UpdateComment = {
+  commentId: string;
+  text: string;
+  author: string;
+  postId: string;
+};
+
+export type Audit = {
+  userId: string;
+  message: string;
+  initiativeUserId: string;
+  initiativeUserImageUrl: string;
+  initiativeUserUsername: string;
+  postImageUrl?: string;
+  postId?: string;
+};
+
+export type LikePostParams = {
+  likesArray: string[];
+  action: "like" | "dislike";
+  post: Models.Document;
 };

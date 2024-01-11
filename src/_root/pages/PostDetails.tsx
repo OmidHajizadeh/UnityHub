@@ -12,6 +12,7 @@ import { UnityHubError, multiFormatDateString } from "@/lib/utils";
 import { useToast } from "@/components/ui/use-toast";
 import Spinner from "@/components/loaders/Spinner";
 import { useDeletePost } from "@/hooks/react-query/mutations";
+import CommentsList from "@/components/shared/CommentsList";
 
 const Alert = lazy(() => import("@/components/shared/Alert"));
 
@@ -135,8 +136,8 @@ const PostDetails = () => {
                     <img
                       src="/assets/icons/edit.svg"
                       alt="edit"
-                      width={24}
-                      height={24}
+                      width={20}
+                      height={20}
                     />
                   </Link>
                   <Suspense fallback={<Spinner />}>
@@ -170,7 +171,9 @@ const PostDetails = () => {
           <hr className="border border-dark-4/80 w-full" />
 
           <div className="flex flex-1 flex-col w-full small-medium lg:base-regular">
-            <p dir="auto" className="font-light">{post.caption}</p>
+            <p dir="auto" className="font-light whitespace-break-spaces">
+              {post.caption}
+            </p>
             {post.tags[0] !== "" && (
               <ul dir="ltr" className="flex gap-2 mt-3">
                 {post.tags.map((tag: string) => {
@@ -185,10 +188,11 @@ const PostDetails = () => {
           </div>
 
           <div className="w-full">
-            <PostStats post={post} userId={user.id} />
+            <PostStats post={post} user={user} showComments />
           </div>
         </div>
       </div>
+      <CommentsList post={post} />
     </div>
   );
 };

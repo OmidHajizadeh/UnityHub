@@ -1,24 +1,32 @@
 import { AppwriteException, Models } from "appwrite";
 import { useState } from "react";
 
-import { UnityHubError, checkIsLiked, checkIsSaved } from "@/lib/utils";
+import { UnityHubError } from "@/lib/utils";
 import Spinner from "../loaders/Spinner";
 import { useLikePost, useSavePost } from "@/hooks/react-query/mutations";
 import { useToast } from "../ui/use-toast";
+import CommentDialog from "./CommentDialog";
+import { User } from "@/types";
 
 type PostStatsProps = {
-  post?: Models.Document;
-  userId: string;
+  post: Models.Document;
+  user: User;
   showLikeCount?: boolean;
+  showComments?: boolean;
 };
 
-const PostStats = ({ post, userId, showLikeCount = true }: PostStatsProps) => {
+const PostStats = ({
+  post,
+  showComments = false,
+  user,
+  showLikeCount = true,
+}: PostStatsProps) => {
   const [likes, setLikes] = useState<string[]>(
-    post?.likes.map((user: Models.Document) => user.$id)
+    post.likes.map((user: Models.Document) => user.$id)
   );
 
   const [saves, setSaves] = useState<string[]>(
-    post?.saves.map((user: Models.Document) => user.$id)
+    post.saves.map((user: Models.Document) => user.$id)
   );
   const { toast } = useToast();
   const { mutateAsync: likePost, isPending: isLikingPost } = useLikePost();
@@ -30,15 +38,22 @@ const PostStats = ({ post, userId, showLikeCount = true }: PostStatsProps) => {
     try {
       e.stopPropagation();
       let newLikes = [...likes];
+      let action: "like" | "dislike" = "like";
 
-      if (newLikes.includes(userId)) {
-        newLikes = newLikes.filter((id) => id !== userId);
+      if (newLikes.includes(user.id)) {
+        action = "dislike";
+        newLikes = newLikes.filter((id) => id !== user.id);
       } else {
-        newLikes.push(userId);
+        action = "like";
+        newLikes.push(user.id);
       }
 
       setLikes(newLikes);
-      await likePost({ postId: post?.$id || "", likesArray: newLikes });
+      await likePost({
+        likesArray: newLikes,
+        action,
+        post
+      });
     } catch (error) {
       if (error instanceof UnityHubError) {
         return toast({
@@ -70,14 +85,14 @@ const PostStats = ({ post, userId, showLikeCount = true }: PostStatsProps) => {
       e.stopPropagation();
       let newSaves = [...saves];
 
-      if (newSaves.includes(userId)) {
-        newSaves = newSaves.filter((id) => id !== userId);
+      if (newSaves.includes(user.id)) {
+        newSaves = newSaves.filter((id) => id !== user.id);
       } else {
-        newSaves.push(userId);
+        newSaves.push(user.id);
       }
 
       setSaves(newSaves);
-      await savePost({ postId: post?.$id || "", savesArray: newSaves });
+      await savePost({ postId: post.$id, savesArray: newSaves });
     } catch (error) {
       if (error instanceof UnityHubError) {
         return toast({
@@ -110,7 +125,7 @@ const PostStats = ({ post, userId, showLikeCount = true }: PostStatsProps) => {
         ) : (
           <img
             src={`/assets/icons/${
-              checkIsLiked(likes, userId) ? "liked" : "like"
+              likes.includes(user.id) ? "liked" : "like"
             }.svg`}
             alt="like"
             width={20}
@@ -124,21 +139,34 @@ const PostStats = ({ post, userId, showLikeCount = true }: PostStatsProps) => {
           <p className="small-medium lg:base-medium">{likes.length}</p>
         )}
       </div>
-      <div className="flex">
-        {isSavingPost ? (
-          <Spinner />
-        ) : (
-          <img
-            src={`/assets/icons/${
-              checkIsSaved(saves, userId) ? "saved" : "save"
-            }.svg`}
-            alt="save"
-            width={20}
-            height={20}
-            onClick={saveHandler}
-            className="cursor-pointer"
-          />
+      <div className="flex gap-4 items-center">
+        {showComments && (
+          <CommentDialog action="create" post={post}>
+            <img
+              src="/assets/icons/chat.svg"
+              alt="comments"
+              width={20}
+              height={20}
+              className="cursor-pointer"
+            />
+          </CommentDialog>
         )}
+        <div>
+          {isSavingPost ? (
+            <Spinner />
+          ) : (
+            <img
+              src={`/assets/icons/${
+                saves.includes(user.id) ? "saved" : "save"
+              }.svg`}
+              alt="save"
+              width={20}
+              height={20}
+              onClick={saveHandler}
+              className="cursor-pointer"
+            />
+          )}
+        </div>
       </div>
     </div>
   );

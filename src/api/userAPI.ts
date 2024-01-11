@@ -9,7 +9,8 @@ import {
 } from "@/lib/AppWirte/config";
 import { NewUser, UpdateUser } from "@/types";
 import { deleteFile, getFilePreview, uploadFile } from "./fileAPI";
-import { UnityHubError } from "@/lib/utils";
+import { UnityHubError, generateAuditId } from "@/lib/utils";
+import { createAudit, deleteAudit } from "./auditsAPI";
 
 export async function createUserAccount(user: NewUser) {
   // Getting all users
@@ -240,14 +241,32 @@ export async function followUser(action: string, targetUserId: string) {
   const currentUser = await getCurrentUser();
 
   if (!currentUser || currentUser.$id === targetUserId) throw Error;
+  let auditPromise = undefined;
+  const uniqueAuditId = generateAuditId(
+    "follow",
+    currentUser.$id,
+    targetUserId
+  );
 
   let currentUserFollowings = currentUser.followings;
+
   if (action === "follow") {
     currentUserFollowings.push(targetUserId);
+    auditPromise = createAudit(
+      {
+        userId: targetUserId,
+        initiativeUserId: currentUser.$id,
+        initiativeUserImageUrl: currentUser.imageUrl,
+        initiativeUserUsername: currentUser.username,
+        message: "شما را دنبال کرد.",
+      },
+      uniqueAuditId
+    );
   } else {
     currentUserFollowings = currentUserFollowings.filter(
       (id: string) => id !== targetUserId
     );
+    auditPromise = deleteAudit(uniqueAuditId);
   }
 
   const targetUser = await getUserById(targetUserId);
@@ -284,7 +303,11 @@ export async function followUser(action: string, targetUserId: string) {
     }
   );
 
-  const resp = await Promise.all([updateCurrentUser, updateTargetUser]);
+  const resp = await Promise.all([
+    updateCurrentUser,
+    updateTargetUser,
+    auditPromise,
+  ]);
 
   if (!resp) throw new UnityHubError("خطای سرور", "لطفاً دوباره امتحان کنید");
 }

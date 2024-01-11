@@ -61,3 +61,9 @@ export const ProfileValidation = z.object({
     .email({ message: "ایمیل وارد شده معتبر نمی باشد" })
     .min(8, { message: "ایمیل نمیتواند کمتر از 8 کارکتر باشد" }),
 });
+
+export const CommentValidationSchema = z.object({
+  text: z
+    .string()
+    .min(2, { message: "متن کامنت نمیتواند کمتر از 2 کارکتر باشد" }),
+});

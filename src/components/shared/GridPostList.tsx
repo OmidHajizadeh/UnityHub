@@ -27,6 +27,7 @@ const GridPostList = ({
               className="relative min-w-80 h-80"
               layout
               exit={{ scale: 0.8, opacity: 0 }}
+              initial={{ scale: 0.8, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               transition={{ duration: 0.2 }}
             >
@@ -49,11 +50,7 @@ const GridPostList = ({
                   </div>
                 )}
                 {showStats && (
-                  <PostStats
-                    post={post}
-                    userId={user.id}
-                    showLikeCount={false}
-                  />
+                  <PostStats post={post} user={user} showLikeCount={false} />
                 )}
               </div>
             </motion.div>

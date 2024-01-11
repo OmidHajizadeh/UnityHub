@@ -1,3 +1,6 @@
+import React from "react";
+import CommentSkeleton from "../loaders/CommentSkeleton";
+
 const PostDetailsFallback = () => {
   return (
     <div className="post_details-container">
@@ -24,10 +27,23 @@ const PostDetailsFallback = () => {
 
           <div className="w-full flex-between">
             <div className="w-9 h-8 rounded-md bg-light-3 animate-pulse" />
-            <div className="w-9 h-8 rounded-md bg-light-3 animate-pulse" />
+            <div className="flex gap-4">
+              <div className="w-9 h-8 rounded-md bg-light-3 animate-pulse" />
+              <div className="w-9 h-8 rounded-md bg-light-3 animate-pulse" />
+            </div>
           </div>
         </div>
       </div>
+      <ul
+        dir="rtl"
+        className="w-full max-w-5xl p-3 flex flex-col gap-3 bg-dark-3 rounded-xl"
+      >
+        {Array.from({ length: 4 }).map((_, index) => (
+          <React.Fragment key={index}>
+            <CommentSkeleton />
+          </React.Fragment>
+        ))}
+      </ul>
     </div>
   );
 };
