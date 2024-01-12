@@ -114,9 +114,5 @@ export function useGetAudits() {
       }
     },
     initialPageParam: null,
-  })
-  // return useQuery({
-  //   queryKey: [QUERY_KEYS.GET_AUDITS],
-  //   queryFn: () => getAudits(),
-  // });
+  });
 }

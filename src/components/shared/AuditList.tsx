@@ -19,7 +19,7 @@ const AuditList = ({ audits }: AuditListProps) => {
       >
         <Link
           to={`/profile/${audit.initiativeUserId}`}
-          className="shrink-0 rounded-full"
+          className="shrink-0 rounded-full relative"
         >
           <img
             src={
@@ -29,6 +29,19 @@ const AuditList = ({ audits }: AuditListProps) => {
             className="rounded-full h-14 w-14"
             alt={audit.initiativeUserUsername}
           />
+          {audit.auditType === "like" ? (
+            <img
+              src="/assets/icons/liked.svg"
+              alt="liked icon"
+              className="absolute -top-2 -start-0 w-5 h-5"
+            />
+          ) : audit.auditType === "comment" ? (
+            <img
+              src="/assets/icons/comment.svg"
+              alt="comment icon"
+              className="absolute -top-2 -start-0 w-5 h-5"
+            />
+          ) : null}
         </Link>
         <div className="flex-between gap-3 grow">
           <div className="flex flex-col gap-1">
@@ -47,35 +60,39 @@ const AuditList = ({ audits }: AuditListProps) => {
               </time>
             </small>
           </div>
-          {audit.postImageUrl && audit.postId ? (
+          {audit.auditType === "like" ? (
             <Link className="shrink-0" to={`/posts/${audit.postId}`}>
               <img
-                src={
-                  audit.postImageUrl || "/assets/icons/profile-placeholder.svg"
-                }
+                src={audit.postImageUrl}
                 className="rounded-md h-20 w-20"
-                alt={audit.initiativeUserUsername}
+                alt="تصویر پست لایک شده"
               />
             </Link>
-          ) : audit.postImageUrl && !audit.postId ? (
-            <Link
-              className="shrink-0"
-              to={`/profile/${audit.initiativeUserId}`}
-            >
-              <img
-                src={
-                  audit.postImageUrl || "/assets/icons/profile-placeholder.svg"
-                }
-                className="rounded-md h-20 w-20"
-                alt={audit.initiativeUserUsername}
-              />
-            </Link>
-          ) : (
+          ) : audit.auditType === "follow" ? (
             <FollowUserButton
               className="shad-button_primary px-4"
               currentUserFollowings={user.followings}
               targetUserId={audit.initiativeUserId}
             />
+          ) : audit.auditType === "comment" ? (
+            <Link className="shrink-0" to={`/posts/${audit.postId}`}>
+              <img
+                src={audit.postImageUrl}
+                className="rounded-md h-20 w-20"
+                alt="تصویر پست کامنت گذاری شده"
+              />
+            </Link>
+          ) : (
+            <Link
+              className="shrink-0"
+              to={`/profile/${audit.initiativeUserId}`}
+            >
+              <img
+                src="/assets/images/icon.svg"
+                className="rounded-md h-20 w-20"
+                alt={audit.initiativeUserUsername}
+              />
+            </Link>
           )}
         </div>
       </li>

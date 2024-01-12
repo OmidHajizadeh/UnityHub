@@ -3,6 +3,9 @@ import { useState } from "react";
 import { Button } from "../ui/button";
 import Spinner from "../loaders/Spinner";
 import { useFollowUser } from "@/hooks/react-query/mutations";
+import { useToast } from "../ui/use-toast";
+import { UnityHubError } from "@/lib/utils";
+import { AppwriteException } from "appwrite";
 
 type FollowUserButtonProps = {
   className: string;
@@ -19,8 +22,12 @@ const FollowUserButton = ({
     currentUserFollowings.includes(targetUserId)
   );
 
+  const { toast } = useToast();
+
   const { mutateAsync: followAction, isPending: isFollowActionOn } =
     useFollowUser(targetUserId);
+  console.log(targetUserId, hadFollowedUser);
+
   async function followUserHandler(
     action: "follow" | "unfollow",
     e: React.MouseEvent
@@ -28,9 +35,28 @@ const FollowUserButton = ({
     e.preventDefault();
     try {
       await followAction(action);
-      setHadFollowedUser(!hadFollowedUser);
+      setHadFollowedUser((prev) => !prev);
     } catch (error) {
-      console.log(error);
+      if (error instanceof UnityHubError) {
+        return toast({
+          title: error.title,
+          description: error.message,
+          variant: "destructive",
+        });
+      } else if (error instanceof AppwriteException) {
+        return toast({
+          title: error.name,
+          description: error.message,
+          variant: "destructive",
+        });
+      } else {
+        console.log(error);
+        return toast({
+          title: "عملیات با خطا مواجه شد",
+          description: "لطفاً دوباره امتحان کنید.",
+          variant: "destructive",
+        });
+      }
     }
   }
   return (

@@ -62,6 +62,7 @@ const Audits = () => {
               </React.Fragment>
             );
           })}
+          <li ref={ref} className="-mt-4" />
           {hasNextPage &&
             Array.from({ length: 5 }).map((_, index) => {
               return (
@@ -72,7 +73,6 @@ const Audits = () => {
             })}
         </ul>
       </div>
-      <section ref={ref} className="mt-7" />
     </div>
   );
 };

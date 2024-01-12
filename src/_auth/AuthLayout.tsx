@@ -8,15 +8,15 @@ const AuthLayout = () => {
 
   return (
     <>
-      {isAuthenticated ? (
+      {/* {isAuthenticated ? (
         <Navigate to="/" />
-      ) : (
+      ) : ( */}
         <section className="flex flex-1 justify-center items-center flex-col py-10 bg-auth bg-no-repeat bg-cover bg-center">
           <PageWrapper>
             <Outlet />
           </PageWrapper>
         </section>
-      )}
+      {/* )} */}
     </>
   );
 };

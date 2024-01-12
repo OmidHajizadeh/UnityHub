@@ -184,7 +184,7 @@ export function useFollowUser(targetUserId: string) {
         queryKey: [QUERY_KEYS.GET_HOME_FEED],
       });
       queryClient.invalidateQueries({
-        queryKey: [QUERY_KEYS.SEARCH_USER, targetUserId],
+        queryKey: [QUERY_KEYS.SEARCH_USER],
       });
     },
   });

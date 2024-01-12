@@ -52,7 +52,7 @@ const PostStats = ({
       await likePost({
         likesArray: newLikes,
         action,
-        post
+        post,
       });
     } catch (error) {
       if (error instanceof UnityHubError) {
