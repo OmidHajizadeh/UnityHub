@@ -3,19 +3,26 @@ import * as z from "zod";
 export const signupValidationSchema = z.object({
   name: z
     .string()
+    .trim()
     .min(2, { message: "اسم نمیتواند کمتر از 2 کارکتر باشد" })
     .max(50, { message: "اسم نمیتواند بیشتر از 50 کارکتر باشد" }),
   username: z
     .string()
-    .min(2, { message: "نام کاربری نمیتواند کمتر از 2 کارکتر باشد" })
-    .max(50, { message: "نام کاربری نمیتواند بیشتر از 50 کارکتر باشد" }),
+    .trim()
+    .regex(
+      new RegExp(/^[\w](?!.*?\.{2})[\w.]{1,28}[\w]$/),
+      "نام کاربری وارد شده معتبر نمی باشد"
+    )
+    .min(3, { message: "نام کاربری نمیتواند کمتر از 3 کارکتر باشد" })
+    .max(30, { message: "نام کاربری نمیتواند بیشتر از 30 کارکتر باشد" }),
   email: z
     .string()
     .email({ message: "ایمیل وارد شده معتبر نمی باشد" })
     .min(8, { message: "ایمیل نمیتواند کمتر از 8 کارکتر باشد" }),
   password: z
     .string()
-    .min(8, { message: "پسورد نمیتواند کمتر از 8 کارکتر باشد" }),
+    .min(8, { message: "پسورد نمیتواند کمتر از 8 کارکتر باشد" })
+    .max(50, { message: "پسورد نمیتواند بیشتر از 50 کارکتر باشد" }),
 });
 
 export const signinValidationSchema = z.object({
@@ -65,5 +72,6 @@ export const ProfileValidation = z.object({
 export const CommentValidationSchema = z.object({
   text: z
     .string()
+    .trim()
     .min(2, { message: "متن کامنت نمیتواند کمتر از 2 کارکتر باشد" }),
 });

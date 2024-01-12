@@ -17,8 +17,7 @@ const ExplorerGridList = ({
   showStats = true,
 }: ExplorerGridListProps) => {
   const { user } = useUserContext();
-  console.log(posts);
-  
+
   return posts.map((post) => {
     return (
       <motion.li

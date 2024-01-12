@@ -102,8 +102,21 @@ export function useGetComments(postId: string) {
 }
 
 export function useGetAudits() {
-  return useQuery({
+  return useInfiniteQuery({
     queryKey: [QUERY_KEYS.GET_AUDITS],
-    queryFn: () => getAudits(),
-  });
+    queryFn: getAudits,
+    getNextPageParam: (lastPage: any) => {
+      if (lastPage && lastPage.documents.length === 0) {
+        return null;
+      } else {
+        const lastId = lastPage?.documents.at(-1).$id;
+        return lastId;
+      }
+    },
+    initialPageParam: null,
+  })
+  // return useQuery({
+  //   queryKey: [QUERY_KEYS.GET_AUDITS],
+  //   queryFn: () => getAudits(),
+  // });
 }

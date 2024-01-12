@@ -141,8 +141,8 @@ const Explore = () => {
                 />
               ) : (
                 !searchedPosts &&
-                posts.pages.map((item, index) => (
-                  <ExplorerGridList key={index} posts={item.documents} />
+                posts.pages.map((item) => (
+                  <ExplorerGridList posts={item.documents} />
                 ))
               )}
               {hasNextPage &&

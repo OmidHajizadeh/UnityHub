@@ -76,6 +76,19 @@ export async function createUserAccount(user: NewUser) {
     newUserInfo
   );
 
+  const uniqueAuditId = uuidv4();
+  await createAudit(
+    {
+      userId: newUser.$id,
+      initiativeUserId: newUser.$id,
+      initiativeUserImageUrl: newUser.imageUrl,
+      initiativeUserUsername: newUser.username,
+      message: "حساب کاربری شما با موفقیت ساخته شده.",
+      postImageUrl: newUser.imageUrl,
+    },
+    uniqueAuditId
+  );
+
   if (!newUser) {
     await account.deleteIdentity(uniqueId);
     throw new UnityHubError("خطای سرور", "لطفا دوباره امتحان کنید.");

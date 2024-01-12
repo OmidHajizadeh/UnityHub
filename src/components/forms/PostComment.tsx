@@ -103,6 +103,7 @@ const PostComment = ({
         <FormField
           control={form.control}
           name="text"
+          disabled={isCreating || isUpdating}
           render={({ field }) => (
             <FormItem>
               <FormControl>

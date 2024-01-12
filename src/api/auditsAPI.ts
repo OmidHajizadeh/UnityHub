@@ -24,12 +24,23 @@ export function deleteAudit(auditId: string) {
   return deletedAudit;
 }
 
-export async function getAudits() {
+export async function getAudits({ pageParam }: { pageParam: number }) {
   const user = await getCurrentUser();
+
+  const queries: string[] = [
+    Query.equal("userId", user.$id),
+    Query.orderDesc("$createdAt"),
+    Query.limit(10),
+  ];
+
+  if (pageParam) {
+    queries.push(Query.cursorAfter(pageParam.toString()));
+  }
+
   const audits = await databases.listDocuments(
     appwriteConfig.databaseId,
     appwriteConfig.auditCollectionId,
-    [Query.equal("userId", user.$id), Query.orderDesc("$createdAt")]
+    queries
   );
   return audits;
 }

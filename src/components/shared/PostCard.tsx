@@ -34,7 +34,7 @@ const PostCard = ({ post }: { post: Models.Document }) => {
                 {multiFormatDateString(post.$createdAt)}
               </p>
               -
-              <p className="subtle-semibold lg: small-regular">
+              <p className="subtle-semibold lg:small-regular">
                 {post.location}
               </p>
             </div>
