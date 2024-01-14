@@ -64,7 +64,7 @@ const Audits = () => {
       <div className="explore-inner_container">
         <div className="flex gap-2 w-full max-w-5xl">
           <img
-            src="/assets/icons/notification.svg"
+            src="/icons/notification.svg"
             width={36}
             height={36}
             alt="audits"

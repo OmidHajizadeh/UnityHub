@@ -2,27 +2,27 @@ import { NavLink } from "react-router-dom";
 
 const bottombarLinks = [
   {
-    imageUrl: "/assets/icons/home.svg",
+    imageUrl: "/icons/home.svg",
     route: "/",
     label: "خانه",
   },
   {
-    imageUrl: "/assets/icons/wallpaper.svg",
+    imageUrl: "/icons/wallpaper.svg",
     route: "/explore",
     label: "اکسپلورر",
   },
   {
-    imageUrl: "/assets/icons/notification.svg",
+    imageUrl: "/icons/notification.svg",
     route: "/audits",
     label: "گزارش ها",
   },
   {
-    imageUrl: "/assets/icons/people.svg",
+    imageUrl: "/icons/people.svg",
     route: "/all-users",
     label: "کاربران"
   },
   {
-    imageUrl: "/assets/icons/gallery-add.svg",
+    imageUrl: "/icons/gallery-add.svg",
     route: "/create-post",
     label: "پست جدید",
   },

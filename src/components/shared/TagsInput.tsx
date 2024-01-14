@@ -87,7 +87,7 @@ const TagsInput = ({ field, setFormValue }: TagsInputProps) => {
             key={tag.id}
           >
             <img
-              src="/assets/icons/delete.svg"
+              src="/icons/delete.svg"
               alt="edit"
               width="16"
               height="16"

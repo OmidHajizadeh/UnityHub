@@ -7,7 +7,7 @@ const AllUsersFallback = () => {
       <div className="explore-inner_container">
         <div className="flex gap-2 w-full max-w-5xl">
           <img
-            src="/assets/icons/people.svg"
+            src="/icons/people.svg"
             width={36}
             height={36}
             alt="users"

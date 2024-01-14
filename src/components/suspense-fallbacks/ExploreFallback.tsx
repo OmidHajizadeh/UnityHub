@@ -8,7 +8,7 @@ const ExploreFallback = () => {
       <div className="explore-inner_container">
         <div className="flex gap-2 w-full max-w-5xl">
           <img
-            src="/assets/icons/wallpaper.svg"
+            src="/icons/wallpaper.svg"
             width={36}
             height={36}
             alt="edit"

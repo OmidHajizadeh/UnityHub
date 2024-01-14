@@ -6,7 +6,7 @@ const Spinner = ({ size = 24 }: SpinnerProps) => {
   return (
     <div className="flex-center w-full">
       <img
-        src="/assets/icons/loader.svg"
+        src="/icons/loader.svg"
         alt="loader"
         width={size}
         height={size}

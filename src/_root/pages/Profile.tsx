@@ -68,7 +68,7 @@ const Profile = () => {
       <div className="profile-inner_container">
         <div className="flex xl:flex-row flex-col max-xl:items-center flex-1 gap-7">
           <img
-            src={thisUser.imageUrl || "/assets/icons/profile-placeholder.svg"}
+            src={thisUser.imageUrl || "/icons/profile-placeholder.svg"}
             alt="profile"
             className="w-28 h-28 lg:h-36 lg:w-36 rounded-full"
           />
@@ -112,7 +112,7 @@ const Profile = () => {
               }`}
             >
               <img
-                src={"/assets/icons/edit.svg"}
+                src={"/icons/edit.svg"}
                 alt="edit"
                 width={20}
                 height={20}
@@ -141,7 +141,7 @@ const Profile = () => {
             }`}
           >
             <img
-              src={"/assets/icons/posts.svg"}
+              src={"/icons/posts.svg"}
               alt="posts"
               width={20}
               height={20}
@@ -155,7 +155,7 @@ const Profile = () => {
             }`}
           >
             <img
-              src={"/assets/icons/like.svg"}
+              src={"/icons/like.svg"}
               alt="like"
               width={20}
               height={20}
@@ -169,7 +169,7 @@ const Profile = () => {
             }`}
           >
             <img
-              src={"/assets/icons/bookmark.svg"}
+              src={"/icons/bookmark.svg"}
               alt="like"
               width={20}
               height={20}

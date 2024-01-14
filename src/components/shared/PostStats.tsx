@@ -127,7 +127,7 @@ const PostStats = ({
           <Spinner />
         ) : (
           <img
-            src={`/assets/icons/${
+            src={`/icons/${
               likes.includes(user.$id) ? "liked" : "like"
             }.svg`}
             alt="like"
@@ -146,7 +146,7 @@ const PostStats = ({
         {showComments && (
           <CommentDialog action="create" post={post}>
             <img
-              src="/assets/icons/chat.svg"
+              src="/icons/chat.svg"
               alt="comments"
               width={20}
               height={20}
@@ -159,7 +159,7 @@ const PostStats = ({
             <Spinner />
           ) : (
             <img
-              src={`/assets/icons/${
+              src={`/icons/${
                 saves.includes(user.$id) ? "saved" : "save"
               }.svg`}
               alt="save"

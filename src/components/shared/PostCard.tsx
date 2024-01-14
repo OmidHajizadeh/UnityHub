@@ -18,7 +18,7 @@ const PostCard = ({ post }: { post: Post }) => {
         >
           <img
             src={
-              post.creator.imageUrl || "/assets/icons/profile-placeholder.svg"
+              post.creator.imageUrl || "/icons/profile-placeholder.svg"
             }
             alt={post.creator.name}
             className="rounded-full w-12 lg:h-12"
@@ -41,7 +41,7 @@ const PostCard = ({ post }: { post: Post }) => {
         {user?.$id === post.creator.$id && (
           <Link to={`/update-post/${post.$id}`}>
             <img
-              src="/assets/icons/edit.svg"
+              src="/icons/edit.svg"
               alt="edit"
               width={20}
               height={20}
@@ -67,7 +67,7 @@ const PostCard = ({ post }: { post: Post }) => {
       </div>
       <Link to={`/posts/${post.$id}`}>
         <img
-          src={post.imageUrl || "/assets/icons/profile-placeholder.svg"}
+          src={post.imageUrl || "/icons/profile-placeholder.svg"}
           alt={post.caption}
           width="auto"
           height="auto"

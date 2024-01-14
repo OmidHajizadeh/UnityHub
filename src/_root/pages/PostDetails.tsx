@@ -115,7 +115,7 @@ const PostDetails = () => {
               <img
                 src={
                   post.creator.imageUrl ||
-                  "/assets/icons/profile-placeholder.svg"
+                  "/icons/profile-placeholder.svg"
                 }
                 alt={post.creator.name}
                 className="rounded-full w-8 h-8 lg:w-12 lg:h-12"
@@ -140,7 +140,7 @@ const PostDetails = () => {
                 <>
                   <Link to={`/update-post/${post.$id}`}>
                     <img
-                      src="/assets/icons/edit.svg"
+                      src="/icons/edit.svg"
                       alt="edit"
                       width={20}
                       height={20}
@@ -161,7 +161,7 @@ const PostDetails = () => {
                         className="ghost_details-delete-btn"
                       >
                         <img
-                          src="/assets/icons/delete.svg"
+                          src="/icons/delete.svg"
                           alt="edit"
                           width={24}
                           height={24}

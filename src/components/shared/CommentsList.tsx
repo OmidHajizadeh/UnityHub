@@ -59,7 +59,7 @@ const CommentsList = ({ post }: CommentsListProps) => {
               <img
                 src={
                   comment.author.imageUrl ||
-                  "/assets/icons/profile-placeholder.svg"
+                  "/icons/profile-placeholder.svg"
                 }
                 alt="profile"
                 className="h-14 w-14 rounded-full"
@@ -86,7 +86,7 @@ const CommentsList = ({ post }: CommentsListProps) => {
                       post={comment.postId}
                     >
                       <img
-                        src="/assets/icons/edit.svg"
+                        src="/icons/edit.svg"
                         alt="comments"
                         width={15}
                         height={15}
@@ -99,7 +99,7 @@ const CommentsList = ({ post }: CommentsListProps) => {
                       description="این عملیات برگشت ناپذیر است و کامنت شما بصورت کامل حذف خواهد شد."
                     >
                       <img
-                        src="/assets/icons/delete.svg"
+                        src="/icons/delete.svg"
                         alt="delete"
                         width={18}
                         height={18}

@@ -25,14 +25,14 @@ const AuditList = ({ audits }: AuditListProps) => {
           <img
             src={
               audit.initiativeUserImageUrl ||
-              "/assets/icons/profile-placeholder.svg"
+              "/icons/profile-placeholder.svg"
             }
             className="rounded-full h-14 w-14"
             alt={audit.initiativeUserUsername}
           />
            {audit.auditType === "comment" && (
             <img
-              src="/assets/icons/comment.svg"
+              src="/icons/comment.svg"
               alt="comment icon"
               className="absolute -top-2 -start-0 w-5 h-5"
             />
@@ -83,7 +83,7 @@ const AuditList = ({ audits }: AuditListProps) => {
               to={`/profile/${audit.initiativeUserId}`}
             >
               <img
-                src="/assets/images/icon.svg"
+                src="/images/icon.svg"
                 className="rounded-md h-20 w-20"
                 alt={audit.initiativeUserUsername}
               />

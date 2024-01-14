@@ -42,7 +42,7 @@ const AllUsers = () => {
       <div className="explore-inner_container">
         <div className="flex gap-2 w-full max-w-5xl">
           <img
-            src="/assets/icons/people.svg"
+            src="/icons/people.svg"
             width={36}
             height={36}
             alt="users"
@@ -52,7 +52,7 @@ const AllUsers = () => {
         </div>
         <div className="flex gap-1 px-4 w-full rounded-lg bg-dark-4">
           <img
-            src="/assets/icons/search.svg"
+            src="/icons/search.svg"
             alt="search"
             width={24}
             height={24}

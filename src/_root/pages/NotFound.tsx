@@ -5,7 +5,7 @@ const NotFound = () => {
     <div className="h-screen w-screen grid place-items-center">
       <div className="text-center flex-center flex-col gap-4">
         <img
-          src="/assets/images/icon.svg"
+          src="/images/icon.svg"
           alt="unityhub"
           className="w-14 lg:w-24 h-14 lg:h-24"
         />

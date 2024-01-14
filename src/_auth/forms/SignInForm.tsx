@@ -72,7 +72,7 @@ const SignInForm = () => {
     <Form {...form}>
       <div className="sm:w-420 flex-center flex-col px-4 sm:px-0">
         <img
-          src="/assets/images/icon.svg"
+          src="/images/icon.svg"
           alt="logo"
           className="max-w-[5rem]"
         />

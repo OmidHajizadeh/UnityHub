@@ -8,27 +8,27 @@ import { useGetCurrentUser } from "@/hooks/react-query/queries";
 
 const sidebarLinks = [
   {
-    imageUrl: "/assets/icons/home.svg",
+    imageUrl: "/icons/home.svg",
     route: "/",
     label: "خانه",
   },
   {
-    imageUrl: "/assets/icons/notification.svg",
+    imageUrl: "/icons/notification.svg",
     route: "/audits",
     label: "گزارش ها",
   },
   {
-    imageUrl: "/assets/icons/wallpaper.svg",
+    imageUrl: "/icons/wallpaper.svg",
     route: "/explore",
     label: "اکسپلورر",
   },
   {
-    imageUrl: "/assets/icons/people.svg",
+    imageUrl: "/icons/people.svg",
     route: "/all-users",
     label: "کاربران",
   },
   {
-    imageUrl: "/assets/icons/add-post.svg",
+    imageUrl: "/icons/add-post.svg",
     route: "/create-post",
     label: "پست جدید",
   },
@@ -52,7 +52,7 @@ const MainSidebar = () => {
         {user ? (
           <Link to={`/profile/${user.$id}`} className="flex gap-3 items-center">
             <img
-              src={user?.imageUrl || "/assets/icons/profile-placeholder.svg"}
+              src={user?.imageUrl || "/icons/profile-placeholder.svg"}
               alt="profile"
               className="h-14 w-14 rounded-full"
             />
@@ -79,7 +79,7 @@ const MainSidebar = () => {
               >
                 <img
                   src={link.imageUrl}
-                  alt={link.label}
+                  alt="icon"
                   className="group-hover:invert-white transition"
                 />
                 {link.label}
@@ -90,7 +90,7 @@ const MainSidebar = () => {
       </div>
       <Alert title="آیا مطمئن هستید ؟" onSubmit={signOutHandler}>
         <Button variant="ghost" className="shad-button_ghost mt-4">
-          <img src="/assets/icons/logout.svg" alt="logout" />
+          <img src="/icons/logout.svg" alt="logout" />
           <p className="small-medium lg:base-medium">خروج از حساب کاربری</p>
         </Button>
       </Alert>

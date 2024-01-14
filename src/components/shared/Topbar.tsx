@@ -24,7 +24,7 @@ const Topbar = () => {
       <div className="flex-between py-4 px-5">
         <Link to="/" className="flex gap-3 items-center">
           <img
-            src="/assets/images/logo.svg"
+            src="/images/logo.svg"
             alt="logo"
             width={130}
             height={325}
@@ -34,13 +34,13 @@ const Topbar = () => {
           <Suspense fallback={<Spinner />}>
             <Alert title="آیا مطمئن هستید ؟" onSubmit={signOutHandler}>
               <Button variant="ghost" className="shad-button_ghost">
-                <img src="/assets/icons/logout.svg" alt="logout" />
+                <img src="/icons/logout.svg" alt="logout" />
               </Button>
             </Alert>
           </Suspense>
           <Link to={`/profile/${user?.$id}`} className="flex-center gap-3">
             <img
-              src={user?.imageUrl || "/assets/images/profile-placeholder.svg"}
+              src={user?.imageUrl || "/images/profile-placeholder.svg"}
               alt="profile image"
               className="h-8 w-8 rounded-full"
             />
