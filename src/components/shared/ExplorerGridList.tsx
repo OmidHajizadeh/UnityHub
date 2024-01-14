@@ -3,8 +3,7 @@ import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 
 import PostStats from "./PostStats";
-import { useGetCurrentUser } from "@/hooks/react-query/queries";
-import { User } from "@/types";
+import { Post } from "@/types";
 
 type ExplorerGridListProps = {
   posts: Models.Document[];
@@ -17,8 +16,6 @@ const ExplorerGridList = ({
   showUser = true,
   showStats = true,
 }: ExplorerGridListProps) => {
-  const { data: user } = useGetCurrentUser();
-
   return posts.map((post) => {
     return (
       <motion.li
@@ -48,13 +45,7 @@ const ExplorerGridList = ({
               <p className="line-clamp-1">{post.creator.name}</p>
             </div>
           )}
-          {showStats && (
-            <PostStats
-              post={post}
-              user={user || ({} as User)}
-              showLikeCount={false}
-            />
-          )}
+          {showStats && <PostStats post={post as Post} showLikeCount={false} />}
         </div>
       </motion.li>
     );

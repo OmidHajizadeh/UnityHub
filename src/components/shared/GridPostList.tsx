@@ -2,8 +2,7 @@ import { Link } from "react-router-dom";
 import { AnimatePresence, motion } from "framer-motion";
 
 import PostStats from "./PostStats";
-import { useGetCurrentUser } from "@/hooks/react-query/queries";
-import { Post, User } from "@/types";
+import { Post } from "@/types";
 
 type GridPostListProps = {
   posts: Post[];
@@ -16,7 +15,6 @@ const GridPostList = ({
   showUser = true,
   showStats = true,
 }: GridPostListProps) => {
-
   return (
     <section className="grid-container">
       <AnimatePresence mode="popLayout">
@@ -49,9 +47,7 @@ const GridPostList = ({
                     <p className="line-clamp-1">{post.creator.name}</p>
                   </div>
                 )}
-                {showStats && (
-                  <PostStats post={post} showLikeCount={false} />
-                )}
+                {showStats && <PostStats post={post} showLikeCount={false} />}
               </div>
             </motion.div>
           );

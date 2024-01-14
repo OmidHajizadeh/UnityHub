@@ -9,6 +9,7 @@ import { useGetAudits } from "@/hooks/react-query/queries";
 import AuditList from "@/components/shared/AuditList";
 import AuditSkeleton from "@/components/loaders/AuditSkeleton";
 import { UnityHubError } from "@/lib/utils";
+import { Audit } from "@/types";
 
 const Audits = () => {
   const {
@@ -75,7 +76,7 @@ const Audits = () => {
           {audits.pages.map((item, index) => {
             return (
               <React.Fragment key={index}>
-                <AuditList audits={item.documents} />
+                <AuditList audits={item.documents as Audit[]} />
               </React.Fragment>
             );
           })}

@@ -1,4 +1,4 @@
-import { AppwriteException, Models } from "appwrite";
+import { AppwriteException } from "appwrite";
 import { useState } from "react";
 
 import { UnityHubError } from "@/lib/utils";
