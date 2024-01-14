@@ -1,4 +1,4 @@
-import { Query } from "appwrite";
+import { Models, Query } from "appwrite";
 import { v4 as uuidv4 } from "uuid";
 
 import {
@@ -7,7 +7,7 @@ import {
   avatars,
   databases,
 } from "@/lib/AppWirte/config";
-import { NewUser, UpdateUser } from "@/types";
+import { NewUser, UpdateUser, User } from "@/types";
 import { deleteFile, getFilePreview, uploadFile } from "./fileAPI";
 import { UnityHubError, generateAuditId } from "@/lib/utils";
 import { createAudit, deleteAudit } from "./auditsAPI";
@@ -62,7 +62,6 @@ export async function createUserAccount(user: NewUser) {
 
   // Adding user to our database
   const newUserInfo = {
-    bio: "",
     name: newAccount.name,
     email: newAccount.email,
     username: user.username,
@@ -80,11 +79,12 @@ export async function createUserAccount(user: NewUser) {
   await createAudit(
     {
       userId: newUser.$id,
+      message: "حساب کاربری شما با موفقیت ساخته شده.",
       initiativeUserId: newUser.$id,
       initiativeUserImageUrl: newUser.imageUrl,
       initiativeUserUsername: newUser.username,
-      message: "حساب کاربری شما با موفقیت ساخته شده.",
       postImageUrl: newUser.imageUrl,
+      auditType: "createAccount",
     },
     uniqueAuditId
   );
@@ -117,7 +117,6 @@ export async function signOutAccount() {
       "لطفاً دوباره امتحان کنید."
     );
 
-  window.location.href = "/sign-in";
   return session;
 }
 
@@ -127,7 +126,7 @@ export async function getCurrentUser() {
   if (!currentAccount)
     throw new UnityHubError(
       "خطا در دریافت اطلاعات کاربر",
-      "لطفاً دوباره امتحان کنید"
+      "لطفاً به حساب کاربری خود وارد شوید."
     );
 
   const currentUser = await databases.listDocuments(
@@ -139,10 +138,10 @@ export async function getCurrentUser() {
   if (!currentUser)
     throw new UnityHubError(
       "خطا در دریافت اطلاعات کاربر",
-      "لطفاً دوباره امتحان کنید"
+      "لطفاً به حساب کاربری خود وارد شوید."
     );
 
-  return currentUser.documents[0];
+  return currentUser.documents[0] as User;
 }
 
 export async function getUsers(limit?: number) {
@@ -220,7 +219,7 @@ export async function updateUser(user: UpdateUser) {
   const updatedUser = await databases.updateDocument(
     appwriteConfig.databaseId,
     appwriteConfig.userCollectionId,
-    user.userId,
+    user.$id!,
     {
       name: user.name,
       bio: user.bio,
@@ -253,7 +252,12 @@ export async function updateUser(user: UpdateUser) {
 export async function followUser(action: string, targetUserId: string) {
   const currentUser = await getCurrentUser();
 
-  if (!currentUser || currentUser.$id === targetUserId) throw Error;
+  if (!currentUser || currentUser.$id === targetUserId)
+    throw new UnityHubError(
+      "خطا در انجام عملیات",
+      "شما اجازه این عملیات را ندارید."
+    );
+
   let auditPromise = undefined;
   const uniqueAuditId = generateAuditId(
     "follow",
@@ -271,7 +275,8 @@ export async function followUser(action: string, targetUserId: string) {
         initiativeUserId: currentUser.$id,
         initiativeUserImageUrl: currentUser.imageUrl,
         initiativeUserUsername: currentUser.username,
-        message: "شما را دنبال کرد.",
+        message: `کاربر ${currentUser.name} شما را دنبال کرد.`,
+        auditType: "follow",
       },
       uniqueAuditId
     );
@@ -322,7 +327,7 @@ export async function followUser(action: string, targetUserId: string) {
     auditPromise,
   ]);
 
-  if (!resp) throw new UnityHubError("خطای سرور", "لطفاً دوباره امتحان کنید");
+  if (!resp) throw new UnityHubError("خطای سرور", "لطفاً دوباره امتحان کنید.");
 }
 
 export async function searchUser({ searchTerm }: { searchTerm: string }) {
@@ -334,7 +339,7 @@ export async function searchUser({ searchTerm }: { searchTerm: string }) {
   if (!posts)
     throw new UnityHubError(
       "خطا در پیدا کردن کاربر",
-      "لطفاً دوباره امتحان کنید"
+      "لطفاً دوباره امتحان کنید."
     );
 
   return posts;

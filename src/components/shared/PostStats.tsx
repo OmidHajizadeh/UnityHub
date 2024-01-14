@@ -6,11 +6,11 @@ import Spinner from "../loaders/Spinner";
 import { useLikePost, useSavePost } from "@/hooks/react-query/mutations";
 import { useToast } from "../ui/use-toast";
 import CommentDialog from "./CommentDialog";
-import { User } from "@/types";
+import { Post, User } from "@/types";
+import { useGetCurrentUser } from "@/hooks/react-query/queries";
 
 type PostStatsProps = {
-  post: Models.Document;
-  user: User;
+  post: Post;
   showLikeCount?: boolean;
   showComments?: boolean;
 };
@@ -18,34 +18,36 @@ type PostStatsProps = {
 const PostStats = ({
   post,
   showComments = false,
-  user,
   showLikeCount = true,
 }: PostStatsProps) => {
+  const { toast } = useToast();
   const [likes, setLikes] = useState<string[]>(
-    post.likes.map((user: Models.Document) => user.$id)
+    post.likes.map((user: User) => user.$id)
   );
 
   const [saves, setSaves] = useState<string[]>(
-    post.saves.map((user: Models.Document) => user.$id)
+    post.saves.map((user: User) => user.$id)
   );
-  const { toast } = useToast();
   const { mutateAsync: likePost, isPending: isLikingPost } = useLikePost();
   const { mutateAsync: savePost, isPending: isSavingPost } = useSavePost();
+  const { data: user } = useGetCurrentUser();
+  if (!user) return;
 
   async function likeHandler(
     e: React.MouseEvent<HTMLImageElement, MouseEvent>
   ) {
+    if (!user) return;
     try {
       e.stopPropagation();
       let newLikes = [...likes];
       let action: "like" | "dislike" = "like";
 
-      if (newLikes.includes(user.id)) {
+      if (newLikes.includes(user.$id)) {
         action = "dislike";
-        newLikes = newLikes.filter((id) => id !== user.id);
+        newLikes = newLikes.filter((id) => id !== user.$id);
       } else {
         action = "like";
-        newLikes.push(user.id);
+        newLikes.push(user.$id);
       }
 
       setLikes(newLikes);
@@ -81,14 +83,15 @@ const PostStats = ({
   async function saveHandler(
     e: React.MouseEvent<HTMLImageElement, MouseEvent>
   ) {
+    if (!user) return;
     try {
       e.stopPropagation();
       let newSaves = [...saves];
 
-      if (newSaves.includes(user.id)) {
-        newSaves = newSaves.filter((id) => id !== user.id);
+      if (newSaves.includes(user.$id)) {
+        newSaves = newSaves.filter((id) => id !== user.$id);
       } else {
-        newSaves.push(user.id);
+        newSaves.push(user.$id);
       }
 
       setSaves(newSaves);
@@ -125,7 +128,7 @@ const PostStats = ({
         ) : (
           <img
             src={`/assets/icons/${
-              likes.includes(user.id) ? "liked" : "like"
+              likes.includes(user.$id) ? "liked" : "like"
             }.svg`}
             alt="like"
             width={20}
@@ -157,7 +160,7 @@ const PostStats = ({
           ) : (
             <img
               src={`/assets/icons/${
-                saves.includes(user.id) ? "saved" : "save"
+                saves.includes(user.$id) ? "saved" : "save"
               }.svg`}
               alt="save"
               width={20}

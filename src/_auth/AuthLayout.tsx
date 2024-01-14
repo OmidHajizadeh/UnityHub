@@ -1,22 +1,27 @@
-import { Navigate, Outlet } from "react-router-dom";
+import { Outlet, useNavigate } from "react-router-dom";
 
 import PageWrapper from "@/lib/framer-motion/PageWrapper";
-import { useUserContext } from "@/context/AuthContext";
+import { useEffect } from "react";
 
 const AuthLayout = () => {
-  const { isAuthenticated } = useUserContext();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (
+      localStorage.getItem("cookieFallback") !== "[]" &&
+      localStorage.getItem("cookieFallback") !== null
+    ) {
+      navigate("/");
+    }
+  }, [navigate]);
 
   return (
     <>
-      {/* {isAuthenticated ? (
-        <Navigate to="/" />
-      ) : ( */}
-        <section className="flex flex-1 justify-center items-center flex-col py-10 bg-auth bg-no-repeat bg-cover bg-center">
-          <PageWrapper>
-            <Outlet />
-          </PageWrapper>
-        </section>
-      {/* )} */}
+      <section className="flex flex-1 justify-center items-center flex-col py-10 bg-auth bg-no-repeat bg-cover bg-center">
+        <PageWrapper>
+          <Outlet />
+        </PageWrapper>
+      </section>
     </>
   );
 };

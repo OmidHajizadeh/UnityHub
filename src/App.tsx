@@ -127,7 +127,7 @@ function App() {
               }
             />
             <Route
-              path="/update-profile/:id"
+              path="/update-profile"
               element={
                 <Suspense fallback={<Spinner size={50} />}>
                   <UpdateProfile />

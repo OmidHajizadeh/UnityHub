@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 import { Helmet } from "react-helmet";
 import { AnimatePresence, motion } from "framer-motion";
 import { useInView } from "react-intersection-observer";
+import { AppwriteException } from "appwrite";
 
 import PostCard from "@/components/shared/PostCard";
 import UserCard from "@/components/shared/UserCard";
@@ -10,9 +11,12 @@ import MediumPostSkeleton from "@/components/loaders/MediumPostSkeleton";
 import UsersCardSkeleton from "@/components/loaders/UsersCardSkeleton";
 import { UnityHubError } from "@/lib/utils";
 import { useToast } from "@/components/ui/use-toast";
-import { AppwriteException } from "appwrite";
+import { Post } from "@/types";
 
 const Home = () => {
+  const { ref, inView } = useInView();
+  const { toast } = useToast();
+
   const {
     data: posts,
     isPending: isPostLoading,
@@ -22,80 +26,63 @@ const Home = () => {
     hasNextPage,
   } = useGetHomeFeed();
 
-  const { ref, inView } = useInView();
-  const { toast } = useToast();
   const {
-    data: creators,
-    isPending: isUserLoading,
-    isError: isErrorCreators,
-    error: creatorsError,
+    data: users,
+    isPending: areUsersLoading,
+    isError: isErrorUsers,
+    error: usersError,
   } = useGetUsers(6);
 
   useEffect(() => {
     if (inView) {
       fetchNextPage();
     }
-  }, [inView]);
+  }, [inView, fetchNextPage]);
 
-  if (isErrorPosts || isErrorCreators) {
-    if (postsError) {
-      if (postsError instanceof UnityHubError) {
-        toast({
-          title: postsError.title,
-          description: postsError.message,
-          variant: "destructive",
-        });
-      } else if (postsError instanceof AppwriteException) {
-        toast({
-          title: postsError.name,
-          description: postsError.message,
-          variant: "destructive",
-        });
-      } else {
-        console.log(postsError);
-        toast({
-          title: "خطا در دریافت پست ها",
-          description: "لطفاً دوباره امتحان کنید.",
-          variant: "destructive",
-        });
-      }
+  if (isErrorPosts) {
+    if (postsError instanceof UnityHubError) {
+      toast({
+        title: postsError.title,
+        description: postsError.message,
+        variant: "destructive",
+      });
+    } else if (postsError instanceof AppwriteException) {
+      toast({
+        title: postsError.name,
+        description: postsError.message,
+        variant: "destructive",
+      });
+    } else {
+      console.log(postsError);
+      toast({
+        title: "خطا در دریافت پست ها",
+        description: "لطفاً دوباره امتحان کنید.",
+        variant: "destructive",
+      });
     }
-    if (creatorsError) {
-      if (creatorsError instanceof UnityHubError) {
-        toast({
-          title: creatorsError.title,
-          description: creatorsError.message,
-          variant: "destructive",
-        });
-      } else if (creatorsError instanceof AppwriteException) {
-        toast({
-          title: creatorsError.name,
-          description: creatorsError.message,
-          variant: "destructive",
-        });
-      } else {
-        console.log(creatorsError);
-        toast({
-          title: "خطا در دریافت کاربران",
-          description: "لطفاً دوباره امتحان کنید.",
-          variant: "destructive",
-        });
-      }
-    }
+  }
 
-    return (
-      <div className="flex flex-1">
-        <Helmet>
-          <title>خطا</title>
-        </Helmet>
-        <div className="home-container">
-          <p className="body-medium text-light-1">خطایی رخ داد</p>
-        </div>
-        <div className="home-creators">
-          <p className="body-medium text-light-1">خطایی رخ داد</p>
-        </div>
-      </div>
-    );
+  if (isErrorUsers) {
+    if (usersError instanceof UnityHubError) {
+      toast({
+        title: usersError.title,
+        description: usersError.message,
+        variant: "destructive",
+      });
+    } else if (usersError instanceof AppwriteException) {
+      toast({
+        title: usersError.name,
+        description: usersError.message,
+        variant: "destructive",
+      });
+    } else {
+      console.log(usersError);
+      toast({
+        title: "خطا در دریافت کاربران",
+        description: "لطفاً دوباره امتحان کنید.",
+        variant: "destructive",
+      });
+    }
   }
 
   return (
@@ -108,15 +95,19 @@ const Home = () => {
           <h2 className="h3-bold text-center md:h2-bold w-full">
             پست های کاربران دنبال شده
           </h2>
-          {isPostLoading && !posts ? (
+          {isPostLoading && (
             <section className="flex flex-col flex-1 gap-9 w-full">
-              {Array.from({ length: 5 }).map((_, index) => (
+              {Array.from({ length: 3 }).map((_, index) => (
                 <React.Fragment key={index}>
                   <MediumPostSkeleton />
                 </React.Fragment>
               ))}
             </section>
-          ) : (
+          )}
+          {isErrorPosts && (
+            <p className="body-medium text-light-1">خطایی رخ داد</p>
+          )}
+          {posts && (
             <ul className="flex flex-col flex-1 gap-9 w-full">
               <AnimatePresence mode="popLayout">
                 {posts.pages.map((item) => {
@@ -130,7 +121,7 @@ const Home = () => {
                         key={post.$id}
                         transition={{ duration: 0.2 }}
                       >
-                        <PostCard post={post} />
+                        <PostCard post={post as Post} />
                       </motion.li>
                     );
                   });
@@ -161,19 +152,23 @@ const Home = () => {
           )}
         </div>
       </div>
-      <div className="home-creators">
+      <div className="home-users">
         <h3 className="h3-bold text-center text-light-1">آخرین کاربران</h3>
-        {isUserLoading && !creators ? (
+        {areUsersLoading && (
           <section className="grid 2xl:grid-cols-2 gap-6">
-            {Array.from({ length: 5 }).map((_, index) => (
+            {Array.from({ length: 6 }).map((_, index) => (
               <React.Fragment key={index}>
                 <UsersCardSkeleton />
               </React.Fragment>
             ))}
           </section>
-        ) : (
+        )}
+        {isErrorUsers && (
+          <p className="body-medium text-light-1">خطایی رخ داد</p>
+        )}
+        {users && (
           <ul className="grid 2xl:grid-cols-2 gap-6">
-            {creators?.documents.map((creator) => {
+            {users.documents.map((creator) => {
               return (
                 <li key={creator?.$id}>
                   <UserCard user={creator} />

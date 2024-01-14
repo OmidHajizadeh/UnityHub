@@ -1,2 +1,3 @@
 01. Go through Error handling again.
 02. Make sure request are Promise.all() if they can be.
+03. Make a 404 page and route

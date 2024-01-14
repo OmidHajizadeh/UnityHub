@@ -2,14 +2,15 @@ import { Link, useNavigate } from "react-router-dom";
 import { Suspense, lazy, useEffect } from "react";
 
 import { Button } from "../ui/button";
-import { useUserContext } from "@/context/AuthContext";
 import { useSignOutAccount } from "@/hooks/react-query/mutations";
 import Spinner from "../loaders/Spinner";
+import { useGetCurrentUser } from "@/hooks/react-query/queries";
 const Alert = lazy(() => import("@/components/shared/Alert"));
 
 const Topbar = () => {
-  const { mutate: signOutHandler, isSuccess } = useSignOutAccount();
-  const { user } = useUserContext();
+  const { mutateAsync: signOutHandler, isSuccess } = useSignOutAccount();
+  const { data: user } = useGetCurrentUser();
+
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -37,9 +38,9 @@ const Topbar = () => {
               </Button>
             </Alert>
           </Suspense>
-          <Link to={`/profile/${user.id}`} className="flex-center gap-3">
+          <Link to={`/profile/${user?.$id}`} className="flex-center gap-3">
             <img
-              src={user.imageUrl || "/assets/images/profile-placeholder.svg"}
+              src={user?.imageUrl || "/assets/images/profile-placeholder.svg"}
               alt="profile image"
               className="h-8 w-8 rounded-full"
             />

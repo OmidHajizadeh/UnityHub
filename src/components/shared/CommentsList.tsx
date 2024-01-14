@@ -1,14 +1,13 @@
+import React from "react";
+import { Models } from "appwrite";
 import { Link } from "react-router-dom";
 
-import { useUserContext } from "@/context/AuthContext";
-import { useGetComments } from "@/hooks/react-query/queries";
+import { useGetComments, useGetCurrentUser } from "@/hooks/react-query/queries";
 import { multiFormatDateString } from "@/lib/utils";
 import CommentDialog from "./CommentDialog";
 import Alert from "./Alert";
 import { useDeleteComment } from "@/hooks/react-query/mutations";
 import CommentSkeleton from "../loaders/CommentSkeleton";
-import React from "react";
-import { Models } from "appwrite";
 
 type CommentsListProps = {
   post: Models.Document;
@@ -21,7 +20,8 @@ const CommentsList = ({ post }: CommentsListProps) => {
     isError,
   } = useGetComments(post.$id);
 
-  const { user } = useUserContext();
+  const { data: user } = useGetCurrentUser();
+
   const { mutateAsync: deleteComment } = useDeleteComment(post.$id);
 
   if (isLoadingComments)
@@ -67,8 +67,8 @@ const CommentsList = ({ post }: CommentsListProps) => {
             </Link>
             <div className="flex flex-col gap-1 w-full">
               <Link to={`/profile/${comment.author.$id}`}>
-                <small className="text-light-3">
-                  {comment.author.username}
+                <small dir="auto" className="text-light-3">
+                  @{comment.author.username}
                 </small>
               </Link>
               <p dir="auto" className="font-light whitespace-break-spaces">
@@ -78,7 +78,7 @@ const CommentsList = ({ post }: CommentsListProps) => {
                 <small className="text-light-4">
                   <time>{multiFormatDateString(comment.$createdAt)}</time>
                 </small>
-                {user.id === comment.author.$id && (
+                {user?.$id === comment.author.$id && (
                   <div className="flex gap-3">
                     <CommentDialog
                       comment={comment}

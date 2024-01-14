@@ -1,16 +1,17 @@
-import { multiFormatDateString } from "@/lib/utils";
-import { Models } from "appwrite";
 import { Link } from "react-router-dom";
+
 import FollowUserButton from "./FollowUserButton";
-import { useUserContext } from "@/context/AuthContext";
+import { useGetCurrentUser } from "@/hooks/react-query/queries";
+import { multiFormatDateString } from "@/lib/utils";
+import { Audit } from "@/types";
 
 type AuditListProps = {
-  audits: Models.Document[];
+  audits: Audit[];
 };
 
 const AuditList = ({ audits }: AuditListProps) => {
-  const { user } = useUserContext();
-
+  const { data: user } = useGetCurrentUser();
+  
   return audits.map((audit) => {
     return (
       <li
@@ -29,19 +30,13 @@ const AuditList = ({ audits }: AuditListProps) => {
             className="rounded-full h-14 w-14"
             alt={audit.initiativeUserUsername}
           />
-          {audit.auditType === "like" ? (
-            <img
-              src="/assets/icons/liked.svg"
-              alt="liked icon"
-              className="absolute -top-2 -start-0 w-5 h-5"
-            />
-          ) : audit.auditType === "comment" ? (
+           {audit.auditType === "comment" && (
             <img
               src="/assets/icons/comment.svg"
               alt="comment icon"
               className="absolute -top-2 -start-0 w-5 h-5"
             />
-          ) : null}
+          ) }
         </Link>
         <div className="flex-between gap-3 grow">
           <div className="flex flex-col gap-1">
@@ -71,7 +66,7 @@ const AuditList = ({ audits }: AuditListProps) => {
           ) : audit.auditType === "follow" ? (
             <FollowUserButton
               className="shad-button_primary px-4"
-              currentUserFollowings={user.followings}
+              currentUserFollowings={user?.followings || []}
               targetUserId={audit.initiativeUserId}
             />
           ) : audit.auditType === "comment" ? (

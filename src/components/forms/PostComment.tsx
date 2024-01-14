@@ -14,13 +14,13 @@ import {
 import { Textarea } from "../ui/textarea";
 import { useToast } from "../ui/use-toast";
 import Loader from "../loaders/Spinner";
-import { useUserContext } from "@/context/AuthContext";
 import { CommentValidationSchema } from "@/lib/validation";
 import {
   useCreateComment,
   useUpdateComment,
 } from "@/hooks/react-query/mutations";
 import { UnityHubError } from "@/lib/utils";
+import { useGetCurrentUser } from "@/hooks/react-query/queries";
 
 type PostCommentProps = {
   comment?: Models.Document;
@@ -36,7 +36,7 @@ const PostComment = ({
   closeModal,
 }: PostCommentProps) => {
   const { toast } = useToast();
-  const { user } = useUserContext();
+  const { data: user } = useGetCurrentUser();
 
   const form = useForm<z.infer<typeof CommentValidationSchema>>({
     resolver: zodResolver(CommentValidationSchema),
@@ -51,19 +51,20 @@ const PostComment = ({
     useUpdateComment();
 
   async function onSubmit(values: z.infer<typeof CommentValidationSchema>) {
+    if (!user) return;
     try {
       if (comment && action === "update") {
         await updateComment({
           commentId: comment.$id,
           text: values.text,
-          author: user.id,
+          author: user.$id,
           postId: post.$id,
         });
       } else {
         await createComment({
           comment: {
             text: values.text,
-            author: user.id,
+            author: user.$id,
             postId: post.$id,
           },
           post: post,

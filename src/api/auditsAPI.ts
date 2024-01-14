@@ -2,30 +2,32 @@ import { appwriteConfig, databases } from "@/lib/AppWirte/config";
 import { Query } from "appwrite";
 import { getCurrentUser } from "./userAPI";
 import { Audit } from "@/types";
+import { UnityHubError } from "@/lib/utils";
 
 export function createAudit(audit: Audit, auditId: string) {
-  const newAuditPromise = databases.createDocument(
+  return databases.createDocument(
     appwriteConfig.databaseId,
     appwriteConfig.auditCollectionId,
     auditId,
     audit
   );
-
-  return newAuditPromise;
 }
 
 export function deleteAudit(auditId: string) {
-  const deletedAudit = databases.deleteDocument(
+  return databases.deleteDocument(
     appwriteConfig.databaseId,
     appwriteConfig.auditCollectionId,
     auditId
   );
-
-  return deletedAudit;
 }
 
 export async function getAudits({ pageParam }: { pageParam: number }) {
   const user = await getCurrentUser();
+  if (!user)
+    throw new UnityHubError(
+      "شما اجازه دسترسی به گزارش ها را ندارید",
+      "لطفا به حساب کاربری خود وارد شوید"
+    );
 
   const queries: string[] = [
     Query.equal("userId", user.$id),
@@ -42,5 +44,9 @@ export async function getAudits({ pageParam }: { pageParam: number }) {
     appwriteConfig.auditCollectionId,
     queries
   );
+
+  if (!audits)
+    throw new UnityHubError("خطا در دریافت گزارش ها", "لطفا صفحه را رفرش کنید");
+
   return audits;
 }

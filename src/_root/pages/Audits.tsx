@@ -1,19 +1,21 @@
 import React, { useEffect } from "react";
 import { useInView } from "react-intersection-observer";
 import { Helmet } from "react-helmet";
+import { AppwriteException } from "appwrite";
 
 import AuditsFallback from "@/components/suspense-fallbacks/AuditsFallback";
 import { useToast } from "@/components/ui/use-toast";
 import { useGetAudits } from "@/hooks/react-query/queries";
 import AuditList from "@/components/shared/AuditList";
 import AuditSkeleton from "@/components/loaders/AuditSkeleton";
+import { UnityHubError } from "@/lib/utils";
 
 const Audits = () => {
   const {
     data: audits,
-    isPending,
-    isError,
-    error,
+    isPending: isLoadingAudits,
+    isError: auditsHasError,
+    error: auditError,
     fetchNextPage,
     hasNextPage,
   } = useGetAudits();
@@ -25,18 +27,33 @@ const Audits = () => {
     if (inView) {
       fetchNextPage();
     }
-  }, [inView]);
+  }, [inView, fetchNextPage]);
 
-  if (!audits || isPending) return <AuditsFallback />;
-
-  if (isError) {
-    toast({
-      title: error.name,
-      description: error.message,
-      variant: "destructive",
-    });
+  if (auditsHasError) {
+    if (auditError instanceof UnityHubError) {
+      toast({
+        title: auditError.title,
+        description: auditError.message,
+        variant: "destructive",
+      });
+    } else if (auditError instanceof AppwriteException) {
+      toast({
+        title: auditError.name,
+        description: auditError.message,
+        variant: "destructive",
+      });
+    } else {
+      console.log(auditError);
+      toast({
+        title: "دریافت گزارش ها با خطا مواجه شد",
+        description: "لطفاً صفحه را رفرش کنید.",
+        variant: "destructive",
+      });
+    }
     return <AuditsFallback />;
   }
+
+  if (!audits || isLoadingAudits) return <AuditsFallback />;
 
   return (
     <div className="explore-container">

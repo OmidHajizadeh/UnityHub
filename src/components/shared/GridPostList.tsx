@@ -1,12 +1,12 @@
-import { Models } from "appwrite";
 import { Link } from "react-router-dom";
 import { AnimatePresence, motion } from "framer-motion";
 
-import { useUserContext } from "@/context/AuthContext";
 import PostStats from "./PostStats";
+import { useGetCurrentUser } from "@/hooks/react-query/queries";
+import { Post, User } from "@/types";
 
 type GridPostListProps = {
-  posts: Models.Document[];
+  posts: Post[];
   showUser?: boolean;
   showStats?: boolean;
 };
@@ -16,7 +16,7 @@ const GridPostList = ({
   showUser = true,
   showStats = true,
 }: GridPostListProps) => {
-  const { user } = useUserContext();
+
   return (
     <section className="grid-container">
       <AnimatePresence mode="popLayout">
@@ -50,7 +50,7 @@ const GridPostList = ({
                   </div>
                 )}
                 {showStats && (
-                  <PostStats post={post} user={user} showLikeCount={false} />
+                  <PostStats post={post} showLikeCount={false} />
                 )}
               </div>
             </motion.div>

@@ -18,11 +18,11 @@ import { Textarea } from "../ui/textarea";
 import FileUploader from "../shared/FileUploader";
 import { useToast } from "../ui/use-toast";
 import Loader from "../loaders/Spinner";
-import { useUserContext } from "@/context/AuthContext";
 import { postValidationSchema } from "@/lib/validation";
 import { useCreatePost, useUpdatePost } from "@/hooks/react-query/mutations";
 import { UnityHubError } from "@/lib/utils";
 import TagsInput from "../shared/TagsInput";
+import { useGetCurrentUser } from "@/hooks/react-query/queries";
 
 const PostForm = ({
   post,
@@ -33,7 +33,8 @@ const PostForm = ({
 }) => {
   const { mutateAsync: createPost, isPending: isCreating } = useCreatePost();
   const { mutateAsync: updatePost, isPending: isUpdating } = useUpdatePost();
-  const { user } = useUserContext();
+  const { data: user } = useGetCurrentUser();
+
   const { toast } = useToast();
   const navigate = useNavigate();
 
@@ -50,24 +51,21 @@ const PostForm = ({
   const { setValue } = form;
 
   async function onSubmit(values: z.infer<typeof postValidationSchema>) {
+    if (!user) return;
     try {
       if (post && action === "update") {
         await updatePost({
           ...values,
-          postId: post.$id,
           imageId: post.imageId,
           imageUrl: post.imageUrl,
         });
-
-        return navigate(-1);
+      } else {
+        await createPost({
+          ...values,
+          userId: user.$id,
+        });
       }
-
-      await createPost({
-        ...values,
-        userId: user.id,
-      });
-
-      return navigate(-1);
+      navigate(-1);
     } catch (error) {
       if (error instanceof UnityHubError) {
         return toast({

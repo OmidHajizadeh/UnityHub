@@ -16,6 +16,7 @@ const SearchPostResults = ({
   if (isFetching)
     return (
       <motion.li
+        key="spinner"
         exit={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         initial={{ opacity: 0 }}
@@ -30,6 +31,7 @@ const SearchPostResults = ({
     return <ExplorerGridList posts={searchedPosts.documents} />;
   return (
     <li
+      key="no-result"
       className="text-light-4 text-center w-full mt-10"
       style={{ gridColumn: "1/-1" }}
     >

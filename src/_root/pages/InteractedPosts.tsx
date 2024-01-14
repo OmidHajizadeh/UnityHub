@@ -15,9 +15,9 @@ const InteractedPosts = ({
   title,
   noResultText,
 }: InteractedPostsProps) => {
-  const { data: currentUser } = useGetCurrentUser();
+  const { data: currentUser, isLoading: isLoadingUser } = useGetCurrentUser();
 
-  if (!currentUser)
+  if (isLoadingUser || !currentUser)
     return (
       <div className="flex-center w-full h-full">
         <SmallPostsFallback count={6} />

@@ -9,8 +9,7 @@ import {
 import { Helmet } from "react-helmet";
 import { Suspense, lazy } from "react";
 
-import { useUserContext } from "@/context/AuthContext";
-import { useGetUserById } from "@/hooks/react-query/queries";
+import { useGetCurrentUser, useGetUserById } from "@/hooks/react-query/queries";
 import GridPostList from "@/components/shared/GridPostList";
 import SmallPostsFallback from "@/components/suspense-fallbacks/SmallPostsFallback";
 import ProfileFallback from "@/components/suspense-fallbacks/ProfileFallback";
@@ -32,16 +31,34 @@ const StatBlock = ({ value, label }: StabBlockProps) => (
 
 const Profile = () => {
   const { id } = useParams();
-  const { user } = useUserContext();
   const { pathname } = useLocation();
 
-  const { data: thisUser, isError } = useGetUserById(id || "");
+  const {
+    data: user,
+    isError: isCurrentUserMissing,
+    isLoading: isLoadingCurrentUser,
+  } = useGetCurrentUser();
+  const {
+    data: thisUser,
+    isError: hasVisitedUserError,
+    isLoading: isLoadingVisitedUser,
+  } = useGetUserById(id!);
 
-  if (isError || !id) {
-    return <p>کاربر مورد نظر یافت نشد</p>;
+  if (isLoadingCurrentUser || isLoadingVisitedUser) return <ProfileFallback />;
+
+  if (
+    hasVisitedUserError ||
+    isCurrentUserMissing ||
+    !id ||
+    !user ||
+    !thisUser
+  ) {
+    return (
+      <div className="profile-container">
+        <p>کاربر مورد نظر یافت نشد</p>
+      </div>
+    );
   }
-
-  if (!thisUser) return <ProfileFallback />;
 
   return (
     <div className="profile-container">
@@ -81,17 +98,17 @@ const Profile = () => {
             </div>
 
             {thisUser.bio && (
-              <p className="small-medium md:base-medium text-center xl:text-start mt-7 max-w-screen-sm">
+              <p className="whitespace-break-spaces small-medium md:base-medium text-center xl:text-start mt-7 max-w-screen-sm">
                 {thisUser.bio}
               </p>
             )}
           </div>
 
-          {user.id === thisUser.$id && (
+          {user.$id === thisUser.$id && (
             <Link
-              to={`/update-profile/${thisUser.$id}`}
+              to="/update-profile"
               className={`h-12 bg-dark-4 px-5 text-light-1 flex-center gap-2 rounded-lg ${
-                user.id !== thisUser.$id && "hidden"
+                user.$id !== thisUser.$id && "hidden"
               }`}
             >
               <img
@@ -105,7 +122,7 @@ const Profile = () => {
               </p>
             </Link>
           )}
-          {user.id !== id && (
+          {user.$id !== id && (
             <FollowUserButton
               className="shad-button_primary px-8"
               currentUserFollowings={user.followings}
@@ -115,7 +132,7 @@ const Profile = () => {
         </div>
       </div>
 
-      {thisUser.$id === user.id && (
+      {thisUser.$id === user.$id && (
         <div className="flex-center gap-3 w-full">
           <Link
             to={`/profile/${id}`}
@@ -171,11 +188,15 @@ const Profile = () => {
                 شما هیچ پستی آپلود نکرده اید
               </p>
             ) : (
-              <GridPostList posts={thisUser.posts} showUser={false} showStats={false} />
+              <GridPostList
+                posts={thisUser.posts}
+                showUser={false}
+                showStats={false}
+              />
             )
           }
         />
-        {thisUser.$id === user.id && (
+        {thisUser.$id === user.$id && (
           <>
             <Route
               path="/liked-posts"

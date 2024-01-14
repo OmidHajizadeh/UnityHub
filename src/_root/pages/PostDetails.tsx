@@ -6,8 +6,7 @@ import { AppwriteException } from "appwrite";
 import PostStats from "@/components/shared/PostStats";
 import PostDetailsFallback from "@/components/suspense-fallbacks/PostDetailsFallback";
 import { Button } from "@/components/ui/button";
-import { useUserContext } from "@/context/AuthContext";
-import { useGetPostById } from "@/hooks/react-query/queries";
+import { useGetCurrentUser, useGetPostById } from "@/hooks/react-query/queries";
 import { UnityHubError, multiFormatDateString } from "@/lib/utils";
 import { useToast } from "@/components/ui/use-toast";
 import Spinner from "@/components/loaders/Spinner";
@@ -18,15 +17,22 @@ const Alert = lazy(() => import("@/components/shared/Alert"));
 
 const PostDetails = () => {
   const { id } = useParams();
-  const { data: post, isPending, isError, error } = useGetPostById(id || "");
-  const { user } = useUserContext();
   const { toast } = useToast();
   const navigate = useNavigate();
+
+  const {
+    data: post,
+    isPending: isLoadingPost,
+    isError: isErrorPost,
+    error,
+  } = useGetPostById(id || "");
+  const { data: user } = useGetCurrentUser();
+
   const { mutateAsync: deletePost } = useDeletePost();
 
-  if (isPending) return <PostDetailsFallback />;
+  if (isLoadingPost) return <PostDetailsFallback />;
 
-  if (isError) {
+  if (isErrorPost) {
     if (error instanceof UnityHubError) {
       toast({
         title: error.title,
@@ -49,7 +55,7 @@ const PostDetails = () => {
     }
   }
 
-  if (!post) {
+  if (!post || !user) {
     return <p>پست پیدا نشد</p>;
   }
 
@@ -130,7 +136,7 @@ const PostDetails = () => {
               </div>
             </Link>
             <div className="flex-center">
-              {user.id === post.creator.$id && (
+              {user.$id === post.creator.$id && (
                 <>
                   <Link to={`/update-post/${post.$id}`}>
                     <img
@@ -188,7 +194,7 @@ const PostDetails = () => {
           </div>
 
           <div className="w-full">
-            <PostStats post={post} user={user} showComments />
+            <PostStats post={post} showComments />
           </div>
         </div>
       </div>

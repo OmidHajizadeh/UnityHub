@@ -2,14 +2,14 @@ import { Models } from "appwrite";
 import { Link } from "react-router-dom";
 
 import FollowUserButton from "./FollowUserButton";
-import { useUserContext } from "@/context/AuthContext";
+import { useGetCurrentUser } from "@/hooks/react-query/queries";
 
 type UserCardProps = {
   user: Models.Document;
 };
 
 const UserCard = ({ user }: UserCardProps) => {
-  const { user: currentUser } = useUserContext();
+  const { data: currentUser } = useGetCurrentUser();
 
   return (
     <Link to={`/profile/${user.$id}`} className="user-card">
@@ -33,11 +33,11 @@ const UserCard = ({ user }: UserCardProps) => {
           @{user.username}
         </p>
       </div>
-      {currentUser.id !== user.$id && (
+      {currentUser?.$id !== user.$id && (
         <FollowUserButton
           className="shad-button_primary px-5"
           targetUserId={user.$id}
-          currentUserFollowings={currentUser.followings}
+          currentUserFollowings={currentUser?.followings || []}
         />
       )}
     </Link>

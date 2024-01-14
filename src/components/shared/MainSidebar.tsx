@@ -1,10 +1,10 @@
 import { useEffect } from "react";
 import { Link, NavLink, useNavigate } from "react-router-dom";
 
-import { useUserContext } from "@/context/AuthContext";
 import { Button } from "../ui/button";
 import { useSignOutAccount } from "@/hooks/react-query/mutations";
 import Alert from "./Alert";
+import { useGetCurrentUser } from "@/hooks/react-query/queries";
 
 const sidebarLinks = [
   {
@@ -35,8 +35,9 @@ const sidebarLinks = [
 ];
 
 const MainSidebar = () => {
-  const { mutate: signOutHandler, isSuccess } = useSignOutAccount();
-  const { user } = useUserContext();
+  const { mutateAsync: signOutHandler, isSuccess } = useSignOutAccount();
+  const { data: user } = useGetCurrentUser();
+
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -48,17 +49,27 @@ const MainSidebar = () => {
   return (
     <nav className="rightsidebar">
       <div className="flex flex-col gap-11">
-        <Link to={`/profile/${user.id}`} className="flex gap-3 items-center">
-          <img
-            src={user.imageUrl || "/assets/icons/profile-placeholder.svg"}
-            alt="profile"
-            className="h-14 w-14 rounded-full"
-          />
-          <div className="flex flex-col">
-            <p className="body-bold">{user.name}</p>
-            <p className="small-regular text-light-3">{user.username}@</p>
+        {user ? (
+          <Link to={`/profile/${user.$id}`} className="flex gap-3 items-center">
+            <img
+              src={user?.imageUrl || "/assets/icons/profile-placeholder.svg"}
+              alt="profile"
+              className="h-14 w-14 rounded-full"
+            />
+            <div className="flex flex-col">
+              <p className="body-bold">{user.name}</p>
+              <p className="small-regular text-light-3">{user.username}@</p>
+            </div>
+          </Link>
+        ) : (
+          <div className="flex gap-3 items-center">
+            <div className="bg-slate-400 rounded-full h-14 w-14 animate-pulse" />
+            <div className="flex flex-col grow gap-2">
+              <div className="h-6 rounded-sm animate-pulse w-full max-w-[9rem] bg-white" />
+              <div className="h-4 rounded-sm animate-pulse w-full max-w-[6rem] bg-light-3" />
+            </div>
           </div>
-        </Link>
+        )}
         <ul className="flex flex-col gap-4">
           {sidebarLinks.map((link, index) => (
             <li key={index} className="rightsidebar-link group">

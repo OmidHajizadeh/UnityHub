@@ -1,15 +1,13 @@
-import { Models } from "appwrite";
 import { Link } from "react-router-dom";
 
-import { useUserContext } from "@/context/AuthContext";
 import { multiFormatDateString } from "@/lib/utils";
 import PostStats from "./PostStats";
 import GlowingCard from "./GlowingCard";
+import { useGetCurrentUser } from "@/hooks/react-query/queries";
+import { Post } from "@/types";
 
-const PostCard = ({ post }: { post: Models.Document }) => {
-  const { user } = useUserContext();
-
-  // if (post.creator) return;
+const PostCard = ({ post }: { post: Post }) => {
+  const { data: user } = useGetCurrentUser();
 
   return (
     <GlowingCard className="post-card after:rounded-[23px]">
@@ -40,7 +38,7 @@ const PostCard = ({ post }: { post: Models.Document }) => {
             </div>
           </div>
         </Link>
-        {user.id === post.creator.$id && (
+        {user?.$id === post.creator.$id && (
           <Link to={`/update-post/${post.$id}`}>
             <img
               src="/assets/icons/edit.svg"
@@ -76,7 +74,7 @@ const PostCard = ({ post }: { post: Models.Document }) => {
           className="post-card_img"
         />
       </Link>
-      <PostStats post={post} user={user} showComments />
+      <PostStats post={post} showComments />
     </GlowingCard>
   );
 };

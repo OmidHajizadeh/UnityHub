@@ -1,8 +1,9 @@
 import * as z from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { Helmet } from "react-helmet";
+import { AppwriteException } from "appwrite";
 
 import {
   Form,
@@ -14,66 +15,56 @@ import {
 } from "@/components/ui/form";
 import { useToast } from "@/components/ui/use-toast";
 
-import { useUserContext } from "@/context/AuthContext";
 import { ProfileValidation } from "@/lib/validation";
-import { useGetUserById } from "@/hooks/react-query/queries";
 import Spinner from "@/components/loaders/Spinner";
 import ProfileUploader from "@/components/shared/ProfileUploader";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useUpdateUser } from "@/hooks/react-query/mutations";
 import { UnityHubError } from "@/lib/utils";
-import { AppwriteException } from "appwrite";
 import { Textarea } from "@/components/ui/textarea";
+import { useGetCurrentUser } from "@/hooks/react-query/queries";
 
 const UpdateProfile = () => {
   const { toast } = useToast();
   const navigate = useNavigate();
-  const { id } = useParams();
-  const { user, setUser } = useUserContext();
+  const { data: user } = useGetCurrentUser();
+
+  const { mutateAsync: updateUser, isPending: isUpdatingUser } =
+    useUpdateUser();
+
   const form = useForm<z.infer<typeof ProfileValidation>>({
     resolver: zodResolver(ProfileValidation),
     defaultValues: {
       file: [],
-      name: user.name,
-      bio: user.bio,
-      username: user.username,
-      email: user.email,
+      name: user?.name,
+      bio: user?.bio,
+      username: user?.username,
+      email: user?.email,
     },
   });
 
-  const { data: currentUser } = useGetUserById(id || "");
-
-  const { mutateAsync: updateUser, isPending: isLoadingUpdate } =
-    useUpdateUser();
-  if (!currentUser)
+  if (!user)
     return (
       <div className="flex-center w-full h-full">
         <Spinner size={50} />
       </div>
     );
 
-  const updateUserHandler = async (
-    value: z.infer<typeof ProfileValidation>
-  ) => {
+  async function updateUserHandler(value: z.infer<typeof ProfileValidation>) {
     try {
-      const updatedUser = await updateUser({
-        userId: currentUser.$id,
+      if (!user) return;
+
+      await updateUser({
+        $id: user.$id,
         name: value.name,
         file: value.file,
         bio: value.bio,
-        imageUrl: currentUser.imageUrl,
-        imageId: currentUser.imageId,
+        imageUrl: user.imageUrl,
+        imageId: user.imageId,
       });
 
-      setUser({
-        ...user,
-        name: updatedUser.name,
-        imageUrl: updatedUser.imageUrl,
-        bio: updatedUser.bio,
-      });
-
-      navigate(`/profile/${id}`);
+      navigate(`/profile/${user.$id}`);
     } catch (error) {
       if (error instanceof UnityHubError) {
         return toast({
@@ -96,7 +87,7 @@ const UpdateProfile = () => {
         });
       }
     }
-  };
+  }
 
   return (
     <div className="flex flex-1">
@@ -128,7 +119,7 @@ const UpdateProfile = () => {
                   <FormControl>
                     <ProfileUploader
                       fieldChange={field.onChange}
-                      mediaUrl={currentUser.imageUrl}
+                      mediaUrl={user.imageUrl}
                     />
                   </FormControl>
                   <FormMessage className="shad-form_message" />
@@ -217,9 +208,9 @@ const UpdateProfile = () => {
               <Button
                 type="submit"
                 className="shad-button_primary bg-primary-500 whitespace-nowrap"
-                disabled={isLoadingUpdate}
+                disabled={isUpdatingUser}
               >
-                {isLoadingUpdate && <Spinner />}
+                {isUpdatingUser && <Spinner />}
                 ویرایش پروفایل
               </Button>
             </div>

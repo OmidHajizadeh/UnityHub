@@ -1,26 +1,8 @@
 import { Models } from "appwrite";
-import { Dispatch, SetStateAction } from "react";
 
-export type ContextType = {
-  user: User;
-  isLoading: boolean;
-  isAuthenticated: boolean;
-  setUser: Dispatch<SetStateAction<User>>;
-  setIsAuthenticated: Dispatch<SetStateAction<boolean>>;
-  checkAuthUser: () => Promise<boolean>;
-};
-
-export type UpdateUser = {
-  userId: string;
-  name: string;
-  imageId: string;
-  imageUrl: URL | string;
-  file: File[];
-  bio: string;
-};
+//!  User Types
 
 export type User = {
-  id: string;
   name: string;
   email: string;
   username: string;
@@ -28,14 +10,31 @@ export type User = {
   bio: string;
   followings: string[];
   audits: string[];
-};
+} & Readonly<Models.Document>;
 
 export type NewUser = {
-  name: string;
-  email: string;
-  username: string;
   password: string;
-};
+} & Pick<User, "name" | "email" | "username">;
+
+export type UpdateUser = {
+  name: string;
+  imageId: string;
+  imageUrl: URL | string;
+  file: File[];
+  bio: string;
+} & Readonly<Pick<Models.Document, "$id">>;
+
+//!  Post Types
+export type Post = {
+  caption: string;
+  tags: string[];
+  imageId: string;
+  imageUrl: string;
+  location: string;
+  creator: User;
+  likes: User[];
+  saves: User[];
+} & Readonly<Models.Document>;
 
 export type NewPost = {
   userId: string;
@@ -46,15 +45,15 @@ export type NewPost = {
 };
 
 export type UpdatePost = {
-  postId: string;
   caption: string;
   imageId: string;
   imageUrl: URL;
   files: File[];
   location?: string;
   tags?: string[];
-};
+} & Partial<Models.Document>;
 
+//!  Comment Types
 export type NewComment = {
   text: string;
   author: string;
@@ -68,18 +67,20 @@ export type UpdateComment = {
   postId: string;
 };
 
+//!  Rest
+export type LikePostParams = {
+  likesArray: string[];
+  action: "like" | "dislike";
+  post: Post;
+};
+
 export type Audit = {
   userId: string;
   message: string;
   initiativeUserId: string;
   initiativeUserImageUrl: string;
   initiativeUserUsername: string;
+  auditType: string;
   postImageUrl?: string;
   postId?: string;
-};
-
-export type LikePostParams = {
-  likesArray: string[];
-  action: "like" | "dislike";
-  post: Models.Document;
-};
+} & Readonly<Partial<Models.Document>>;

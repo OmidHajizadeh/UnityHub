@@ -12,27 +12,27 @@ import useDebounce from "@/hooks/use-debounce";
 
 const AllUsers = () => {
   const { toast } = useToast();
-  const {
-    data: creators,
-    isLoading,
-    isError: isErrorCreators,
-  } = useGetUsers(6);
-
   const [searchValue, setSearchValue] = useState("");
   const debouncedSearchValue = useDebounce(searchValue, 500);
+
+  const {
+    data: users,
+    isLoading: isLoadingUsers,
+    isError: isErrorUsers,
+  } = useGetUsers(6);
 
   const { data: searchedUsers, isPending: isFetching } =
     useSearchUser(debouncedSearchValue);
 
-  const shouldShowSearchResults = searchValue !== "";
-
-  if (isErrorCreators) {
+  if (isErrorUsers) {
     toast({
       title: "خطا در دریافت کاربران",
       description: "لطفاً دوباره امتحان کنید.",
       variant: "destructive",
     });
   }
+
+  const shouldShowSearchResults = searchValue.trim().length !== 0;
 
   return (
     <div className="common-container">
@@ -67,10 +67,10 @@ const AllUsers = () => {
         </div>
       </div>
       <div className="user-container mt-8 mb-7 relative">
-        <h2 className="body-bold md:h3-bold">
-          {searchValue.trim() !== "" ? "" : "کاربران اخیر"}
-        </h2>
-        {isLoading && !creators ? (
+        {!shouldShowSearchResults && (
+          <h2 className="body-bold md:h3-bold">کاربران اخیر</h2>
+        )}
+        {isLoadingUsers ? (
           <section className="user-grid">
             {Array.from({ length: 6 }).map((_, index) => {
               return (
@@ -90,10 +90,11 @@ const AllUsers = () => {
                 />
               )}
               {!searchedUsers &&
-                creators?.documents.map((creator) => {
+                users &&
+                users.documents.map((user) => {
                   return (
                     <motion.li
-                      key={creator?.$id}
+                      key={user.$id}
                       layout
                       exit={{ scale: 0.8, opacity: 0 }}
                       initial={{ opacity: 0 }}
@@ -101,7 +102,7 @@ const AllUsers = () => {
                       transition={{ duration: 0.2 }}
                       className="flex-1 min-w-[200px] w-full"
                     >
-                      <UserCard user={creator} />
+                      <UserCard user={user} />
                     </motion.li>
                   );
                 })}

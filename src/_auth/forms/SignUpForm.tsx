@@ -2,6 +2,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
+import { AppwriteException } from "appwrite";
 
 import { signupValidationSchema } from "@/lib/validation";
 
@@ -16,23 +17,21 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/components/ui/use-toast";
-import Loader from "@/components/loaders/Spinner";
-import { useUserContext } from "@/context/AuthContext";
+import Spinner from "@/components/loaders/Spinner";
 import {
   useCreateUserAccount,
   useSignInAccount,
 } from "@/hooks/react-query/mutations";
 import { UnityHubError } from "@/lib/utils";
-import { AppwriteException } from "appwrite";
 
 const SignUpForm = () => {
   const { toast } = useToast();
-  const { checkAuthUser, isLoading: isUserLoading } = useUserContext();
   const navigate = useNavigate();
 
   const { mutateAsync: createUserAccount, isPending: isCreatingUser } =
     useCreateUserAccount();
-  const { mutateAsync: signInAccount } = useSignInAccount();
+  const { mutateAsync: signInAccount, isPending: isUserLoading } =
+    useSignInAccount();
 
   const form = useForm<z.infer<typeof signupValidationSchema>>({
     resolver: zodResolver(signupValidationSchema),
@@ -57,12 +56,8 @@ const SignUpForm = () => {
         navigate("/sign-in");
       }
 
-      const isLoggedIn = await checkAuthUser();
-
-      if (isLoggedIn) {
-        form.reset();
-        navigate("/");
-      }
+      form.reset();
+      navigate("/");
     } catch (error) {
       if (error instanceof UnityHubError) {
         return toast({
@@ -166,12 +161,12 @@ const SignUpForm = () => {
           >
             {isCreatingUser ? (
               <div className="flex-center gap-2">
-                <Loader />
+                <Spinner />
                 در حال ثبت نام...
               </div>
             ) : isUserLoading ? (
               <div className="flex-center gap-2">
-                <Loader />
+                <Spinner />
                 در حال ورود...
               </div>
             ) : (

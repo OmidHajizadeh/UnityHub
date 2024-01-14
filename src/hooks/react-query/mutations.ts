@@ -28,6 +28,7 @@ import {
   UpdateUser,
 } from "@/types";
 import { Models } from "appwrite";
+import { useNavigate } from "react-router-dom";
 
 export function useCreateUserAccount() {
   return useMutation({
@@ -43,8 +44,10 @@ export function useSignInAccount() {
 }
 
 export function useSignOutAccount() {
+  const navigate = useNavigate();
   return useMutation({
     mutationFn: () => signOutAccount(),
+    onSuccess: () => navigate("/sign-in"),
   });
 }
 

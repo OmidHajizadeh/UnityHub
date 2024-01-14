@@ -26,7 +26,6 @@ const FollowUserButton = ({
 
   const { mutateAsync: followAction, isPending: isFollowActionOn } =
     useFollowUser(targetUserId);
-  console.log(targetUserId, hadFollowedUser);
 
   async function followUserHandler(
     action: "follow" | "unfollow",

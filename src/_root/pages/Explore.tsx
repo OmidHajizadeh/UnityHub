@@ -22,6 +22,7 @@ const Explore = () => {
   const [searchValue, setSearchValue] = useState("");
   const { toast } = useToast();
   const debouncedSearchValue = useDebounce(searchValue, 500);
+
   const {
     data: searchedPosts,
     isPending: isFetching,
@@ -41,7 +42,7 @@ const Explore = () => {
     if (inView && !searchValue) {
       fetchNextPage();
     }
-  }, [inView, searchValue]);
+  }, [inView, searchValue, fetchNextPage]);
 
   if (isPostsError) {
     if (postsError instanceof UnityHubError) {
@@ -133,7 +134,7 @@ const Explore = () => {
         )}
         <div className="flex flex-wrap mt-8 gap-9">
           <ul className="grid-container">
-            <AnimatePresence mode="popLayout">
+            <AnimatePresence key="animate-presence" mode="popLayout">
               {shouldShowSearchResults ? (
                 <SearchPostResults
                   isFetching={isFetching}
@@ -141,22 +142,26 @@ const Explore = () => {
                 />
               ) : (
                 !searchedPosts &&
-                posts.pages.map((item) => (
-                  <ExplorerGridList posts={item.documents} />
+                posts.pages.map((item, index) => (
+                  <React.Fragment key={`posts-${index}`}>
+                    <ExplorerGridList posts={item.documents} />
+                  </React.Fragment>
                 ))
               )}
-              {hasNextPage &&
-                !searchValue &&
-                Array.from({ length: 3 }).map((_, index) => (
-                  <React.Fragment key={index}>
-                    <SmallPostSkeleton />
-                  </React.Fragment>
-                ))}
+              {hasNextPage && !searchValue && (
+                <>
+                  <SmallPostSkeleton ref={ref} />
+                  {Array.from({ length: 2 }).map((_, index) => (
+                    <React.Fragment key={`skeleton-${index}`}>
+                      <SmallPostSkeleton />
+                    </React.Fragment>
+                  ))}
+                </>
+              )}
             </AnimatePresence>
           </ul>
         </div>
       </div>
-      <section ref={ref} className="mt-7" />
     </div>
   );
 };

@@ -5,7 +5,7 @@ const MediumPostSkeleton = () => {
     <GlowingCard className="post-card after:rounded-[23px]">
       <div className="flex flex-between">
         <div className="flex items-center gap-3 grow">
-          <div className="rounded-full shrink-0 w-12 lg:h-12 bg-slate-600 animate-pulse" />
+          <div className="rounded-full shrink-0 w-12 h-12 bg-slate-600 animate-pulse" />
           <div className="flex flex-col gap-3 w-full grow">
             <div className="bg-light-1 rounded-sm max-w-[10rem] h-4 animate-pulse" />
             <div className="flex-center gap-2 bg-light-3 h-4 max-w-[7rem] animate-pulse rounded-sm" />

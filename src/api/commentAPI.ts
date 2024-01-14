@@ -37,12 +37,13 @@ export async function createComment(
   const auditPromise = createAudit(
     {
       userId: post.creator.$id,
-      initiativeUserId: currentUser.id,
+      initiativeUserId: currentUser.$id,
       initiativeUserImageUrl: currentUser.imageUrl,
       initiativeUserUsername: currentUser.username,
       message: comment.text,
       postImageUrl: post.imageUrl,
       postId: post.$id,
+      auditType: "comment",
     },
     uniqueAuditId
   );
@@ -60,6 +61,9 @@ export async function createComment(
 
   const [newComment] = await Promise.all([newCommentPromise, auditPromise]);
 
+  if (!newComment)
+    throw new UnityHubError("خطا در ارسال کامنت", "لطفاً دوباره امتحان کنید.");
+
   return newComment;
 }
 
@@ -75,18 +79,35 @@ export async function updateComment(comment: UpdateComment) {
     }
   );
 
+  if (!updatedComment)
+    throw new UnityHubError("خطا در ویرایش کامنت", "لطفاً دوباره امتحان کنید.");
+
   return updatedComment;
 }
 
 export async function deleteComment(commentId: string) {
   const currentUser = await getCurrentUser();
+
+  if (!currentUser) {
+    throw new UnityHubError(
+      "شما اجازه حذف این کامنت را ندارید",
+      "لطفا به حساب کاربری خود وارد شوید"
+    );
+  }
+
   const deleteCommentPromise = databases.deleteDocument(
     appwriteConfig.databaseId,
     appwriteConfig.commentCollectionId,
     commentId
   );
+
   const uniqueAuditId = generateAuditId("comment", currentUser.$id, commentId);
   const auditPromise = deleteAudit(uniqueAuditId);
 
-  await Promise.all([deleteCommentPromise, auditPromise]);
+  const [deletedComment] = await Promise.all([
+    deleteCommentPromise,
+    auditPromise,
+  ]);
+  if (!deletedComment)
+    throw new UnityHubError("خطا در حذف کامنت", "لطفاً دوباره امتحان کنید.");
 }

@@ -2,8 +2,9 @@ import { Models } from "appwrite";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 
-import { useUserContext } from "@/context/AuthContext";
 import PostStats from "./PostStats";
+import { useGetCurrentUser } from "@/hooks/react-query/queries";
+import { User } from "@/types";
 
 type ExplorerGridListProps = {
   posts: Models.Document[];
@@ -16,7 +17,7 @@ const ExplorerGridList = ({
   showUser = true,
   showStats = true,
 }: ExplorerGridListProps) => {
-  const { user } = useUserContext();
+  const { data: user } = useGetCurrentUser();
 
   return posts.map((post) => {
     return (
@@ -48,7 +49,11 @@ const ExplorerGridList = ({
             </div>
           )}
           {showStats && (
-            <PostStats post={post} user={user} showLikeCount={false} />
+            <PostStats
+              post={post}
+              user={user || ({} as User)}
+              showLikeCount={false}
+            />
           )}
         </div>
       </motion.li>

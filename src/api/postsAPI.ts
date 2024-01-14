@@ -1,7 +1,7 @@
 import { Query } from "appwrite";
 import { v4 as uuidv4 } from "uuid";
 
-import { LikePostParams, NewPost, UpdatePost } from "@/types";
+import { LikePostParams, NewPost, Post, UpdatePost } from "@/types";
 import { appwriteConfig, databases } from "../lib/AppWirte/config";
 import { deleteFile, getFilePreview, uploadFile } from "./fileAPI";
 import { getCurrentUser } from "./userAPI";
@@ -30,7 +30,6 @@ export async function createPost(post: NewPost) {
     appwriteConfig.postCollectionId,
     uniqueId,
     {
-      postId: uniqueId,
       creator: post.userId,
       caption: post.caption,
       imageUrl: fileUrl,
@@ -62,7 +61,8 @@ export async function updatePost(post: UpdatePost) {
   if (hasFileToUpdate) {
     const uploadedFile = await uploadFile(post.files[0]);
 
-    if (!uploadedFile) throw Error;
+    if (!uploadedFile)
+      throw new UnityHubError("خطا در ویرایش پست", "لطفاً دوباره امتحان کنید.");
 
     const fileUrl = getFilePreview(uploadedFile.$id);
     if (!fileUrl) {
@@ -80,7 +80,7 @@ export async function updatePost(post: UpdatePost) {
   const updatedPost = await databases.updateDocument(
     appwriteConfig.databaseId,
     appwriteConfig.postCollectionId,
-    post.postId,
+    post.$id!,
     {
       caption: post.caption,
       imageUrl: image.imageUrl,
@@ -119,7 +119,11 @@ export async function deletePost(postId: string, imageId: string) {
 
 export async function likePost({ action, likesArray, post }: LikePostParams) {
   const currentUser = await getCurrentUser();
-  if (!currentUser) throw Error;
+  if (!currentUser)
+    throw new UnityHubError(
+      "شما اجازه لایک کردن این پست را ندارید",
+      "لطفا به حساب کاربری خود وارد شوید"
+    );
 
   const updatedPostPromise = databases.updateDocument(
     appwriteConfig.databaseId,
@@ -144,6 +148,7 @@ export async function likePost({ action, likesArray, post }: LikePostParams) {
           message: "پست شما را لایک کرد.",
           postImageUrl: post.imageUrl,
           postId: post.$id,
+          auditType: "like",
         },
         uniqueAuditId
       );
@@ -191,7 +196,7 @@ export async function getPostById(postId: string) {
   if (!post)
     throw new UnityHubError("پست پیدا نشد", "لطفاً دوباره امتحان کنید.");
 
-  return post;
+  return post as Post;
 }
 
 export async function getExplorerPosts({ pageParam }: { pageParam: number }) {
@@ -220,7 +225,7 @@ export async function getHomeFeed({ pageParam }: { pageParam: number }) {
   if (!user)
     throw new UnityHubError(
       "خطا در دریافت اطلاعات کاربر",
-      "لطفاً دوباره امتحان کنید."
+      "لطفا به حساب کاربری خود وارد شوید"
     );
 
   const usersId = [user.$id, ...user.followings];

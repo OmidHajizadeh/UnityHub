@@ -2,6 +2,7 @@ import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
+import { AppwriteException } from "appwrite";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -14,19 +15,17 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/components/ui/use-toast";
-import Loader from "@/components/loaders/Spinner";
+import Spinner from "@/components/loaders/Spinner";
 import { signinValidationSchema } from "@/lib/validation";
-import { useUserContext } from "@/context/AuthContext";
 import { useSignInAccount } from "@/hooks/react-query/mutations";
 import { UnityHubError } from "@/lib/utils";
-import { AppwriteException } from "appwrite";
 
 const SignInForm = () => {
   const { toast } = useToast();
-  const { checkAuthUser, isLoading: isUserLoading } = useUserContext();
   const navigate = useNavigate();
 
-  const { mutateAsync: signInAccount, isPending } = useSignInAccount();
+  const { mutateAsync: signInAccount, isPending: isUserLoading } =
+    useSignInAccount();
 
   const form = useForm<z.infer<typeof signinValidationSchema>>({
     resolver: zodResolver(signinValidationSchema),
@@ -43,12 +42,8 @@ const SignInForm = () => {
         password: values.password,
       });
 
-      const isLoggedIn = await checkAuthUser();
-
-      if (isLoggedIn) {
-        form.reset();
-        navigate("/");
-      }
+      form.reset();
+      navigate("/");
     } catch (error) {
       if (error instanceof UnityHubError) {
         return toast({
@@ -121,11 +116,11 @@ const SignInForm = () => {
           <Button
             type="submit"
             className="shad-button_primary bg-primary-500 mt-3"
-            disabled={isPending}
+            disabled={isUserLoading}
           >
-            {isUserLoading || isPending ? (
+            {isUserLoading ? (
               <div className="flex-center gap-2">
-                <Loader />
+                <Spinner />
                 در حال ارسال...
               </div>
             ) : (
