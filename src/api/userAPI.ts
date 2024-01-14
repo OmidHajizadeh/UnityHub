@@ -90,7 +90,14 @@ export async function createUserAccount(user: NewUser) {
   );
 
   if (!newUser) {
-    await account.deleteIdentity(uniqueId);
+    await Promise.all([
+      account.deleteIdentity(uniqueId),
+      databases.deleteDocument(
+        appwriteConfig.databaseId,
+        appwriteConfig.userCollectionId,
+        uniqueId
+      ),
+    ]);
     throw new UnityHubError("خطای سرور", "لطفا دوباره امتحان کنید.");
   }
 
