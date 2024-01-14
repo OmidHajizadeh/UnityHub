@@ -14,6 +14,7 @@ import AllUsersFallback from "./components/suspense-fallbacks/AllUsersFallback";
 import PostDetailsFallback from "./components/suspense-fallbacks/PostDetailsFallback";
 import Spinner from "./components/loaders/Spinner";
 import ProfileFallback from "./components/suspense-fallbacks/ProfileFallback";
+import NotFound from "./_root/pages/NotFound";
 
 const SignInForm = lazy(() => import("./_auth/forms/SignInForm"));
 const SignUpForm = lazy(() => import("./_auth/forms/SignUpForm"));
@@ -135,6 +136,7 @@ function App() {
               }
             />
           </Route>
+          <Route path="/*" element={<NotFound />} />
         </Routes>
       </AnimatePresence>
       <Toaster />
