@@ -44,7 +44,7 @@ const MainSidebar = () => {
     if (isSuccess) {
       navigate("/sign-in");
     }
-  }, [isSuccess]);
+  }, [isSuccess, navigate]);
 
   return (
     <nav className="rightsidebar">
