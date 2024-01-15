@@ -59,6 +59,7 @@ const PostComment = ({
           text: values.text,
           author: user.$id,
           postId: post.$id,
+          edited: true,
         });
       } else {
         await createComment({
