@@ -21,7 +21,7 @@ const Audits = () => {
     hasNextPage,
   } = useGetAudits();
   const { ref, inView } = useInView();
-
+  
   const { toast } = useToast();
 
   useEffect(() => {

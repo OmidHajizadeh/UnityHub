@@ -65,6 +65,7 @@ export type UpdateComment = {
   text: string;
   author: string;
   postId: string;
+  edited: boolean;
 };
 
 //!  Rest

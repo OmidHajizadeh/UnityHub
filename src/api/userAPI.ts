@@ -79,7 +79,7 @@ export async function createUserAccount(user: NewUser) {
   await createAudit(
     {
       userId: newUser.$id,
-      message: "حساب کاربری شما با موفقیت ساخته شده.",
+      message: "حساب کاربری شما با موفقیت ساخته شد.",
       initiativeUserId: newUser.$id,
       initiativeUserImageUrl: newUser.imageUrl,
       initiativeUserUsername: newUser.username,

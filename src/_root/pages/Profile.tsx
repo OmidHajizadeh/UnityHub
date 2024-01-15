@@ -98,7 +98,10 @@ const Profile = () => {
             </div>
 
             {thisUser.bio && (
-              <p className="whitespace-break-spaces small-medium md:base-medium text-center xl:text-start mt-7 max-w-screen-sm">
+              <p
+                dir="auto"
+                className="whitespace-break-spaces test-start small-medium md:base-medium text-center xl:text-start mt-7 max-w-screen-sm"
+              >
                 {thisUser.bio}
               </p>
             )}
@@ -111,12 +114,7 @@ const Profile = () => {
                 user.$id !== thisUser.$id && "hidden"
               }`}
             >
-              <img
-                src={"/icons/edit.svg"}
-                alt="edit"
-                width={20}
-                height={20}
-              />
+              <img src={"/icons/edit.svg"} alt="edit" width={20} height={20} />
               <p className="flex whitespace-nowrap small-medium">
                 ویرایش پروفایل
               </p>
@@ -140,12 +138,7 @@ const Profile = () => {
               pathname === `/profile/${id}` && "!bg-dark-3"
             }`}
           >
-            <img
-              src={"/icons/posts.svg"}
-              alt="posts"
-              width={20}
-              height={20}
-            />
+            <img src={"/icons/posts.svg"} alt="posts" width={20} height={20} />
             <span className="hidden lg:inline">پست های من</span>
           </Link>
           <Link
@@ -154,12 +147,7 @@ const Profile = () => {
               pathname === `/profile/${id}/liked-posts` && "!bg-dark-3"
             }`}
           >
-            <img
-              src={"/icons/like.svg"}
-              alt="like"
-              width={20}
-              height={20}
-            />
+            <img src={"/icons/like.svg"} alt="like" width={20} height={20} />
             <span className="hidden lg:inline">لایک شده ها</span>
           </Link>
           <Link
@@ -185,7 +173,9 @@ const Profile = () => {
           element={
             thisUser.posts.length === 0 ? (
               <p className="text-light-4 text-center w-full mt-10">
-                شما هیچ پستی آپلود نکرده اید
+                {thisUser.$id === user.$id
+                  ? "شما هیچ پستی آپلود نکرده اید"
+                  : "هیچ پستی برای نمایش پیدا نشد"}
               </p>
             ) : (
               <GridPostList

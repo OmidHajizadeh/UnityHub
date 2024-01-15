@@ -104,7 +104,7 @@ const TagsInput = ({ field, setFormValue }: TagsInputProps) => {
           type="text"
           className="h-8 bg-dark-4 border-none p-0 placeholder:text-light-4 focus-visible:ring-0 focus-visible:ring-offset-0"
           onKeyDown={addTagHandler}
-          placeholder="Art"
+          placeholder="Meme"
           {...field}
           value={inputValue}
           onChange={(e) => setInputValue(e.currentTarget.value)}

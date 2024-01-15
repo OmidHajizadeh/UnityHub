@@ -17,7 +17,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "../ui/textarea";
 import FileUploader from "../shared/FileUploader";
 import { useToast } from "../ui/use-toast";
-import Loader from "../loaders/Spinner";
+import Spinner from "../loaders/Spinner";
 import { postValidationSchema } from "@/lib/validation";
 import { useCreatePost, useUpdatePost } from "@/hooks/react-query/mutations";
 import { UnityHubError } from "@/lib/utils";
@@ -58,14 +58,16 @@ const PostForm = ({
           ...values,
           imageId: post.imageId,
           imageUrl: post.imageUrl,
+          $id: post.$id
         });
+        navigate(-1);
       } else {
-        await createPost({
+        const newPost = await createPost({
           ...values,
           userId: user.$id,
         });
+        navigate(`/posts/${newPost.$id}`);
       }
-      navigate(-1);
     } catch (error) {
       if (error instanceof UnityHubError) {
         return toast({
@@ -104,7 +106,7 @@ const PostForm = ({
               render={({ field }) => (
                 <FormItem>
                   <FormLabel className="shad-form_label">کپشن</FormLabel>
-                  <FormControl>
+                  <FormControl className="relative">
                     <Textarea
                       dir="auto"
                       className="shad-textarea custom-scrollbar"
@@ -173,7 +175,7 @@ const PostForm = ({
           >
             {isCreating || isUpdating ? (
               <div className="flex-center gap-2">
-                <Loader />
+                <Spinner />
                 در حال ارسال...
               </div>
             ) : action === "create" ? (

@@ -27,9 +27,8 @@ import { useGetCurrentUser } from "@/hooks/react-query/queries";
 
 const UpdateProfile = () => {
   const { toast } = useToast();
-  const navigate = useNavigate();
   const { data: user } = useGetCurrentUser();
-
+  const navigate = useNavigate();
   const { mutateAsync: updateUser, isPending: isUpdatingUser } =
     useUpdateUser();
 
@@ -197,23 +196,14 @@ const UpdateProfile = () => {
               )}
             />
 
-            <div className="flex gap-4 items-center justify-end">
-              <Button
-                type="button"
-                className="shad-button_dark_4"
-                onClick={() => navigate(-1)}
-              >
-                کنسل
-              </Button>
-              <Button
-                type="submit"
-                className="shad-button_primary bg-primary-500 whitespace-nowrap"
-                disabled={isUpdatingUser}
-              >
-                {isUpdatingUser && <Spinner />}
-                ویرایش پروفایل
-              </Button>
-            </div>
+            <Button
+              type="submit"
+              className="shad-button_primary self-end bg-primary-500 whitespace-nowrap"
+              disabled={isUpdatingUser}
+            >
+              {isUpdatingUser && <Spinner />}
+              ویرایش پروفایل
+            </Button>
           </form>
         </Form>
       </div>

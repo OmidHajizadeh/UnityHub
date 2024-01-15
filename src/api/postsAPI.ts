@@ -52,7 +52,7 @@ export async function createPost(post: NewPost) {
 
 export async function updatePost(post: UpdatePost) {
   const hasFileToUpdate = post.files.length > 0;
-
+  
   let image = {
     imageUrl: post.imageUrl,
     imageId: post.imageId,
@@ -75,7 +75,7 @@ export async function updatePost(post: UpdatePost) {
   // Convert tags into array
   // const rawTags = post.tags?.replace(/ /g, "").split(",");
   const tags = Array.from(new Set(post.tags)) || [];
-
+  
   // Create post
   const updatedPost = await databases.updateDocument(
     appwriteConfig.databaseId,
@@ -89,6 +89,7 @@ export async function updatePost(post: UpdatePost) {
       tags,
     }
   );
+  
 
   if (!updatedPost) {
     await deleteFile(post.imageId);

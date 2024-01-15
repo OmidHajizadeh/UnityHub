@@ -76,6 +76,7 @@ export async function updateComment(comment: UpdateComment) {
       text: comment.text,
       author: comment.author,
       postId: comment.postId,
+      edited: true,
     }
   );
 
