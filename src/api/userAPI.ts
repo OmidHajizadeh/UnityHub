@@ -261,7 +261,7 @@ export async function followUser(action: string, targetUserId: string) {
 
   if (!currentUser || currentUser.$id === targetUserId)
     throw new UnityHubError(
-      "خطا در انجام عملیات",
+      "خطا",
       "شما اجازه این عملیات را ندارید."
     );
 
@@ -272,7 +272,7 @@ export async function followUser(action: string, targetUserId: string) {
     targetUserId
   );
 
-  let currentUserFollowings = currentUser.followings;
+  let currentUserFollowings = currentUser.followings.slice();
 
   if (action === "follow") {
     currentUserFollowings.push(targetUserId);
@@ -301,7 +301,7 @@ export async function followUser(action: string, targetUserId: string) {
       "لطفاً دوباره امتحان کنید"
     );
 
-  let targetUserFollowers = targetUser.followers;
+  let targetUserFollowers = targetUser.followers.slice();
   if (action === "follow") {
     targetUserFollowers.push(currentUser.$id);
   } else {

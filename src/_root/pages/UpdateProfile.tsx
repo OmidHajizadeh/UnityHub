@@ -110,91 +110,98 @@ const UpdateProfile = () => {
             onSubmit={form.handleSubmit(updateUserHandler)}
             className="flex flex-col gap-7 w-full mt-4 max-w-5xl"
           >
-            <FormField
-              control={form.control}
-              name="file"
-              render={({ field }) => (
-                <FormItem className="flex">
-                  <FormControl>
-                    <FileUploader
-                      fieldChange={field.onChange}
-                      mediaUrl={user.imageUrl}
-                    />
-                  </FormControl>
-                  <FormMessage className="shad-form_message" />
-                </FormItem>
-              )}
-            />
+            <div className="flex flex-col sm:flex-row md:flex-col lg:flex-row gap-4">
+              <FormField
+                control={form.control}
+                name="file"
+                render={({ field }) => (
+                  <FormItem className="flex self-center shrink max-w-sm">
+                    <FormControl>
+                      <FileUploader
+                        fieldChange={field.onChange}
+                        mediaUrl={user.imageUrl}
+                      />
+                    </FormControl>
+                    <FormMessage className="shad-form_message" />
+                  </FormItem>
+                )}
+              />
+              <div className="flex grow flex-col gap-4">
+                <FormField
+                  control={form.control}
+                  name="name"
+                  render={({ field }) => (
+                    <FormItem className="w-full">
+                      <FormLabel className="shad-form_label">اسم</FormLabel>
+                      <FormControl>
+                        <Input type="text" className="shad-input" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
 
-            <FormField
-              control={form.control}
-              name="name"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel className="shad-form_label">اسم</FormLabel>
-                  <FormControl>
-                    <Input type="text" className="shad-input" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+                <FormField
+                  control={form.control}
+                  name="bio"
+                  render={({ field }) => (
+                    <FormItem className="w-full">
+                      <FormLabel className="shad-form_label">
+                        بیوگرافی
+                      </FormLabel>
+                      <FormControl>
+                        <Textarea
+                          dir="auto"
+                          className="shad-textarea custom-scrollbar"
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
 
-            <FormField
-              control={form.control}
-              name="bio"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel className="shad-form_label">بیوگرافی</FormLabel>
-                  <FormControl>
-                    <Textarea
-                      dir="auto"
-                      className="shad-textarea custom-scrollbar"
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+                <FormField
+                  control={form.control}
+                  name="username"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel className="shad-form_label">
+                        نام کاربری
+                      </FormLabel>
+                      <FormControl>
+                        <Input
+                          type="text"
+                          className="shad-input"
+                          {...field}
+                          disabled
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
 
-            <FormField
-              control={form.control}
-              name="username"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel className="shad-form_label">نام کاربری</FormLabel>
-                  <FormControl>
-                    <Input
-                      type="text"
-                      className="shad-input"
-                      {...field}
-                      disabled
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <FormField
-              control={form.control}
-              name="email"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel className="shad-form_label">ایمیل</FormLabel>
-                  <FormControl>
-                    <Input
-                      type="text"
-                      className="shad-input"
-                      {...field}
-                      disabled
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+                <FormField
+                  control={form.control}
+                  name="email"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel className="shad-form_label">ایمیل</FormLabel>
+                      <FormControl>
+                        <Input
+                          type="text"
+                          className="shad-input"
+                          {...field}
+                          disabled
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+            </div>
 
             <Button
               type="submit"
@@ -202,7 +209,7 @@ const UpdateProfile = () => {
               disabled={isUpdatingUser}
             >
               {isUpdatingUser && <Spinner />}
-              ویرایش پروفایل
+              ویرایش
             </Button>
           </form>
         </Form>

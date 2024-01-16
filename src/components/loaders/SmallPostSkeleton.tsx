@@ -7,7 +7,7 @@ type SmallPostSkeletonProps = {
 const SmallPostSkeleton = React.forwardRef(
   ({ ShowStats = true }: SmallPostSkeletonProps, ref: React.LegacyRef<HTMLLIElement>) => {
     return (
-      <li className="relative min-w-80 h-80" ref={ref}>
+      <li className="w-full relative mx-w-80 aspect-square" ref={ref}>
         <div className="grid-post_link">
           <div className="w-full h-full animate-pulse bg-slate-500" />
         </div>

@@ -5,7 +5,7 @@ const AuditsFallback = () => {
   return (
     <div className="common-container">
       <div className="user-container">
-        <div className="flex gap-2 w-full max-w-5xl">
+        <div className="hidden md:flex gap-2 w-full max-w-5xl">
           <img
             src="/icons/notification.svg"
             width={36}

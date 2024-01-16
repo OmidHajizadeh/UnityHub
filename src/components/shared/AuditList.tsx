@@ -1,7 +1,6 @@
 import { Link } from "react-router-dom";
 
 import FollowUserButton from "./FollowUserButton";
-import { useGetCurrentUser } from "@/hooks/react-query/queries";
 import { multiFormatDateString } from "@/lib/utils";
 import { Audit } from "@/types";
 
@@ -10,8 +9,6 @@ type AuditListProps = {
 };
 
 const AuditList = ({ audits }: AuditListProps) => {
-  const { data: user } = useGetCurrentUser();
-  
   return audits.map((audit) => {
     return (
       <li
@@ -24,19 +21,18 @@ const AuditList = ({ audits }: AuditListProps) => {
         >
           <img
             src={
-              audit.initiativeUserImageUrl ||
-              "/icons/profile-placeholder.svg"
+              audit.initiativeUserImageUrl || "/icons/profile-placeholder.svg"
             }
             className="rounded-full h-14 w-14"
             alt={audit.initiativeUserUsername}
           />
-           {audit.auditType === "comment" && (
+          {audit.auditType === "comment" && (
             <img
               src="/icons/comment.svg"
               alt="comment icon"
               className="absolute -top-2 -start-0 w-5 h-5"
             />
-          ) }
+          )}
         </Link>
         <div className="flex-between gap-3 grow">
           <div className="flex flex-col gap-1">

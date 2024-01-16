@@ -18,11 +18,15 @@ const FollowUserButton = ({
 }: FollowUserButtonProps) => {
   const { toast } = useToast();
 
-  const { data: user, isLoading: isLoadingUser } = useGetCurrentUser();
+  const {
+    data: user,
+    isLoading: isLoadingUser,
+    isPending,
+  } = useGetCurrentUser();
   const { mutateAsync: followAction, isPending: isFollowActionOn } =
     useFollowUser(targetUserId);
 
-  if (!user || isLoadingUser) return <Spinner />;
+  if (!user || isLoadingUser || isPending) return <Spinner />;
 
   const hadFollowedUser = user.followings.includes(targetUserId);
 
