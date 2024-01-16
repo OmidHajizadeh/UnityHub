@@ -1,31 +1,30 @@
-import { useState } from "react";
+import { AppwriteException } from "appwrite";
 
 import { Button } from "../ui/button";
 import Spinner from "../loaders/Spinner";
 import { useFollowUser } from "@/hooks/react-query/mutations";
 import { useToast } from "../ui/use-toast";
 import { UnityHubError } from "@/lib/utils";
-import { AppwriteException } from "appwrite";
+import { useGetCurrentUser } from "@/hooks/react-query/queries";
 
 type FollowUserButtonProps = {
   className: string;
   targetUserId: string;
-  currentUserFollowings: string[];
 };
 
 const FollowUserButton = ({
   className,
   targetUserId,
-  currentUserFollowings,
 }: FollowUserButtonProps) => {
-  const [hadFollowedUser, setHadFollowedUser] = useState(
-    currentUserFollowings.includes(targetUserId)
-  );
-
   const { toast } = useToast();
 
+  const { data: user, isLoading: isLoadingUser } = useGetCurrentUser();
   const { mutateAsync: followAction, isPending: isFollowActionOn } =
     useFollowUser(targetUserId);
+
+  if (!user || isLoadingUser) return <Spinner />;
+
+  const hadFollowedUser = user.followings.includes(targetUserId);
 
   async function followUserHandler(
     action: "follow" | "unfollow",
@@ -34,7 +33,6 @@ const FollowUserButton = ({
     e.preventDefault();
     try {
       await followAction(action);
-      setHadFollowedUser((prev) => !prev);
     } catch (error) {
       if (error instanceof UnityHubError) {
         return toast({
@@ -67,7 +65,9 @@ const FollowUserButton = ({
       type="button"
       size="sm"
       className={`${className} ${
-        hadFollowedUser ? "bg-primary-400" : "bg-primary-500"
+        hadFollowedUser
+          ? "bg-dark-4 border border-dark-1 text-light-1"
+          : "bg-primary-500"
       }`}
       disabled={isFollowActionOn}
     >

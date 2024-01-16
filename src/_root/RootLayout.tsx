@@ -21,7 +21,7 @@ const RootLayout = () => {
   return (
     <div className="w-full md-flex md:ms-[270px]">
       <Topbar />
-      <section className="flex flex-1 h-full">
+      <section className="root-container">
         <MainSidebar />
         <PageWrapper>
           <Outlet />

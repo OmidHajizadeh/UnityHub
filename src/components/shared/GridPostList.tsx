@@ -22,7 +22,7 @@ const GridPostList = ({
           return (
             <motion.div
               key={post.$id}
-              className="relative min-w-80 h-80"
+              className="relative w-full max-w-80 aspect-square"
               layout
               exit={{ scale: 0.8, opacity: 0 }}
               initial={{ scale: 0.8, opacity: 0 }}
@@ -33,10 +33,10 @@ const GridPostList = ({
                 <img
                   src={post.imageUrl}
                   alt={post.caption}
-                  className="w-full h-full object-cover duration-300 transition-transform hover:scale-110"
+                  className="w-full h-full object-cover"
                 />
               </Link>
-              <div className="grid-post_user">
+              <div className={showUser || showStats ? "grid-post_user" : ""}>
                 {showUser && (
                   <div className="flex items-center justify-start gap-2 flex-1">
                     <img

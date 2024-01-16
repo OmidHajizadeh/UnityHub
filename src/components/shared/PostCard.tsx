@@ -10,16 +10,14 @@ const PostCard = ({ post }: { post: Post }) => {
   const { data: user } = useGetCurrentUser();
 
   return (
-    <GlowingCard className="post-card after:rounded-[23px]">
+    <GlowingCard className="post-card after:rounded-[5px] md:after:rounded-[23px]">
       <div className="flex flex-between">
         <Link
           className="flex items-center gap-3"
           to={`profile/${post.creator.$id}`}
         >
           <img
-            src={
-              post.creator.imageUrl || "/icons/profile-placeholder.svg"
-            }
+            src={post.creator.imageUrl || "/icons/profile-placeholder.svg"}
             alt={post.creator.name}
             className="rounded-full w-12 lg:h-12"
           />
@@ -40,12 +38,7 @@ const PostCard = ({ post }: { post: Post }) => {
         </Link>
         {user?.$id === post.creator.$id && (
           <Link to={`/update-post/${post.$id}`}>
-            <img
-              src="/icons/edit.svg"
-              alt="edit"
-              width={20}
-              height={20}
-            />
+            <img src="/icons/edit.svg" alt="edit" width={20} height={20} />
           </Link>
         )}
       </div>
@@ -69,8 +62,8 @@ const PostCard = ({ post }: { post: Post }) => {
         <img
           src={post.imageUrl || "/icons/profile-placeholder.svg"}
           alt={post.caption}
-          width="auto"
-          height="auto"
+          width="500"
+          height="500"
           className="post-card_img"
         />
       </Link>

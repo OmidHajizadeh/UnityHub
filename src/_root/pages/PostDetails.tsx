@@ -92,7 +92,7 @@ const PostDetails = () => {
   }
 
   return (
-    <div className="post_details-container">
+    <div className="post_details-container relative">
       <Helmet>
         <title>{post.caption}</title>
         <meta name="description" content={post.caption} />
@@ -104,8 +104,21 @@ const PostDetails = () => {
         <meta name="og:site_name" content="UnityHub" />
         <meta name="og:description" content={post.caption} />
       </Helmet>
-      <div className="post_details-card">
-        <img src={post.imageUrl} alt="creator" className="post_details-img" />
+      <div className="absolute opacity-20 h-full hidden xl:block inset-0 after:absolute after:bottom-0 after:w-full after:h-40 after:bg-gradient-to-b after:from-transparent after:to-black before:absolute before:top-0 before:w-full before:h-40 before:bg-gradient-to-t before:from-transparent before:to-black before:z-10">
+        <div className="absolute h-full hidden xl:block inset-0 after:absolute after:top-0 after:left-0 after:h-full after:w-40 after:bg-gradient-to-l after:from-transparent after:to-black before:absolute before:top-0 before:right-0 before:w-40 before:h-full before:bg-gradient-to-r before:from-transparent before:to-black">
+          <img
+            src={post.imageUrl}
+            alt="background image"
+            className="object-cover h-full w-full"
+          />
+        </div>
+      </div>
+      <div className="post_details-card relative z-20">
+        <img
+          src={post.imageUrl}
+          alt={post.caption}
+          className="post_details-img"
+        />
         <div className="post_details-info">
           <div className="flex-between w-full">
             <Link
@@ -113,10 +126,7 @@ const PostDetails = () => {
               className="flex items-center gap-3"
             >
               <img
-                src={
-                  post.creator.imageUrl ||
-                  "/icons/profile-placeholder.svg"
-                }
+                src={post.creator.imageUrl || "/icons/profile-placeholder.svg"}
                 alt={post.creator.name}
                 className="rounded-full w-8 h-8 lg:w-12 lg:h-12"
               />
@@ -129,7 +139,7 @@ const PostDetails = () => {
                     {multiFormatDateString(post.$createdAt)}
                   </p>
                   -
-                  <p className="subtle-semibold lg: small-regular">
+                  <p className="subtle-semibold lg:small-regular">
                     {post.location}
                   </p>
                 </div>

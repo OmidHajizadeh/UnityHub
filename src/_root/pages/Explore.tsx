@@ -96,12 +96,12 @@ const Explore = () => {
   const shouldShowSearchResults = searchValue !== "";
 
   return (
-    <div className="explore-container">
+    <div className="common-container">
       <Helmet>
         <title>اکسپلورر</title>
       </Helmet>
-      <div className="explore-inner_container">
-        <div className="flex gap-2 w-full max-w-5xl">
+      <div className="common-container_inner">
+        <div className="hidden md:flex gap-2 w-full max-w-5xl">
           <img
             src="/icons/wallpaper.svg"
             width={36}
@@ -112,12 +112,7 @@ const Explore = () => {
           <h2 className="h3-bold md:h2-bold w-full">جستجو</h2>
         </div>
         <div className="flex gap-1 px-4 w-full rounded-lg bg-dark-4">
-          <img
-            src="/icons/search.svg"
-            alt="search"
-            width={24}
-            height={24}
-          />
+          <img src="/icons/search.svg" alt="search" width={24} height={24} />
           <Input
             type="text"
             placeholder="جستجو متن پست..."
@@ -128,39 +123,34 @@ const Explore = () => {
         </div>
       </div>
 
-      <div className="relative w-full max-w-5xl mt-16 mb-7">
-        {!searchValue.trim() && (
-          <h3 className="body-bold md:h3-bold">همه پست ها</h3>
-        )}
-        <div className="flex flex-wrap mt-8 gap-9">
-          <ul className="grid-container">
-            <AnimatePresence key="animate-presence" mode="popLayout">
-              {shouldShowSearchResults ? (
-                <SearchPostResults
-                  isFetching={isFetching}
-                  searchedPosts={searchedPosts}
-                />
-              ) : (
-                !searchedPosts &&
-                posts.pages.map((item, index) => (
-                  <React.Fragment key={`posts-${index}`}>
-                    <ExplorerGridList posts={item.documents} />
+      <div className="relative w-full max-w-5xl">
+        <ul className="grid-container">
+          <AnimatePresence key="animate-presence" mode="popLayout">
+            {shouldShowSearchResults ? (
+              <SearchPostResults
+                isFetching={isFetching}
+                searchedPosts={searchedPosts}
+              />
+            ) : (
+              !searchedPosts &&
+              posts.pages.map((item, index) => (
+                <React.Fragment key={`posts-${index}`}>
+                  <ExplorerGridList posts={item.documents} />
+                </React.Fragment>
+              ))
+            )}
+            {hasNextPage && !searchValue && (
+              <>
+                <SmallPostSkeleton ref={ref} />
+                {Array.from({ length: 2 }).map((_, index) => (
+                  <React.Fragment key={`skeleton-${index}`}>
+                    <SmallPostSkeleton />
                   </React.Fragment>
-                ))
-              )}
-              {hasNextPage && !searchValue && (
-                <>
-                  <SmallPostSkeleton ref={ref} />
-                  {Array.from({ length: 2 }).map((_, index) => (
-                    <React.Fragment key={`skeleton-${index}`}>
-                      <SmallPostSkeleton />
-                    </React.Fragment>
-                  ))}
-                </>
-              )}
-            </AnimatePresence>
-          </ul>
-        </div>
+                ))}
+              </>
+            )}
+          </AnimatePresence>
+        </ul>
       </div>
     </div>
   );

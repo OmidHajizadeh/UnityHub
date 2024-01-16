@@ -171,7 +171,7 @@ const PostForm = ({
           <Button
             disabled={isCreating || isUpdating}
             type="submit"
-            className="shad-button_primary bg-primary-500 whitespace-nowrap"
+            className="shad-button_primary w-full md:w-auto bg-primary-500 whitespace-nowrap"
           >
             {isCreating || isUpdating ? (
               <div className="flex-center gap-2">

@@ -106,8 +106,7 @@ const Profile = () => {
               </p>
             )}
           </div>
-
-          {user.$id === thisUser.$id && (
+          {user.$id === thisUser.$id ? (
             <Link
               to="/update-profile"
               className={`h-12 bg-dark-4 px-5 text-light-1 flex-center gap-2 rounded-lg ${
@@ -119,11 +118,9 @@ const Profile = () => {
                 ویرایش پروفایل
               </p>
             </Link>
-          )}
-          {user.$id !== id && (
+          ) : (
             <FollowUserButton
               className="shad-button_primary px-8"
-              currentUserFollowings={user.followings}
               targetUserId={id}
             />
           )}
@@ -131,7 +128,7 @@ const Profile = () => {
       </div>
 
       {thisUser.$id === user.$id && (
-        <div className="flex-center gap-3 w-full">
+        <div className="flex-center gap-3 my-4 w-full">
           <Link
             to={`/profile/${id}`}
             className={`profile-tab rounded-lg ${

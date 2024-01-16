@@ -57,12 +57,12 @@ const Audits = () => {
   if (!audits || isLoadingAudits) return <AuditsFallback />;
 
   return (
-    <div className="explore-container">
+    <div className="common-container">
       <Helmet>
         <title>گزارش ها</title>
       </Helmet>
-      <div className="explore-inner_container">
-        <div className="flex gap-2 w-full max-w-5xl">
+      <div className="common-container_inner">
+        <div className="hidden md:flex gap-2 w-full max-w-5xl">
           <img
             src="/icons/notification.svg"
             width={36}
@@ -72,7 +72,7 @@ const Audits = () => {
           />
           <h2 className="h3-bold md:h2-bold w-full">گزارش ها</h2>
         </div>
-        <ul className="flex flex-col gap-4 w-full">
+        <ul className="flex flex-col gap-2 md:gap-4 w-full">
           {audits.pages.map((item, index) => {
             return (
               <React.Fragment key={index}>

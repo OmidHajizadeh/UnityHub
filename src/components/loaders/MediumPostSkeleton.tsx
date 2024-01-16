@@ -2,7 +2,7 @@ import GlowingCard from "../shared/GlowingCard";
 
 const MediumPostSkeleton = () => {
   return (
-    <GlowingCard className="post-card after:rounded-[23px]">
+    <GlowingCard className="post-card after:rounded-[5px] md:after:rounded-[23px]">
       <div className="flex flex-between">
         <div className="flex items-center gap-3 grow">
           <div className="rounded-full shrink-0 w-12 h-12 bg-slate-600 animate-pulse" />
@@ -20,7 +20,7 @@ const MediumPostSkeleton = () => {
             <div className="animate-pulse bg-light-2 h-4 rounded-sm w-full max-w-sm" />
           </div>
         </div>
-        <div className="h-64 xs:h-[400px] lg:h-[450px] w-full bg-light-4 rounded-[24px] mb-5 animate-pulse" />
+        <div className="h-64 xs:h-[400px] lg:h-[450px] w-full bg-light-4 rounded-md md:rounded-2xl mb-5 animate-pulse" />
       </div>
       <div className="flex-between gap-3 z-20 relative">
         <div className="w-8 h-8 rounded-md animate-pulse bg-light-4" />

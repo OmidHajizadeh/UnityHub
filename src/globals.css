@@ -29,7 +29,7 @@
   }
 
   .h3-bold {
-    @apply text-[24px] font-bold leading-[140%] tracking-tighter;
+    @apply text-2xl font-bold leading-[140%] tracking-tighter;
   }
 
   .base-semibold {
@@ -108,35 +108,32 @@
     background: #7878a3;
   }
 
-  .common-container {
-    @apply flex flex-col flex-1 items-center gap-10 overflow-scroll py-10 px-5 md:px-8 lg:p-14 custom-scrollbar;
+  .root-container {
+    @apply flex flex-1 pt-[88px] pb-[100px] md:py-16 h-full;
   }
 
-  /* All Users */
+  .common-container {
+    @apply flex flex-col flex-1 items-center gap-4 md:gap-10 overflow-scroll px-2 md:px-8 custom-scrollbar;
+  }
+
+  .common-container_inner {
+    @apply max-w-5xl flex flex-col items-center w-full gap-6 md:gap-9;
+  }
+
   .user-container {
     @apply max-w-5xl flex flex-col items-start w-full gap-6 md:gap-9;
   }
 
   .user-grid {
-    @apply w-full grid grid-cols-1 xs:grid-cols-2 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-7 max-w-5xl;
-  }
-
-  /* Explore */
-  .explore-container {
-    @apply flex flex-col flex-1 items-center overflow-scroll py-10 px-5 md:p-14 custom-scrollbar;
-  }
-
-  .explore-inner_container {
-    @apply max-w-5xl flex flex-col items-center w-full gap-6 md:gap-9;
+    @apply w-full grid gap-2 grid-cols-2 lg:grid-cols-3 lg:gap-7 max-w-5xl;
   }
 
   .explore-search {
     @apply h-12 bg-dark-4 border-none placeholder:text-light-4 focus-visible:ring-0 focus-visible:ring-offset-0 ring-offset-0 !important;
   }
 
-  /* Home */
   .home-container {
-    @apply flex flex-col flex-1 items-center gap-10 overflow-scroll py-10 px-5 md:px-8 lg:p-14 xl:me-72 2xl:me-[465px] custom-scrollbar;
+    @apply common-container xl:me-72 2xl:me-[465px];
   }
 
   .home-posts {
@@ -149,28 +146,32 @@
 
   /* Post Details */
   .post_details-container {
-    @apply flex flex-col flex-1 gap-5 px-3 lg:px-10 overflow-scroll my-8 custom-scrollbar items-center;
+    @apply flex flex-col flex-1 gap-5 px-3 lg:px-10 overflow-scroll custom-scrollbar items-center;
   }
 
   .post_details-card {
-    @apply w-full max-w-5xl rounded-[30px] gap-5 flex-col flex xl:flex-row xl:rounded-l-[24px];
+    @apply w-full max-w-5xl rounded-md lg:rounded-2xl gap-5 flex-col flex xl:flex-row;
   }
 
   .post_details-img {
-    @apply xl:w-[48%] max-h-[45rem] rounded-[30px] object-cover bg-dark-1;
+    @apply xl:w-[48%] max-h-[45rem] rounded-md lg:rounded-2xl object-cover bg-dark-1;
   }
 
   .post_details-info {
-    @apply bg-dark-2 flex flex-col gap-5 lg:gap-7 flex-1 items-start px-5 py-4 lg:py-8 rounded-[30px];
+    @apply bg-dark-2 flex flex-col gap-5 lg:gap-7 flex-1 items-start px-5 py-4 lg:py-8 rounded-md lg:rounded-2xl;
   }
 
   .post_details-delete_btn {
     @apply p-0 flex gap-3 hover:bg-transparent hover:text-light-1  text-light-1 small-medium lg:base-medium;
   }
 
+  .comments-container {
+    @apply w-full max-w-5xl p-3 flex flex-col gap-3 bg-dark-3 rounded-md lg:rounded-2xl relative z-20
+  }
+
   /* Profile */
   .profile-container {
-    @apply flex flex-col items-center flex-1 gap-4 overflow-scroll py-10 px-5 md:p-14 custom-scrollbar;
+    @apply flex flex-col items-center flex-1 gap-4 overflow-scroll py-10 px-5 md:px-14 custom-scrollbar;
   }
 
   .profile-inner_container {
@@ -188,7 +189,7 @@
 
   /* Bottom bar */
   .bottom-bar {
-    @apply z-50 flex-between w-full sticky bottom-0 rounded-t-[20px] bg-dark-2 px-5 py-4 md:hidden;
+    @apply z-50 flex-between w-full fixed bottom-0 rounded-t-[20px] bg-dark-2 px-5 py-4 md:hidden;
   }
 
   .bottombar-link.active {
@@ -213,15 +214,15 @@
 
   /* Grid Post List */
   .grid-container {
-    @apply w-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-7 max-w-5xl;
+    @apply w-full grid grid-cols-3 gap-1 lg:gap-2 max-w-5xl;
   }
 
   .grid-post_link {
-    @apply flex rounded-[24px] border border-dark-4 overflow-hidden cursor-pointer w-full h-full;
+    @apply flex rounded-[8px] border border-dark-4 overflow-hidden cursor-pointer w-full h-full;
   }
 
   .grid-post_user {
-    @apply absolute bottom-0 p-5 flex-between w-full bg-gradient-to-t from-dark-3 to-transparent rounded-b-[24px] gap-2;
+    @apply absolute !hidden xl:!flex bottom-0 p-5 flex-between w-full bg-gradient-to-t from-dark-3 to-transparent gap-2;
   }
 
   /* Right sidebar */
@@ -242,7 +243,7 @@
 
   /* Post Card */
   .post-card {
-    @apply p-5 lg:p-7 w-full max-w-screen-sm rounded-3xl;
+    @apply p-5 lg:p-7 w-full max-w-screen-sm rounded-md md:rounded-3xl;
   }
 
   .glowing-card {
@@ -257,17 +258,21 @@
   }
 
   .post-card_img {
-    @apply w-full max-h-[45rem] rounded-[24px] mb-5 object-cover;
+    @apply w-full max-h-[45rem] rounded-md md:rounded-2xl object-cover mb-5;
   }
 
   /* Topbar */
   .topbar {
-    @apply sticky top-0 z-50 md:hidden bg-dark-2 w-full;
+    @apply fixed top-0 z-50 md:hidden bg-dark-2 w-full;
   }
 
   /* User card */
   .user-card {
-    @apply flex-center h-full flex-col gap-4 px-2 py-8 rounded-xl bg-dark-3;
+    @apply flex-center relative overflow-hidden flex-col gap-4 px-2 py-8 rounded-xl bg-dark-3;
+  }
+
+  .home-feed {
+    @apply flex flex-col flex-1 gap-2 md:gap-9 w-full;
   }
 }
 

@@ -25,7 +25,7 @@ const ExplorerGridList = ({
         animate={{ scale: 1, opacity: 1 }}
         transition={{ duration: 0.2 }}
         key={post.$id}
-        className="relative min-w-80 h-80"
+        className="relative w-full mx-w-80 aspect-square"
       >
         <Link to={`/posts/${post.$id}`} className="grid-post_link">
           <img

@@ -68,11 +68,12 @@ export async function createComment(
 }
 
 export async function updateComment(comment: UpdateComment) {
+  const { commentId, ...restOfProperties } = comment;
   const updatedComment = await databases.updateDocument(
     appwriteConfig.databaseId,
     appwriteConfig.commentCollectionId,
-    comment.commentId,
-    comment
+    commentId,
+    restOfProperties
   );
 
   if (!updatedComment)

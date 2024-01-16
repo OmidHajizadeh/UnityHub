@@ -12,6 +12,7 @@ import UsersCardSkeleton from "@/components/loaders/UsersCardSkeleton";
 import { UnityHubError } from "@/lib/utils";
 import { useToast } from "@/components/ui/use-toast";
 import { Post } from "@/types";
+import NoHomeFeed from "@/components/shared/NoHomeFeed";
 
 const Home = () => {
   const { ref, inView } = useInView();
@@ -86,17 +87,14 @@ const Home = () => {
   }
 
   return (
-    <div className="flex flex-1">
+    <div className="flex flex-1 h-full">
       <Helmet>
         <title>خانه یونیتی هاب</title>
       </Helmet>
-      <div className="home-container">
+      <div className="home-container self-center">
         <div className="home-posts">
-          <h2 className="h3-bold text-center md:h2-bold w-full">
-            پست های کاربران دنبال شده
-          </h2>
           {isPostLoading && (
-            <section className="flex flex-col flex-1 gap-9 w-full">
+            <section className="home-feed">
               {Array.from({ length: 3 }).map((_, index) => (
                 <React.Fragment key={index}>
                   <MediumPostSkeleton />
@@ -108,7 +106,7 @@ const Home = () => {
             <p className="body-medium text-light-1">خطایی رخ داد</p>
           )}
           {posts && (
-            <ul className="flex flex-col flex-1 gap-9 w-full">
+            <ul className="home-feed">
               <AnimatePresence mode="popLayout">
                 {posts.pages.map((item) => {
                   return item?.documents.map((post) => {
@@ -133,16 +131,16 @@ const Home = () => {
                     initial={{ scale: 0.8, opacity: 0 }}
                     animate={{ scale: 1, opacity: 1 }}
                     transition={{ duration: 0.2 }}
-                    className="text-light-4 text-center w-full mt-10"
+                    className="text-light-4 text-center w-full"
                   >
-                    پستی برای نمایش پیدا نشد
+                    <NoHomeFeed />
                   </motion.li>
                 )}
               </AnimatePresence>
             </ul>
           )}
           {hasNextPage && (
-            <section ref={ref} className="flex flex-col flex-1 gap-9 w-full">
+            <section ref={ref} className="home-feed -mt-4">
               {Array.from({ length: 3 }).map((_, index) => (
                 <React.Fragment key={index}>
                   <MediumPostSkeleton />

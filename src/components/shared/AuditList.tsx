@@ -66,7 +66,6 @@ const AuditList = ({ audits }: AuditListProps) => {
           ) : audit.auditType === "follow" ? (
             <FollowUserButton
               className="shad-button_primary px-4"
-              currentUserFollowings={user?.followings || []}
               targetUserId={audit.initiativeUserId}
             />
           ) : audit.auditType === "comment" ? (
@@ -84,7 +83,7 @@ const AuditList = ({ audits }: AuditListProps) => {
             >
               <img
                 src="/images/icon.svg"
-                className="rounded-md h-20 w-20"
+                className="rounded-md me-3 h-14 w-14"
                 alt={audit.initiativeUserUsername}
               />
             </Link>

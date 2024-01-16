@@ -124,7 +124,7 @@ const PostStats = ({
     <div className="flex-between gap-3 z-20 relative">
       <div className="flex gap-2">
         {isLikingPost ? (
-          <Spinner />
+          <Spinner size={20} />
         ) : (
           <img
             src={`/icons/${
@@ -156,7 +156,7 @@ const PostStats = ({
         )}
         <div>
           {isSavingPost ? (
-            <Spinner />
+            <Spinner size={20} />
           ) : (
             <img
               src={`/icons/${

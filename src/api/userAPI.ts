@@ -213,7 +213,7 @@ export async function updateUser(user: UpdateUser) {
     const uploadedFile = await uploadFile(user.file[0]);
 
     // Get new file url for preview in update profile page
-    const fileUrl = getFilePreview(uploadedFile.$id);
+    const fileUrl = getFilePreview(uploadedFile.$id, true);
     if (!fileUrl) {
       await deleteFile(uploadedFile.$id);
       throw new UnityHubError("خطای سرور", "لطفاً دوباره امتحان کنید");

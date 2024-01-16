@@ -4,8 +4,8 @@ import SmallPostSkeleton from "../loaders/SmallPostSkeleton";
 
 const ExploreFallback = () => {
   return (
-    <div className="explore-container">
-      <div className="explore-inner_container">
+    <div className="common-container">
+      <div className="common-container_inner">
         <div className="flex gap-2 w-full max-w-5xl">
           <img
             src="/icons/wallpaper.svg"

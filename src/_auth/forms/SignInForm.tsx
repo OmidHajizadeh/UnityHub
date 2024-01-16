@@ -121,7 +121,7 @@ const SignInForm = () => {
             {isUserLoading ? (
               <div className="flex-center gap-2">
                 <Spinner />
-                در حال ارسال...
+                در حال ورود...
               </div>
             ) : (
               "ورود"

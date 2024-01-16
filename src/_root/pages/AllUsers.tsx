@@ -39,8 +39,8 @@ const AllUsers = () => {
       <Helmet>
         <title>همه کاربران</title>
       </Helmet>
-      <div className="explore-inner_container">
-        <div className="flex gap-2 w-full max-w-5xl">
+      <div className="common-container_inner">
+        <div className="hidden md:flex gap-2 w-full max-w-5xl">
           <img
             src="/icons/people.svg"
             width={36}
@@ -66,9 +66,9 @@ const AllUsers = () => {
           />
         </div>
       </div>
-      <div className="user-container mt-8 mb-7 relative">
+      <div className="user-container relative">
         {!shouldShowSearchResults && (
-          <h2 className="body-bold md:h3-bold">کاربران اخیر</h2>
+          <h2 className="body-bold md:h3-bold text-center w-full md:text-start">کاربران اخیر</h2>
         )}
         {isLoadingUsers ? (
           <section className="user-grid">
@@ -100,7 +100,7 @@ const AllUsers = () => {
                       initial={{ opacity: 0 }}
                       animate={{ scale: 1, opacity: 1 }}
                       transition={{ duration: 0.2 }}
-                      className="flex-1 min-w-[200px] w-full"
+                      className="flex-1 w-full"
                     >
                       <UserCard user={user} />
                     </motion.li>

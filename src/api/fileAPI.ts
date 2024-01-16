@@ -17,9 +17,19 @@ export async function uploadFile(file: File) {
   return uploadedFile;
 }
 
-export function getFilePreview(fileId: string) {
-  const fileUrl = storage.getFilePreview(appwriteConfig.storageId, fileId);
-
+export function getFilePreview(fileId: string, isAvatar = false) {
+  let fileUrl;
+  if (isAvatar) {
+    fileUrl = storage.getFilePreview(
+      appwriteConfig.storageId,
+      fileId,
+      500,
+      500,
+      "center"
+    );
+  } else {
+    fileUrl = storage.getFilePreview(appwriteConfig.storageId, fileId);
+  }
   if (!fileUrl)
     throw new UnityHubError("خطا در دریافت تصویر", "لطفاً دوباره امتحان کنید.");
 

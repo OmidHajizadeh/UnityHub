@@ -81,7 +81,7 @@ export function useSearchUser(searchTerm: string) {
 
 export function useGetUsers(limit?: number) {
   return useQuery({
-    queryKey: [QUERY_KEYS.GET_USERS],
+    queryKey: [QUERY_KEYS.GET_USERS, limit],
     queryFn: () => getUsers(limit),
   });
 }

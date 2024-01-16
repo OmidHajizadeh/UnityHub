@@ -24,7 +24,7 @@ const FileUploader = ({ fieldChange, mediaUrl }: FileUploaderProps) => {
   const { getRootProps, getInputProps } = useDropzone({
     onDrop,
     accept: {
-      "image/*": [".png", ".jpg", ".jpeg", ".svg"],
+      "image/*": [".png", ".jpg", ".jpeg"],
     },
   });
 
@@ -51,10 +51,10 @@ const FileUploader = ({ fieldChange, mediaUrl }: FileUploaderProps) => {
             width={96}
             height={77}
           />
-          <h3 className="base-medium text-light-2 mb-2 mt-6"> 
+          <h3 className="base-medium text-light-2 mb-2 mt-6">
             عکس خود را اینجا رها کنید
           </h3>
-          <p className="text-light-4 small-regular mb-6">SVG, PNG, JPG, JPEG</p>
+          <p className="text-light-4 small-regular mb-6">PNG, JPG, JPEG</p>
           <Button type="button" className="shad-button_dark_4">
             یا اینجا از دستگاه خود انتخاب کنید
           </Button>

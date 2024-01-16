@@ -26,6 +26,10 @@ function CommentDialog({
 }: CommentDialogProps) {
   const [isOpen, setIsOpen] = useState(false);
 
+  function closeModal() {
+    setIsOpen(false)
+  }
+
   return (
     <Dialog onOpenChange={setIsOpen} open={isOpen}>
       <DialogTrigger asChild>{children}</DialogTrigger>
@@ -39,7 +43,7 @@ function CommentDialog({
           <Suspense fallback={<Spinner />}>
             <PostComment
               action={action}
-              closeModal={() => setIsOpen(false)}
+              closeModal={closeModal}
               comment={comment}
               post={post}
             />

@@ -17,13 +17,13 @@ import { useToast } from "@/components/ui/use-toast";
 
 import { ProfileValidation } from "@/lib/validation";
 import Spinner from "@/components/loaders/Spinner";
-import ProfileUploader from "@/components/shared/ProfileUploader";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useUpdateUser } from "@/hooks/react-query/mutations";
 import { UnityHubError } from "@/lib/utils";
 import { Textarea } from "@/components/ui/textarea";
 import { useGetCurrentUser } from "@/hooks/react-query/queries";
+import FileUploader from "@/components/shared/FileUploader";
 
 const UpdateProfile = () => {
   const { toast } = useToast();
@@ -94,7 +94,7 @@ const UpdateProfile = () => {
         <title>ویرایش پروفایل</title>
       </Helmet>
       <div className="common-container">
-        <div className="flex-start gap-3 justify-start w-full max-w-5xl">
+        <div className="hidden md:flex-start gap-3 justify-start w-full max-w-5xl">
           <img
             src="/icons/edit.svg"
             width={36}
@@ -116,7 +116,7 @@ const UpdateProfile = () => {
               render={({ field }) => (
                 <FormItem className="flex">
                   <FormControl>
-                    <ProfileUploader
+                    <FileUploader
                       fieldChange={field.onChange}
                       mediaUrl={user.imageUrl}
                     />
@@ -198,7 +198,7 @@ const UpdateProfile = () => {
 
             <Button
               type="submit"
-              className="shad-button_primary self-end bg-primary-500 whitespace-nowrap"
+              className="shad-button_primary self-end w-full md:w-auto bg-primary-500 whitespace-nowrap"
               disabled={isUpdatingUser}
             >
               {isUpdatingUser && <Spinner />}

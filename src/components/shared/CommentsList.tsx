@@ -26,10 +26,7 @@ const CommentsList = ({ post }: CommentsListProps) => {
 
   if (isLoadingComments)
     return (
-      <ul
-        dir="rtl"
-        className="w-full max-w-5xl p-3 flex flex-col gap-3 bg-dark-3 rounded-xl"
-      >
+      <ul dir="rtl" className="comments-container">
         {Array.from({ length: 4 }).map((_, index) => (
           <React.Fragment key={index}>
             <CommentSkeleton />
@@ -38,17 +35,17 @@ const CommentsList = ({ post }: CommentsListProps) => {
       </ul>
     );
 
-  if (!comments || isError || comments.total === 0) return;
+  if (!comments || isError || comments.total === 0)
+    return <div className="comments-container">
+      <p className="text-center py-7">هیچ کامنتی برای این پست نوشته نشده.</p>
+    </div>;
 
   async function deleteCommentHandler(commentId: string) {
     await deleteComment(commentId);
   }
 
   return (
-    <ul
-      dir="rtl"
-      className="w-full max-w-5xl p-3 flex flex-col gap-3 bg-dark-3 rounded-xl"
-    >
+    <ul dir="rtl" className="comments-container">
       {comments.documents.map((comment) => {
         return (
           <li
