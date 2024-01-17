@@ -140,7 +140,7 @@ const Home = () => {
             </ul>
           )}
           {hasNextPage && (
-            <section ref={ref} className="home-feed -mt-4">
+            <section ref={ref} className="home-feed -mt-4 lg:mt-0">
               {Array.from({ length: 3 }).map((_, index) => (
                 <React.Fragment key={index}>
                   <MediumPostSkeleton />
