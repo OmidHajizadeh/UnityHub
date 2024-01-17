@@ -127,9 +127,8 @@ const PostStats = ({
           <Spinner size={20} />
         ) : (
           <img
-            src={`/icons/${
-              likes.includes(user.$id) ? "liked" : "like"
-            }.svg`}
+            aria-label="دکمه لایک پست"
+            src={`/icons/${likes.includes(user.$id) ? "liked" : "like"}.svg`}
             alt="like"
             width={20}
             height={20}
@@ -146,6 +145,7 @@ const PostStats = ({
         {showComments && (
           <CommentDialog action="create" post={post}>
             <img
+              aria-label="دکمه کامنت"
               src="/icons/chat.svg"
               alt="comments"
               width={20}
@@ -159,9 +159,8 @@ const PostStats = ({
             <Spinner size={20} />
           ) : (
             <img
-              src={`/icons/${
-                saves.includes(user.$id) ? "saved" : "save"
-              }.svg`}
+              src={`/icons/${saves.includes(user.$id) ? "saved" : "save"}.svg`}
+              aria-label="دکمه ذخیره پست"
               alt="save"
               width={20}
               height={20}

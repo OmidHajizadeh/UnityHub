@@ -126,7 +126,6 @@ export async function signOutAccount() {
 
   return session;
 }
-console.log();
 
 export async function sendResetPasswordLink(email: string) {
   const passwordRecoverObject = await account.createRecovery(

@@ -33,6 +33,7 @@ const Audits = lazy(() => import("./_root/pages/Audits"));
 
 function App() {
   const location = useLocation();
+  
   return (
     <main className="flex min-h-screen">
       <Helmet>

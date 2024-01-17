@@ -18,7 +18,7 @@ const GridPostList = ({
   return (
     <section className="grid-container">
       <AnimatePresence mode="popLayout">
-        {posts.reverse().map((post) => {
+        {posts.map((post) => {
           return (
             <motion.div
               key={post.$id}

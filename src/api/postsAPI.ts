@@ -202,7 +202,7 @@ export async function getPostById(postId: string) {
 export async function getExplorerPosts({ pageParam }: { pageParam: number }) {
   const queries: string[] = [
     Query.orderDesc("$createdAt"),
-    Query.limit(window.innerWidth > 768 ? 6 : 9),
+    Query.limit(window.innerWidth > 768 ? 6 : 12),
   ];
   if (pageParam) {
     queries.push(Query.cursorAfter(pageParam.toString()));

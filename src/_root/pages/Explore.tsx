@@ -93,7 +93,16 @@ const Explore = () => {
 
   if (!posts) return <ExploreFallback />;
 
+  const currentLoadedPostsCount =
+    posts?.pages.reduce((total, currentPage) => {
+      return total + currentPage.documents.length;
+    }, 0) || 0;
+
   const shouldShowSearchResults = searchValue !== "";
+  const shouldShowSkeletons =
+    currentLoadedPostsCount % posts?.pages[0].total !== 0 &&
+    hasNextPage &&
+    !searchValue;
 
   return (
     <div className="common-container">
@@ -139,10 +148,12 @@ const Explore = () => {
                 </React.Fragment>
               ))
             )}
-            {hasNextPage && !searchValue && (
+            {shouldShowSkeletons && (
               <>
                 <SmallPostSkeleton ShowStats={false} ref={ref} />
-                {Array.from({ length: 2 }).map((_, index) => (
+                {Array.from({
+                  length: 2,
+                }).map((_, index) => (
                   <React.Fragment key={`skeleton-${index}`}>
                     <SmallPostSkeleton ShowStats={false} />
                   </React.Fragment>
