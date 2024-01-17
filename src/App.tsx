@@ -16,6 +16,7 @@ import Spinner from "./components/loaders/Spinner";
 import ProfileFallback from "./components/suspense-fallbacks/ProfileFallback";
 import NotFound from "./_root/pages/NotFound";
 import SignInForm from "./_auth/forms/SignInForm";
+import AuditsFallback from "./components/suspense-fallbacks/AuditsFallback";
 
 const SignUpForm = lazy(() => import("./_auth/forms/SignUpForm"));
 const ForgetPasswordForm = lazy(
@@ -112,7 +113,7 @@ function App() {
             <Route
               path="/audits"
               element={
-                <Suspense fallback={<Spinner size={50} />}>
+                <Suspense fallback={<AuditsFallback />}>
                   <Audits />
                 </Suspense>
               }

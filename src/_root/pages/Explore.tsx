@@ -93,10 +93,9 @@ const Explore = () => {
 
   if (!posts) return <ExploreFallback />;
 
-  const currentLoadedPostsCount =
-    posts?.pages.reduce((total, currentPage) => {
-      return total + currentPage.documents.length;
-    }, 0) || 0;
+  const currentLoadedPostsCount = posts.pages.reduce((total, currentPage) => {
+    return total + currentPage.documents.length;
+  }, 0);
 
   const shouldShowSearchResults = searchValue !== "";
   const shouldShowSkeletons =

@@ -21,7 +21,7 @@ const Audits = () => {
     hasNextPage,
   } = useGetAudits();
   const { ref, inView } = useInView();
-  
+
   const { toast } = useToast();
 
   useEffect(() => {
@@ -55,6 +55,12 @@ const Audits = () => {
   }
 
   if (!audits || isLoadingAudits) return <AuditsFallback />;
+  const currentLoadedAuditsCount = audits.pages.reduce((total, currentPage) => {
+    return total + currentPage.documents.length;
+  }, 0);
+
+  const shouldShowSkeletons =
+    currentLoadedAuditsCount % audits?.pages[0].total !== 0 && hasNextPage;
 
   return (
     <div className="common-container">
@@ -80,8 +86,8 @@ const Audits = () => {
               </React.Fragment>
             );
           })}
-          <li ref={ref} className="-mt-2" />
-          {hasNextPage &&
+          <li ref={ref} className="-mt-2 md:-mt-4" />
+          {shouldShowSkeletons &&
             Array.from({ length: 5 }).map((_, index) => {
               return (
                 <React.Fragment key={index}>
