@@ -68,11 +68,11 @@ const ForgetPasswordForm = () => {
       <div className="sm:w-420 flex-center flex-col px-4 sm:px-0">
         <img src="/images/icon.svg" alt="logo" className="max-w-[5rem]" />
         <h2 className="h3-bold mt-3 md:h2-bold font-bold pt-5 sm-pt-12">
-          فراموشی رمز عبور
+          {isSuccess ? "ایمیل خود را چک کنید" : "فراموشی رمز عبور"}
         </h2>
         <p className="text-light-3 mt-2 small-medium md:base-regular">
           {isSuccess
-            ? "لینک ریست کردن رمز عبور به ایمیل شما فرستاده شد."
+            ? "لینک ریست کردن رمز عبور برای شما فرستاده شد."
             : "لطفاً ایمیل خود را در فیلد زیر وارد کنید."}
         </p>
         {!isSuccess && (

@@ -128,10 +128,8 @@ export async function signOutAccount() {
 }
 
 export async function sendResetPasswordLink(email: string) {
-  const passwordRecoverObject = await account.createRecovery(
-    email,
-    import.meta.env.VITE_UNITYHUB_URL + "reset-password"
-  );
+  const url = import.meta.env.VITE_UNITYHUB_URL + "/reset-password";
+  const passwordRecoverObject = await account.createRecovery(email, url);
   return passwordRecoverObject;
 }
 

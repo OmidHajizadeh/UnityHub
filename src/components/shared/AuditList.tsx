@@ -23,7 +23,7 @@ const AuditList = ({ audits }: AuditListProps) => {
             src={
               audit.initiativeUserImageUrl || "/icons/profile-placeholder.svg"
             }
-            className="rounded-full h-14 w-14"
+            className="rounded-full h-14 w-14 overflow-hidden"
             alt={audit.initiativeUserUsername}
           />
           {audit.auditType === "comment" && (
