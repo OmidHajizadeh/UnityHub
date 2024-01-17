@@ -56,7 +56,6 @@ const SignUpForm = () => {
         navigate("/sign-in");
       }
 
-      form.reset();
       navigate("/");
     } catch (error) {
       if (error instanceof UnityHubError) {
@@ -85,16 +84,12 @@ const SignUpForm = () => {
   return (
     <Form {...form}>
       <div className="sm:w-420 flex-center flex-col px-4 sm:px-0">
-        <img
-          src="/images/icon.svg"
-          alt="logo"
-          className="max-w-[5rem]"
-        />
+        <img src="/images/icon.svg" alt="logo" className="max-w-[5rem]" />
 
         <h2 className="h3-bold mt-3 md:h2-bold font-bold pt-5 sm-pt-12">
           ایجاد حساب کاربری جدید
         </h2>
-        <p className="text-light-3 small-medium md:base-regular">
+        <p className="text-light-3 mt-2 small-medium md:base-regular">
           برای ایجاد حساب کاربری جدید، جزئیات اکانت خود را وارد کنید.
         </p>
         <form

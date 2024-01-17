@@ -85,3 +85,10 @@ export type Audit = {
   postImageUrl?: string;
   postId?: string;
 } & Readonly<Partial<Models.Document>>;
+
+export type ResetPassword = {
+  userId: string;
+  secret: string;
+  password: string;
+  confirmPassword: string;
+};

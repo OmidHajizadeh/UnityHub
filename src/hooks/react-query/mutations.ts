@@ -11,8 +11,10 @@ import {
 } from "@/api/postsAPI";
 import { createComment, deleteComment, updateComment } from "@/api/commentAPI";
 import {
+  sendResetPasswordLink,
   createUserAccount,
   followUser,
+  resetPassword,
   signInAccount,
   signOutAccount,
   updateUser,
@@ -23,12 +25,14 @@ import {
   NewComment,
   NewPost,
   NewUser,
+  ResetPassword,
   UpdateComment,
   UpdatePost,
   UpdateUser,
 } from "@/types";
 import { Models } from "appwrite";
 import { useNavigate } from "react-router-dom";
+import { useToast } from "@/components/ui/use-toast";
 
 export function useCreateUserAccount() {
   return useMutation({
@@ -37,17 +41,39 @@ export function useCreateUserAccount() {
 }
 
 export function useSignInAccount() {
+  const navigate = useNavigate();
   return useMutation({
     mutationFn: (user: { email: string; password: string }) =>
       signInAccount(user.email, user.password),
+    onSuccess: () => navigate("/"),
   });
 }
 
 export function useSignOutAccount() {
   const navigate = useNavigate();
   return useMutation({
-    mutationFn: () => signOutAccount(),
+    mutationFn: signOutAccount,
     onSuccess: () => navigate("/sign-in"),
+  });
+}
+
+export function useForgetPassword() {
+  return useMutation({
+    mutationFn: (email: string) => sendResetPasswordLink(email),
+  });
+}
+
+export function useResetPassword() {
+  const navigate = useNavigate();
+  const { toast } = useToast();
+  return useMutation({
+    mutationFn: (passwordObj: ResetPassword) => resetPassword(passwordObj),
+    onSuccess: () => {
+      toast({
+        title: "رمز عبور شما با موفقیت تغییر یافت",
+      });
+      navigate("/sign-in");
+    },
   });
 }
 

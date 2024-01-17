@@ -7,7 +7,7 @@ import {
   avatars,
   databases,
 } from "@/lib/AppWirte/config";
-import { NewUser, UpdateUser, User } from "@/types";
+import { NewUser, ResetPassword, UpdateUser, User } from "@/types";
 import { deleteFile, getFilePreview, uploadFile } from "./fileAPI";
 import { UnityHubError, generateAuditId } from "@/lib/utils";
 import { createAudit, deleteAudit } from "./auditsAPI";
@@ -125,6 +125,28 @@ export async function signOutAccount() {
     );
 
   return session;
+}
+
+export async function sendResetPasswordLink(email: string) {
+  const passwordRecoverObject = await account.createRecovery(
+    email,
+    "http://localhost:5173/reset-password"
+  );
+  return passwordRecoverObject;
+}
+
+export async function resetPassword(passwordObj: ResetPassword) {
+  const recoveredAccount = await account.updateRecovery(
+    passwordObj.userId,
+    passwordObj.secret,
+    passwordObj.password,
+    passwordObj.confirmPassword
+  );
+
+  if (!recoveredAccount)
+    throw new UnityHubError("خطا ثبت تغییرات", "لطفاً دوباره امتحان کنید.");
+
+  return recoveredAccount;
 }
 
 export async function getCurrentUser() {

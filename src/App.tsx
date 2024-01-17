@@ -15,9 +15,13 @@ import PostDetailsFallback from "./components/suspense-fallbacks/PostDetailsFall
 import Spinner from "./components/loaders/Spinner";
 import ProfileFallback from "./components/suspense-fallbacks/ProfileFallback";
 import NotFound from "./_root/pages/NotFound";
+import SignInForm from "./_auth/forms/SignInForm";
 
-const SignInForm = lazy(() => import("./_auth/forms/SignInForm"));
 const SignUpForm = lazy(() => import("./_auth/forms/SignUpForm"));
+const ForgetPasswordForm = lazy(
+  () => import("./_auth/forms/ForgetPasswordForm")
+);
+const ResetPasswordForm = lazy(() => import("./_auth/forms/ResetPasswordForm"));
 const Explore = lazy(() => import("./_root/pages/Explore"));
 const AllUsers = lazy(() => import("./_root/pages/AllUsers"));
 const CreatePost = lazy(() => import("./_root/pages/CreatePost"));
@@ -50,19 +54,28 @@ function App() {
         <Routes key={location.key} location={location.pathname}>
           {/* Public Routes */}
           <Route element={<AuthLayout />}>
-            <Route
-              path="/sign-in"
-              element={
-                <Suspense fallback={<Spinner size={50} />}>
-                  <SignInForm />
-                </Suspense>
-              }
-            />
+            <Route path="/sign-in" element={<SignInForm />} />
             <Route
               path="/sign-up"
               element={
                 <Suspense fallback={<Spinner size={50} />}>
                   <SignUpForm />
+                </Suspense>
+              }
+            />
+            <Route
+              path="/forget-password"
+              element={
+                <Suspense fallback={<Spinner size={50} />}>
+                  <ForgetPasswordForm />
+                </Suspense>
+              }
+            />
+            <Route
+              path="/reset-password"
+              element={
+                <Suspense fallback={<Spinner size={50} />}>
+                  <ResetPasswordForm />
                 </Suspense>
               }
             />
