@@ -126,11 +126,12 @@ export async function signOutAccount() {
 
   return session;
 }
+console.log();
 
 export async function sendResetPasswordLink(email: string) {
   const passwordRecoverObject = await account.createRecovery(
     email,
-    "http://localhost:5173/reset-password"
+    import.meta.env.VITE_UNITYHUB_URL + "reset-password"
   );
   return passwordRecoverObject;
 }
