@@ -38,14 +38,17 @@ const GridPostList = ({
               </Link>
               <div className={showUser || showStats ? "grid-post_user" : ""}>
                 {showUser && (
-                  <div className="flex items-center justify-start gap-2 flex-1">
+                  <Link
+                    to={`/profile/${post.creator.$id}`}
+                    className="flex items-center justify-start gap-2 flex-1"
+                  >
                     <img
                       src={post.creator.imageUrl}
                       alt={post.creator.name}
                       className="w-8 h-8 rounded-full"
                     />
                     <p className="line-clamp-1">{post.creator.name}</p>
-                  </div>
+                  </Link>
                 )}
                 {showStats && <PostStats post={post} showLikeCount={false} />}
               </div>

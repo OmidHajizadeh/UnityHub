@@ -6,7 +6,7 @@
 
 @layer base {
   * {
-    @apply box-border list-none p-0 m-0 scroll-smooth;
+    @apply box-border list-none p-0 m-0 scroll-smooth select-none;
   }
 
   body {
@@ -171,11 +171,11 @@
 
   /* Profile */
   .profile-container {
-    @apply flex flex-col items-center flex-1 gap-4 overflow-scroll py-10 px-5 md:px-14 custom-scrollbar;
+    @apply max-w-5xl flex flex-col items-center flex-1 gap-4 overflow-scroll mx-5 xl:mx-auto custom-scrollbar;
   }
 
   .profile-inner_container {
-    @apply flex items-center md:mb-8 xl:items-start gap-8 flex-col xl:flex-row relative max-w-5xl w-full;
+    @apply flex flex-col xs:flex-row md:flex-col lg:flex-row items-start md:mb-8 gap-8 relative w-full;
   }
 
   .profile-tab {

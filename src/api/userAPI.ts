@@ -260,10 +260,7 @@ export async function followUser(action: string, targetUserId: string) {
   const currentUser = await getCurrentUser();
 
   if (!currentUser || currentUser.$id === targetUserId)
-    throw new UnityHubError(
-      "خطا",
-      "شما اجازه این عملیات را ندارید."
-    );
+    throw new UnityHubError("خطا", "شما اجازه این عملیات را ندارید.");
 
   let auditPromise = undefined;
   const uniqueAuditId = generateAuditId(
@@ -310,7 +307,7 @@ export async function followUser(action: string, targetUserId: string) {
     );
   }
 
-  const updateCurrentUser = databases.updateDocument(
+  const updateCurrentUserPromise = databases.updateDocument(
     appwriteConfig.databaseId,
     appwriteConfig.userCollectionId,
     currentUser.$id,
@@ -319,7 +316,7 @@ export async function followUser(action: string, targetUserId: string) {
     }
   );
 
-  const updateTargetUser = databases.updateDocument(
+  const updateTargetUserPromise = databases.updateDocument(
     appwriteConfig.databaseId,
     appwriteConfig.userCollectionId,
     targetUser.$id,
@@ -328,13 +325,15 @@ export async function followUser(action: string, targetUserId: string) {
     }
   );
 
-  const resp = await Promise.all([
-    updateCurrentUser,
-    updateTargetUser,
-    auditPromise,
+  const [updateCurrentUser, UpdateTargetUser] = await Promise.all([
+    updateCurrentUserPromise,
+    updateTargetUserPromise,
   ]);
 
-  if (!resp) throw new UnityHubError("خطای سرور", "لطفاً دوباره امتحان کنید.");
+  if (!updateCurrentUser || !UpdateTargetUser)
+    throw new UnityHubError("خطای سرور", "لطفاً دوباره امتحان کنید.");
+
+  await auditPromise;
 }
 
 export async function searchUser({ searchTerm }: { searchTerm: string }) {

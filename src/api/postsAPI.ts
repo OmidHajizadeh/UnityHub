@@ -52,7 +52,7 @@ export async function createPost(post: NewPost) {
 
 export async function updatePost(post: UpdatePost) {
   const hasFileToUpdate = post.files.length > 0;
-  
+
   let image = {
     imageUrl: post.imageUrl,
     imageId: post.imageId,
@@ -75,7 +75,7 @@ export async function updatePost(post: UpdatePost) {
   // Convert tags into array
   // const rawTags = post.tags?.replace(/ /g, "").split(",");
   const tags = Array.from(new Set(post.tags)) || [];
-  
+
   // Create post
   const updatedPost = await databases.updateDocument(
     appwriteConfig.databaseId,
@@ -89,7 +89,6 @@ export async function updatePost(post: UpdatePost) {
       tags,
     }
   );
-  
 
   if (!updatedPost) {
     await deleteFile(post.imageId);
@@ -201,7 +200,10 @@ export async function getPostById(postId: string) {
 }
 
 export async function getExplorerPosts({ pageParam }: { pageParam: number }) {
-  const queries: string[] = [Query.orderDesc("$createdAt"), Query.limit(6)];
+  const queries: string[] = [
+    Query.orderDesc("$createdAt"),
+    Query.limit(window.innerWidth > 768 ? 6 : 9),
+  ];
   if (pageParam) {
     queries.push(Query.cursorAfter(pageParam.toString()));
   }

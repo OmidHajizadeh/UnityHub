@@ -80,7 +80,7 @@ const Audits = () => {
               </React.Fragment>
             );
           })}
-          <li ref={ref} className="-mt-4" />
+          <li ref={ref} className="-mt-2" />
           {hasNextPage &&
             Array.from({ length: 5 }).map((_, index) => {
               return (

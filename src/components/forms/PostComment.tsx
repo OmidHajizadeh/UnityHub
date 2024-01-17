@@ -111,7 +111,7 @@ const PostComment = ({
               <FormControl>
                 <Textarea
                   dir="auto"
-                  className="shad-textarea !bg-dark-1 custom-scrollbar"
+                  className="shad-textarea font-light !bg-dark-1 custom-scrollbar"
                   {...field}
                 />
               </FormControl>

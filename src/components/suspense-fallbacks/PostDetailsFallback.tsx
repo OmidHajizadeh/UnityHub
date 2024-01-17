@@ -5,7 +5,7 @@ const PostDetailsFallback = () => {
   return (
     <div className="post_details-container">
       <div className="post_details-card gap-3">
-        <div className="h-80 lg:h-[480px] xl:w-[48%] rounded-[30px] object-cover p-5 bg-dark-4 animate-pulse" />
+        <div className="h-80 lg:h-[480px] xl:w-[48%] rounded-md lg:rounded-2xl p-5 bg-dark-4 animate-pulse" />
         <div className="post_details-info animate-pulse bg-dark-4">
           <div className="flex-between w-full">
             <div className="flex items-center gap-3">

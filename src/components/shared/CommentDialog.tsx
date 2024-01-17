@@ -6,7 +6,6 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Suspense, lazy, useState } from "react";
-import Spinner from "../loaders/Spinner";
 import { Models } from "appwrite";
 
 const PostComment = lazy(() => import("../forms/PostComment"));
@@ -27,7 +26,7 @@ function CommentDialog({
   const [isOpen, setIsOpen] = useState(false);
 
   function closeModal() {
-    setIsOpen(false)
+    setIsOpen(false);
   }
 
   return (
@@ -40,7 +39,11 @@ function CommentDialog({
           </DialogTitle>
         </DialogHeader>
         {isOpen && (
-          <Suspense fallback={<Spinner />}>
+          <Suspense
+            fallback={
+              <div className="animate-pulse bg-dark-2 rounded-xl h-36" />
+            }
+          >
             <PostComment
               action={action}
               closeModal={closeModal}

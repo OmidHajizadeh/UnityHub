@@ -6,11 +6,11 @@ type SmallPostsFallbackProps = {
 
 const SmallPostsFallback = ({ count = 9 }: SmallPostsFallbackProps) => {
   return (
-    <section className="grid-container">
+    <section className="grid-container gap-4">
       {Array.from({ length: count }).map((_, index) => {
         return (
-          <div key={index} className="relative min-w-80 h-80">
-            <SmallPostSkeleton ShowStats={false} />
+          <div key={index}>
+            <SmallPostSkeleton ShowStats={false} showUser={false} />
           </div>
         );
       })}

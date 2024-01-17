@@ -15,7 +15,7 @@ const AuditsFallback = () => {
           />
           <h2 className="h3-bold md:h2-bold w-full">گزارش ها</h2>
         </div>
-        <ul className="flex flex-col gap-4 w-full">
+        <ul className="flex flex-col gap-2 md:gap-4 w-full">
           {Array.from({ length: 5 }).map((_, index) => {
             return (
               <React.Fragment key={index}>

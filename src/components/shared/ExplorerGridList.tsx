@@ -31,19 +31,19 @@ const ExplorerGridList = ({
           <img
             src={post.imageUrl}
             alt={post.caption}
-            className="w-full h-full object-cover duration-300 transition-transform hover:scale-110"
+            className="w-full h-full object-cover "
           />
         </Link>
         <div className="grid-post_user">
           {showUser && (
-            <div className="flex items-center justify-start gap-2 flex-1">
+            <Link to={`/profile/${post.creator.$id}`} className="flex items-center justify-start gap-2 flex-1">
               <img
                 src={post.creator.imageUrl}
                 alt={post.creator.name}
                 className="w-8 h-8 rounded-full"
               />
               <p className="line-clamp-1">{post.creator.name}</p>
-            </div>
+            </Link>
           )}
           {showStats && <PostStats post={post as Post} showLikeCount={false} />}
         </div>
