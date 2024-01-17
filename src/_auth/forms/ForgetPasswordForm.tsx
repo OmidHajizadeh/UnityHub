@@ -1,7 +1,6 @@
 import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { Link, useNavigate } from "react-router-dom";
 import { AppwriteException } from "appwrite";
 
 import { Button } from "@/components/ui/button";
@@ -19,11 +18,9 @@ import Spinner from "@/components/loaders/Spinner";
 import { forgetPasswordValidationSchema } from "@/lib/validation";
 import { useForgetPassword } from "@/hooks/react-query/mutations";
 import { UnityHubError } from "@/lib/utils";
-import { useState } from "react";
 
 const ForgetPasswordForm = () => {
   const { toast } = useToast();
-  // const navigate = useNavigate();
   const {
     mutateAsync: forgetPasswordHandler,
     isPending: isRequestPending,
@@ -42,8 +39,6 @@ const ForgetPasswordForm = () => {
   ) {
     try {
       await forgetPasswordHandler(values.email);
-      // form.reset();
-      // navigate("/");
     } catch (error) {
       if (error instanceof UnityHubError) {
         return toast({

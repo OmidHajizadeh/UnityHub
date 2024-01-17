@@ -1,7 +1,6 @@
 import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { AppwriteException } from "appwrite";
 
 import { Button } from "@/components/ui/button";
@@ -22,7 +21,6 @@ import { UnityHubError } from "@/lib/utils";
 
 const ResetPasswordForm = () => {
   const { toast } = useToast();
-  // const navigate = useNavigate();
   const { mutateAsync: resetPasswordHandler, isPending: isRequestPending } =
     useResetPassword();
 
