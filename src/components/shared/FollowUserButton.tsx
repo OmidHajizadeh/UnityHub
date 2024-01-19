@@ -63,7 +63,7 @@ const FollowUserButton = ({
   return (
     <Button
       onClick={followUserHandler.bind(
-        this,
+        null,
         hadFollowedUser ? "unfollow" : "follow"
       )}
       type="button"

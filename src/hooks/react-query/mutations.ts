@@ -196,7 +196,6 @@ export function useUpdateUser() {
 export function useFollowUser(targetUserId: string) {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationKey: [QUERY_KEYS.FOLLOW_ACTION, targetUserId],
     mutationFn: (action: "follow" | "unfollow") =>
       followUser(action, targetUserId),
     onSuccess: () => {

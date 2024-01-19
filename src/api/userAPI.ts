@@ -350,8 +350,10 @@ export async function followUser(action: string, targetUserId: string) {
     updateTargetUserPromise,
   ]);
 
-  if (!updateCurrentUser || !UpdateTargetUser)
+  if (!updateCurrentUser || !UpdateTargetUser) {
+    await deleteAudit(uniqueAuditId);
     throw new UnityHubError("خطای سرور", "لطفاً دوباره امتحان کنید.");
+  }
 
   await auditPromise;
 }

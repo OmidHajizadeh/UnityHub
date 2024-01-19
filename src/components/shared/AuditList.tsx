@@ -44,7 +44,7 @@ const AuditList = ({ audits }: AuditListProps) => {
                 @{audit.initiativeUserUsername}
               </small>
             </Link>
-            <p className="whitespace-break-spaces">{audit.message}</p>
+            <p dir="auto" className="whitespace-break-spaces text-right">{audit.message}</p>
             <small>
               <time className="text-light-4">
                 {multiFormatDateString(audit.$createdAt)}
