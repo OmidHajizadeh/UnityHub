@@ -54,8 +54,16 @@ const UnityHubVideoPlayer = ({
   return (
     <div
       className={`flex overflow-hidden rounded-xl relative max-h-[45rem] ${className}`}
+      onContextMenu={(e) => {
+        e.preventDefault();
+        return false;
+      }}
     >
       <div
+        onContextMenu={(e) => {
+          e.preventDefault();
+          return false;
+        }}
         onMouseDown={handlePlayStatus.bind(null, "pause")}
         onMouseUp={handlePlayStatus.bind(null, "play")}
       >

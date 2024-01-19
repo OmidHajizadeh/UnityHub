@@ -61,12 +61,11 @@ const PostForm = ({
 
   async function onSubmit(values: z.infer<typeof postValidationSchema>) {
     if (!user) return;
+
     try {
       if (post && action === "update") {
         await updatePost({
           ...values,
-          imageId: post.imageId,
-          imageUrl: post.imageUrl,
           $id: post.$id,
         });
         navigate(-1);
@@ -177,6 +176,7 @@ const PostForm = ({
                     mediaUrl={post?.imageUrl}
                     mediaType={post?.mediaType}
                     videoErrorHandling={fileErrorHandling}
+                    updateMode={action === "update"}
                   />
                 </FormControl>
                 <FormMessage className="shad-form_message" />
@@ -193,7 +193,7 @@ const PostForm = ({
             {isCreating || isUpdating ? (
               <div className="flex-center gap-2">
                 <Spinner />
-                در حال ارسال...
+                {action === "create" ? "آپلود" : "ویرایش"}
               </div>
             ) : action === "create" ? (
               "آپلود"

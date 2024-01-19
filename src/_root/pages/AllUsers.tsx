@@ -51,12 +51,7 @@ const AllUsers = () => {
           <h2 className="h3-bold md:h2-bold w-full">جستجو</h2>
         </div>
         <div className="flex gap-1 px-4 w-full rounded-lg bg-dark-4">
-          <img
-            src="/icons/search.svg"
-            alt="search"
-            width={24}
-            height={24}
-          />
+          <img src="/icons/search.svg" alt="search" width={24} height={24} />
           <Input
             type="text"
             placeholder="جستجو نام کاربری..."
@@ -68,7 +63,9 @@ const AllUsers = () => {
       </div>
       <div className="user-container relative">
         {!shouldShowSearchResults && (
-          <h2 className="body-bold md:h3-bold text-center w-full md:text-start">کاربران اخیر</h2>
+          <h2 className="body-bold md:h3-bold text-center w-full md:text-start">
+            کاربران اخیر
+          </h2>
         )}
         {isLoadingUsers ? (
           <section className="user-grid">

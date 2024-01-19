@@ -41,19 +41,16 @@ export type NewPost = {
   userId: string;
   caption: string;
   files: File[];
-  location?: string;
+  location: string;
   tags?: string[];
   mediaType: "image" | "video";
 };
 
 export type UpdatePost = {
   caption: string;
-  imageId: string;
-  imageUrl: URL;
-  files: File[];
-  location?: string;
+  location: string;
   tags?: string[];
-} & Partial<Models.Document>;
+} & Readonly<Pick<Models.Document, "$id">>;
 
 //!  Comment Types
 export type NewComment = {

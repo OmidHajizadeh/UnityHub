@@ -58,47 +58,21 @@ export async function createPost(post: NewPost) {
 }
 
 export async function updatePost(post: UpdatePost) {
-  const hasFileToUpdate = post.files.length > 0;
-
-  let image = {
-    imageUrl: post.imageUrl,
-    imageId: post.imageId,
-  };
-
-  if (hasFileToUpdate) {
-    const uploadedFile = await uploadFile(post.files[0]);
-
-    if (!uploadedFile)
-      throw new UnityHubError("خطا در ویرایش پست", "لطفاً دوباره امتحان کنید.");
-
-    const fileUrl = getFilePreview(uploadedFile.$id);
-    if (!fileUrl) {
-      await deleteFile(uploadedFile.$id);
-      throw new UnityHubError("خطای سرور", "لطفاً دوباره امتحان کنید");
-    }
-    image = { ...image, imageUrl: fileUrl, imageId: uploadedFile.$id };
-  }
-
-  // Convert tags into array
-  // const rawTags = post.tags?.replace(/ /g, "").split(",");
   const tags = Array.from(new Set(post.tags)) || [];
 
-  // Create post
+  // Update post
   const updatedPost = await databases.updateDocument(
     appwriteConfig.databaseId,
     appwriteConfig.postCollectionId,
-    post.$id!,
+    post.$id,
     {
       caption: post.caption,
-      imageUrl: image.imageUrl,
-      imageId: image.imageId,
       location: post.location,
       tags,
     }
   );
 
   if (!updatedPost) {
-    await deleteFile(post.imageId);
     throw new UnityHubError(
       "ویرایش پست با خطا مواجه شد",
       "لطفاً دوباره امتحان کنید"

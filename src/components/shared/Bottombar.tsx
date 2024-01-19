@@ -12,6 +12,11 @@ const bottombarLinks = [
     label: "اکسپلورر",
   },
   {
+    imageUrl: "/icons/gallery-add.svg",
+    route: "/create-post",
+    label: "پست جدید",
+  },
+  {
     imageUrl: "/icons/notification.svg",
     route: "/audits",
     label: "گزارش ها",
@@ -20,11 +25,6 @@ const bottombarLinks = [
     imageUrl: "/icons/people.svg",
     route: "/all-users",
     label: "کاربران"
-  },
-  {
-    imageUrl: "/icons/gallery-add.svg",
-    route: "/create-post",
-    label: "پست جدید",
   },
 ];
 

@@ -109,7 +109,7 @@
   }
 
   .root-container {
-    @apply flex flex-1 pt-[88px] pb-[100px] md:py-16 h-full;
+    @apply flex flex-1 pt-[78px] pb-[92px] md:py-16 h-full;
   }
 
   .common-container {
@@ -247,7 +247,7 @@
   }
 
   .glowing-card {
-    @apply relative overflow-hidden before:absolute before:bg-post-card before:top-[--y] before:left-[--x] before:-translate-x-1/2 before:-translate-y-1/2 before:opacity-0 hover:before:opacity-100 after:absolute after:inset-[2px] after:block;
+    @apply relative overflow-hidden before:absolute md:before:bg-post-card before:top-[--y] before:left-[--x] before:-translate-x-1/2 before:-translate-y-1/2 before:opacity-0 hover:before:opacity-100 after:absolute after:inset-[2px] after:block;
   }
 
   .glowing-card::before {
@@ -296,7 +296,7 @@
 
   /* Button */
   .shad-button_primary {
-    @apply hover:bg-primary-600 text-light-1 flex gap-2 !important;
+    @apply text-light-1 flex gap-2 !important;
   }
 
   .shad-button_dark_4 {

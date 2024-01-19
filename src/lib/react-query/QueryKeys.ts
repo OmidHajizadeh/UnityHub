@@ -4,6 +4,7 @@ export enum QUERY_KEYS {
   GET_CURRENT_USER = "getCurrentUser",
   GET_USERS = "getUsers",
   GET_USER_BY_ID = "getUserById",
+  FOLLOW_ACTION = 'followAction',
 
   GET_EXPLORER_POSTS = "getExplorerPosts",
   GET_HOME_FEED = "getHomeFeed",

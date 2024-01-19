@@ -56,9 +56,30 @@ export const postValidationSchema = z.object({
     .max(500, {
       message: "کپشن نمیتواند بیشتر از 500 کارکتر باشد",
     }),
-  files: z.custom<File[]>().refine((files: File[]) => files.length > 0, {
-    message: "یک عکس یا ویدیو انتخاب کنید",
-  }),
+  files: z.custom<File[]>(),
+  // files: z.custom<File[]>().refine((files: File[]) => files.length > 0, {
+  //   message: "یک عکس یا ویدیو انتخاب کنید",
+  // }),
+  location: z
+    .string()
+    .min(1, {
+      message: "لوکیشن نمیتواند کمتر از 1 کارکتر باشد",
+    })
+    .max(100, {
+      message: "لوکیشن نمیتواند بیشتر از 100 کارکتر باشد",
+    }),
+  tags: z.custom<string[]>(),
+});
+
+export const updatePostValidationSchema = z.object({
+  caption: z
+    .string()
+    .min(1, {
+      message: "کپشن نمیتواند کمتر از 1 کارکتر باشد",
+    })
+    .max(500, {
+      message: "کپشن نمیتواند بیشتر از 500 کارکتر باشد",
+    }),
   location: z
     .string()
     .min(1, {

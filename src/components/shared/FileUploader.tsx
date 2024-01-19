@@ -12,6 +12,7 @@ type FileUploaderProps = {
   mediaUrl: string;
   mediaType: "video" | "image" | undefined;
   videoErrorHandling: any;
+  updateMode: boolean;
 };
 
 const FileUploader = ({
@@ -19,6 +20,7 @@ const FileUploader = ({
   mediaUrl,
   mediaType: media,
   videoErrorHandling,
+  updateMode,
 }: FileUploaderProps) => {
   const [files, setFiles] = useState<File[]>([]);
   const [mediaType, setMediaType] = useState(media);
@@ -73,6 +75,7 @@ const FileUploader = ({
       "video/*": [".mp4", ".flv", ".mov", ".avi", ".mpeg"],
     },
     validator: validateInput,
+    disabled: updateMode,
   });
 
   return (
@@ -98,7 +101,9 @@ const FileUploader = ({
             )}
           </div>
           <p className="file_uploader-label" {...getRootProps()}>
-            {mediaType === "video"
+            {updateMode
+              ? "نمیتوانید مدیا را ویرایش کنید"
+              : mediaType === "video"
               ? "برای تغییر، یک مدیا جدید را روی این متن درگ کنید یا روی همین متن کلیک کنید"
               : "برای تغییر، یک مدیا جدید را روی این جعبه درگ کنید یا روی همین مدیا کلیک کنید"}
           </p>

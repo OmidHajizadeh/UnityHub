@@ -70,8 +70,8 @@ const FollowUserButton = ({
       size="sm"
       className={`${className} ${
         hadFollowedUser
-          ? "bg-dark-4 border border-dark-1 text-light-1"
-          : "bg-primary-500"
+          ? "bg-dark-4 hover:bg-dark-3 border border-dark-1 text-light-1"
+          : "bg-primary-500 hover:bg-primary-600"
       }`}
       disabled={isFollowActionOn}
     >

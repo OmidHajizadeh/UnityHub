@@ -1,5 +1,5 @@
+import React from "react";
 import UsersCardSkeleton from "../loaders/UsersCardSkeleton";
-import GlowingCard from "../shared/GlowingCard";
 
 const AllUsersFallback = () => {
   return (
@@ -23,14 +23,9 @@ const AllUsersFallback = () => {
         <section className="user-grid">
           {Array.from({ length: 6 }).map((_, index) => {
             return (
-              <div key={index} className="flex-1 min-w-[200px] w-full">
-                <GlowingCard
-                  size="small"
-                  className="rounded-xl after:rounded-[11px]"
-                >
-                  <UsersCardSkeleton />
-                </GlowingCard>
-              </div>
+              <React.Fragment key={index}>
+                <UsersCardSkeleton />
+              </React.Fragment>
             );
           })}
         </section>
