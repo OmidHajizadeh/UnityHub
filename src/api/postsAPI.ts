@@ -2,18 +2,24 @@ import { Query } from "appwrite";
 import { v4 as uuidv4 } from "uuid";
 
 import { LikePostParams, NewPost, Post, UpdatePost } from "@/types";
-import { appwriteConfig, databases } from "../lib/AppWirte/config";
-import { deleteFile, getFilePreview, uploadFile } from "./fileAPI";
+import { appwriteConfig, databases, storage } from "../lib/AppWirte/config";
+import { deleteFile, getFilePreview, getFileView, uploadFile } from "./fileAPI";
 import { getCurrentUser } from "./userAPI";
 import { UnityHubError, generateAuditId } from "@/lib/utils";
 import { createAudit, deleteAudit } from "./auditsAPI";
 
 export async function createPost(post: NewPost) {
-  // Upload file to Appwrite storage
   const uploadedFile = await uploadFile(post.files[0]);
 
   // Get file url
-  const fileUrl = getFilePreview(uploadedFile.$id);
+  let fileUrl = getFilePreview(uploadedFile.$id);
+
+  if (post.mediaType === "video") {
+    fileUrl = getFileView(uploadedFile.$id);
+  } else {
+    fileUrl = getFilePreview(uploadedFile.$id);
+  }
+
   if (!fileUrl) {
     await deleteFile(uploadedFile.$id);
     throw new UnityHubError("خطای سرور", "لطفاً دوباره امتحان کنید");
@@ -36,6 +42,7 @@ export async function createPost(post: NewPost) {
       imageId: uploadedFile.$id,
       location: post.location,
       tags,
+      mediaType: post.mediaType,
     }
   );
 
@@ -105,13 +112,20 @@ export async function deletePost(postId: string, imageId: string) {
   if (!postId || !imageId)
     throw new UnityHubError("خطای کاربر", "لطفاً دوباره امتحان کنید");
 
-  const deletePost = await databases.deleteDocument(
+  const deletePostPromise = databases.deleteDocument(
     appwriteConfig.databaseId,
     appwriteConfig.postCollectionId,
     postId
   );
 
-  if (!deletePost)
+  const deleteMediaPromise = deleteFile(imageId);
+
+  const [deletePost, deleteMedia] = await Promise.all([
+    deletePostPromise,
+    deleteMediaPromise,
+  ]);
+
+  if (!deletePost && !deleteMedia)
     throw new UnityHubError("خطای سرور", "لطفاً دوباره امتحان کنید.");
 
   return { status: "ok" };
@@ -264,6 +278,7 @@ export async function searchPosts({ searchTerm }: { searchTerm: string }) {
     appwriteConfig.postCollectionId,
     [Query.search("caption", searchTerm)]
   );
+
   if (!posts)
     throw new UnityHubError(
       "خطا در دریافت پست ها",

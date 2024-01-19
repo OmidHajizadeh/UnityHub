@@ -152,7 +152,7 @@ const Explore = () => {
                 <SmallPostSkeleton ShowStats={false} ref={ref} />
                 {Array.from({
                   length: 2,
-                }).map((_, index) => (
+              }).map((_, index) => (
                   <React.Fragment key={`skeleton-${index}`}>
                     <SmallPostSkeleton ShowStats={false} />
                   </React.Fragment>

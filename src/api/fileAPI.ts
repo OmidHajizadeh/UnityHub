@@ -36,6 +36,15 @@ export function getFilePreview(fileId: string, isAvatar = false) {
   return fileUrl;
 }
 
+export function getFileView(fileId: string) {
+  const fileUrl = storage.getFileView(appwriteConfig.storageId, fileId);
+
+  if (!fileUrl)
+    throw new UnityHubError("خطا در دریافت ویدیو", "لطفاً دوباره امتحان کنید.");
+
+  return fileUrl;
+}
+
 export async function deleteFile(fileId: string) {
   const deletedFile = await storage.deleteFile(
     appwriteConfig.storageId,

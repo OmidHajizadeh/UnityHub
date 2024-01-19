@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import { AnimatePresence, motion } from "framer-motion";
 
 import PostStats from "./PostStats";
+import UnityHubVideoPlayer from "./UnityHubVideoPlayer";
 import { Post } from "@/types";
 
 type GridPostListProps = {
@@ -29,12 +30,23 @@ const GridPostList = ({
               animate={{ scale: 1, opacity: 1 }}
               transition={{ duration: 0.2 }}
             >
-              <Link to={`/posts/${post.$id}`} className="grid-post_link">
+              {post.mediaType === "video" && (
                 <img
-                  src={post.imageUrl}
-                  alt={post.caption}
-                  className="w-full h-full object-cover"
+                  src="/icons/video.svg"
+                  alt="video"
+                  className="absolute z-10 top-2 right-2 h-4 w-4 xs:w-6 xs:h-6 lg:top-4 lg:right-4 lg:w-8 lg:h-8 xl:w-10 xl:h-10 rounded-full"
                 />
+              )}
+              <Link to={`/posts/${post.$id}`} className="grid-post_link">
+                {post.mediaType === "video" ? (
+                  <UnityHubVideoPlayer isListItem videoUrl={post.imageUrl} />
+                ) : (
+                  <img
+                    src={post.imageUrl}
+                    alt={post.caption}
+                    className="w-full h-full object-cover "
+                  />
+                )}
               </Link>
               <div className={showUser || showStats ? "grid-post_user" : ""}>
                 {showUser && (
@@ -50,7 +62,7 @@ const GridPostList = ({
                     <p className="line-clamp-1">{post.creator.name}</p>
                   </Link>
                 )}
-                {showStats && <PostStats post={post} showLikeCount={false} />}
+                {showStats && <PostStats post={post as Post} showLikeCount={false} />}
               </div>
             </motion.div>
           );

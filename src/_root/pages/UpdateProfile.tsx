@@ -23,7 +23,7 @@ import { useUpdateUser } from "@/hooks/react-query/mutations";
 import { UnityHubError } from "@/lib/utils";
 import { Textarea } from "@/components/ui/textarea";
 import { useGetCurrentUser } from "@/hooks/react-query/queries";
-import FileUploader from "@/components/shared/FileUploader";
+import ImageUploader from "@/components/shared/ImageUploader";
 
 const UpdateProfile = () => {
   const { toast } = useToast();
@@ -117,7 +117,7 @@ const UpdateProfile = () => {
                 render={({ field }) => (
                   <FormItem className="flex self-center shrink max-w-sm">
                     <FormControl>
-                      <FileUploader
+                      <ImageUploader
                         fieldChange={field.onChange}
                         mediaUrl={user.imageUrl}
                       />

@@ -5,6 +5,7 @@ import PostStats from "./PostStats";
 import GlowingCard from "./GlowingCard";
 import { useGetCurrentUser } from "@/hooks/react-query/queries";
 import { Post } from "@/types";
+import UnityHubVideoPlayer from "./UnityHubVideoPlayer";
 
 const PostCard = ({ post }: { post: Post }) => {
   const { data: user } = useGetCurrentUser();
@@ -43,9 +44,11 @@ const PostCard = ({ post }: { post: Post }) => {
         )}
       </div>
       <div className="small-medium lg:base-medium py-5">
-        <p dir="auto" className="font-light whitespace-break-spaces">
-          {post.caption}
-        </p>
+        <Link to={`/posts/${post.$id}`}>
+          <p dir="auto" className="font-light whitespace-break-spaces">
+            {post.caption}
+          </p>
+        </Link>
         {post.tags[0] !== "" && (
           <ul dir="ltr" className="flex gap-2 mt-3">
             {post.tags.map((tag: string) => {
@@ -58,15 +61,25 @@ const PostCard = ({ post }: { post: Post }) => {
           </ul>
         )}
       </div>
-      <Link to={`/posts/${post.$id}`}>
-        <img
-          src={post.imageUrl || "/icons/profile-placeholder.svg"}
-          alt={post.caption}
-          width="500"
-          height="500"
-          className="post-card_img"
-        />
-      </Link>
+      <div className="mb-5">
+        {post.mediaType === "video" ? (
+          <UnityHubVideoPlayer
+            className="post-card_media"
+            videoUrl={post.imageUrl}
+          />
+        ) : (
+          <Link to={`/posts/${post.$id}`}>
+            <img
+              src={post.imageUrl || "/icons/profile-placeholder.svg"}
+              alt={post.caption}
+              width="500"
+              height="500"
+              className="post-card_media"
+            />
+          </Link>
+        )}
+      </div>
+
       <PostStats post={post} showComments />
     </GlowingCard>
   );

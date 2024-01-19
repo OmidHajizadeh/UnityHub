@@ -74,6 +74,14 @@ export const generateAuditId = (
   return id;
 };
 
+export function mediaType(file: File) {
+  if (file.type.startsWith("video")) {
+    return "video";
+  } else {
+    return "image";
+  }
+}
+
 export class UnityHubError extends Error {
   constructor(public title: string, public message: string) {
     super(message);

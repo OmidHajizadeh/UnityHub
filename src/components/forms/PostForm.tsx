@@ -20,7 +20,7 @@ import { useToast } from "../ui/use-toast";
 import Spinner from "../loaders/Spinner";
 import { postValidationSchema } from "@/lib/validation";
 import { useCreatePost, useUpdatePost } from "@/hooks/react-query/mutations";
-import { UnityHubError } from "@/lib/utils";
+import { UnityHubError, mediaType } from "@/lib/utils";
 import TagsInput from "../shared/TagsInput";
 import { useGetCurrentUser } from "@/hooks/react-query/queries";
 
@@ -48,7 +48,16 @@ const PostForm = ({
     },
   });
 
-  const { setValue } = form;
+  const { setValue, setError, clearErrors } = form;
+
+  const fileErrorHandling = {
+    set: (message: string) => {
+      setError("files", {
+        message,
+      });
+    },
+    clear: () => clearErrors("files"),
+  };
 
   async function onSubmit(values: z.infer<typeof postValidationSchema>) {
     if (!user) return;
@@ -58,13 +67,14 @@ const PostForm = ({
           ...values,
           imageId: post.imageId,
           imageUrl: post.imageUrl,
-          $id: post.$id
+          $id: post.$id,
         });
         navigate(-1);
       } else {
         const newPost = await createPost({
           ...values,
           userId: user.$id,
+          mediaType: mediaType(values.files[0]),
         });
         navigate(`/posts/${newPost.$id}`);
       }
@@ -84,7 +94,10 @@ const PostForm = ({
       } else {
         console.log(error);
         return toast({
-          title: "ویرایش پست با خطا مواجه شد",
+          title:
+            action === "update"
+              ? "ویرایش پست با خطا مواجه شد"
+              : "آپلود پست با خطا مواجه شد",
           description: "لطفاً دوباره امتحان کنید.",
           variant: "destructive",
         });
@@ -141,7 +154,9 @@ const PostForm = ({
               name="tags"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="shad-form_label">هشتگ ها</FormLabel>
+                  <FormLabel className="shad-form_label">
+                    هشتگ ها (بعد از وارد کردن متن هشتگ، اینتر بزنید)
+                  </FormLabel>
                   <FormControl>
                     <TagsInput field={field} setFormValue={setValue} />
                   </FormControl>
@@ -155,11 +170,13 @@ const PostForm = ({
             name="files"
             render={({ field }) => (
               <FormItem>
-                <FormLabel className="shad-form_label">افزودن عکس</FormLabel>
+                <FormLabel className="shad-form_label">افزودن مدیا</FormLabel>
                 <FormControl>
                   <FileUploader
                     fieldChange={field.onChange}
                     mediaUrl={post?.imageUrl}
+                    mediaType={post?.mediaType}
+                    videoErrorHandling={fileErrorHandling}
                   />
                 </FormControl>
                 <FormMessage className="shad-form_message" />

@@ -7,7 +7,6 @@ import AuthLayout from "./_auth/AuthLayout";
 import RootLayout from "./_root/RootLayout";
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as SonnerToaster } from "@/components/ui/sonner";
-import "./globals.css";
 import Home from "./_root/pages/Home";
 import ExploreFallback from "./components/suspense-fallbacks/ExploreFallback";
 import AllUsersFallback from "./components/suspense-fallbacks/AllUsersFallback";
@@ -17,6 +16,8 @@ import ProfileFallback from "./components/suspense-fallbacks/ProfileFallback";
 import NotFound from "./_root/pages/NotFound";
 import SignInForm from "./_auth/forms/SignInForm";
 import AuditsFallback from "./components/suspense-fallbacks/AuditsFallback";
+
+import "./globals.css";
 
 const SignUpForm = lazy(() => import("./_auth/forms/SignUpForm"));
 const ForgetPasswordForm = lazy(

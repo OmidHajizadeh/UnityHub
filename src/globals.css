@@ -153,8 +153,8 @@
     @apply w-full max-w-5xl rounded-md lg:rounded-2xl gap-5 flex-col flex xl:flex-row;
   }
 
-  .post_details-img {
-    @apply xl:w-[48%] max-h-[45rem] rounded-md lg:rounded-2xl object-cover bg-dark-1;
+  .post_details-media {
+    @apply xl:w-[48%] max-h-[45rem] overflow-hidden rounded-md lg:rounded-2xl object-cover bg-dark-1;
   }
 
   .post_details-info {
@@ -166,7 +166,7 @@
   }
 
   .comments-container {
-    @apply w-full max-w-5xl p-3 flex flex-col gap-3 bg-dark-3 rounded-md lg:rounded-2xl relative z-20
+    @apply w-full max-w-5xl p-3 flex flex-col gap-3 bg-dark-3 rounded-md lg:rounded-2xl relative z-20;
   }
 
   /* Profile */
@@ -257,11 +257,10 @@
     background-color: rgba(20, 20, 25, 0.9);
   }
 
-  .post-card_img {
-    @apply w-full max-h-[45rem] rounded-md md:rounded-2xl object-cover mb-5;
+  .post-card_media {
+    @apply w-full max-h-[45rem] rounded-md md:rounded-2xl object-cover;
   }
-
-  /* Topbar */
+  
   .topbar {
     @apply fixed top-0 z-50 md:hidden bg-dark-2 w-full;
   }

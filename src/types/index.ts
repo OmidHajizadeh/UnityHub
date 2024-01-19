@@ -34,6 +34,7 @@ export type Post = {
   creator: User;
   likes: User[];
   saves: User[];
+  mediaType: "image" | "video";
 } & Readonly<Models.Document>;
 
 export type NewPost = {
@@ -42,6 +43,7 @@ export type NewPost = {
   files: File[];
   location?: string;
   tags?: string[];
+  mediaType: "image" | "video";
 };
 
 export type UpdatePost = {
