@@ -2,7 +2,6 @@ import { useCallback, useState } from "react";
 import { FileWithPath, useDropzone } from "react-dropzone";
 
 import { Button } from "../ui/button";
-import UnityHubVideoPlayer from "./UnityHubVideoPlayer";
 
 type ImageUploaderProps = {
   fieldChange: (files: File[]) => void;
