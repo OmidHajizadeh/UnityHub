@@ -2,7 +2,7 @@ import { Query } from "appwrite";
 import { v4 as uuidv4 } from "uuid";
 
 import { LikePostParams, NewPost, Post, UpdatePost } from "@/types";
-import { appwriteConfig, databases, storage } from "../lib/AppWirte/config";
+import { appwriteConfig, databases } from "../lib/AppWirte/config";
 import { deleteFile, getFilePreview, getFileView, uploadFile } from "./fileAPI";
 import { getCurrentUser } from "./userAPI";
 import { UnityHubError, generateAuditId } from "@/lib/utils";
