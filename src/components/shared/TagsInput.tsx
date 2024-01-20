@@ -49,7 +49,7 @@ const TagsInput = ({ field, setFormValue }: TagsInputProps) => {
       return;
     }
 
-    const newTag = e.currentTarget.value.trim().replace(/ /g, "");
+    const newTag = e.currentTarget.value.trim().replace(/ /g, "_");
     setInputValue("");
 
     const doesTagAlreadyExist = tags.some((tag) => tag.value === newTag);

@@ -100,8 +100,12 @@ const PostDetails = () => {
     <div className="post_details-container relative">
       <Helmet>
         <title>{post.caption}</title>
-        <meta name="description" content={post.caption} />
+        <meta name="description" content={post.caption.slice(0, 100)} />
         <meta name="author" content={post.creator.name} />
+        <meta name="author" content={post.creator.name} />
+        {post.tags.length > 0 && (
+          <meta name="keywords" content={post.tags.join(", ")} />
+        )}
 
         <meta name="og:title" content="شبکه اجتماعی یونیتی هاب" />
         <meta name="og:type" content="post" />
