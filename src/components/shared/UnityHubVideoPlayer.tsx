@@ -3,6 +3,7 @@ import ReactPlayer from "react-player";
 import { AnimatePresence, motion } from "framer-motion";
 import Spinner from "../loaders/Spinner";
 import useVideo from "@/hooks/use-video";
+import { useInView } from "react-intersection-observer";
 
 type UnityHubVideoPlayerRaw = {
   videoUrl: string;
@@ -30,6 +31,7 @@ const UnityHubVideoPlayer = ({
   videoErrorHandling,
 }: UnityHubVideoPlayer) => {
   const [state, dispatch] = useVideo();
+  const { ref, inView } = useInView();
 
   function handlePlayStatus(action: "pause" | "play") {
     if (isListItem) return;
@@ -43,6 +45,13 @@ const UnityHubVideoPlayer = ({
       }
     }
   }
+
+  useEffect(() => {
+    if (!inView) {
+      dispatch({ type: "pause" });
+    }
+  }, [inView]);
+
   useEffect(() => {
     dispatch({ type: "clear-error" });
     if (isFromForm) {
@@ -66,10 +75,12 @@ const UnityHubVideoPlayer = ({
         }}
         onMouseDown={handlePlayStatus.bind(null, "pause")}
         onMouseUp={handlePlayStatus.bind(null, "play")}
+        ref={ref}
       >
         <ReactPlayer
           key={videoUrl}
           url={videoUrl}
+          stopOnUnmount
           width={"100%"}
           height={"100%"}
           playing={state.isPlaying}
@@ -138,11 +149,10 @@ const UnityHubVideoPlayer = ({
       {!isListItem &&
         (state.hasError ? (
           <div className="absolute inset-0 rounded-xl grid place-items-center backdrop-blur-sm">
-            <img
-              className="w-14 h-14 cursor-pointer"
-              src="/icons/error.svg"
-              alt="ارور"
-            />
+            <div className="flex flex-col gap-4 items-center">
+              <img className="w-14 h-14" src="/icons/error.svg" alt="ارور" />
+              <p>خطا در دریافت ویدیو</p>
+            </div>
           </div>
         ) : (
           <AnimatePresence mode="popLayout">
