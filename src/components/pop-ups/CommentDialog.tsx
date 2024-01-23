@@ -1,3 +1,6 @@
+import { Suspense, useState } from "react";
+import { Models } from "appwrite";
+
 import {
   Dialog,
   DialogContent,
@@ -5,10 +8,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { Suspense, lazy, useState } from "react";
-import { Models } from "appwrite";
-
-const PostComment = lazy(() => import("../forms/PostComment"));
+import CommentForm from "@/components/forms/Comment.form";
 
 type CommentDialogProps = {
   comment?: Models.Document;
@@ -44,7 +44,7 @@ function CommentDialog({
               <div className="animate-pulse bg-dark-2 rounded-xl h-36" />
             }
           >
-            <PostComment
+            <CommentForm
               action={action}
               closeModal={closeModal}
               comment={comment}

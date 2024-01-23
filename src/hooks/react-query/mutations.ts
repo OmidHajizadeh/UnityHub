@@ -1,5 +1,4 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { toast } from "sonner";
 import { v4 as uuidv4 } from "uuid";
 
 import {
@@ -8,8 +7,8 @@ import {
   likePost,
   savePost,
   updatePost,
-} from "@/api/postsAPI";
-import { createComment, deleteComment, updateComment } from "@/api/commentAPI";
+} from "@/api/posts.api";
+import { createComment, deleteComment, updateComment } from "@/api/comment.api";
 import {
   sendResetPasswordLink,
   createUserAccount,
@@ -18,14 +17,18 @@ import {
   signInAccount,
   signOutAccount,
   updateUser,
-} from "@/api/userAPI";
+} from "@/api/user.api";
 import { QUERY_KEYS } from "@/lib/react-query/QueryKeys";
 import {
+  Comment,
   LikePostParams,
   NewComment,
   NewPost,
   NewUser,
+  Post,
   ResetPassword,
+  UnityHubDocumentList,
+  UnityHubPagesList,
   UpdateComment,
   UpdatePost,
   UpdateUser,
@@ -33,6 +36,8 @@ import {
 import { Models } from "appwrite";
 import { useNavigate } from "react-router-dom";
 import { useToast } from "@/components/ui/use-toast";
+
+//todo ==> Auth Related Mutations
 
 export function useCreateUserAccount() {
   return useMutation({
@@ -77,12 +82,59 @@ export function useResetPassword() {
   });
 }
 
+//todo ==> Post Related Mutations
+
 export function useCreatePost() {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: (post: NewPost) => createPost(post),
+    onSuccess: (createdPost) => {
+      const cahcedPosts = queryClient.getQueryData([
+        QUERY_KEYS.GET_HOME_FEED,
+      ]) as UnityHubPagesList<Post> | undefined;
+
+      if (cahcedPosts) {
+        queryClient.setQueryData([QUERY_KEYS.GET_HOME_FEED], () => {
+          cahcedPosts.pages[0].documents.unshift(createdPost);
+          return cahcedPosts;
+        });
+      } else {
+        queryClient.invalidateQueries({
+          queryKey: [QUERY_KEYS.GET_HOME_FEED],
+        });
+      }
+
+      queryClient.invalidateQueries({
+        queryKey: [QUERY_KEYS.GET_EXPLORER_POSTS],
+      });
+    },
+  });
+}
+
+export function useUpdatePost() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (post: UpdatePost) => updatePost(post),
+    onSuccess: (updatedPost) => {
+      queryClient.invalidateQueries({
+        queryKey: [QUERY_KEYS.GET_POST_BY_ID, updatedPost.$id],
+      });
+      queryClient.invalidateQueries({
+        queryKey: [QUERY_KEYS.GET_HOME_FEED],
+      });
+      queryClient.invalidateQueries({
+        queryKey: [QUERY_KEYS.GET_EXPLORER_POSTS],
+      });
+    },
+  });
+}
+
+export function useDeletePost() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: ({ postId, imageId }: { postId: string; imageId: string }) =>
+      deletePost(postId, imageId),
     onSuccess: () => {
-      toast("در حال بروز رسانی پست ها...");
       queryClient.invalidateQueries({
         queryKey: [QUERY_KEYS.GET_HOME_FEED],
       });
@@ -141,48 +193,13 @@ export function useSavePost() {
   });
 }
 
-export function useUpdatePost() {
-  const queryClient = useQueryClient();
-  return useMutation({
-    mutationFn: (post: UpdatePost) => updatePost(post),
-    onSuccess: (data) => {
-      toast("در حال بروز رسانی پست شما...");
-      queryClient.invalidateQueries({
-        queryKey: [QUERY_KEYS.GET_POST_BY_ID, data?.$id],
-      });
-      queryClient.invalidateQueries({
-        queryKey: [QUERY_KEYS.GET_HOME_FEED],
-      });
-      queryClient.invalidateQueries({
-        queryKey: [QUERY_KEYS.GET_EXPLORER_POSTS],
-      });
-    },
-  });
-}
-
-export function useDeletePost() {
-  const queryClient = useQueryClient();
-  return useMutation({
-    mutationFn: ({ postId, imageId }: { postId: string; imageId: string }) =>
-      deletePost(postId, imageId),
-    onSuccess: () => {
-      toast("در حال بروز رسانی پست ها...");
-      queryClient.invalidateQueries({
-        queryKey: [QUERY_KEYS.GET_HOME_FEED],
-      });
-      queryClient.invalidateQueries({
-        queryKey: [QUERY_KEYS.GET_EXPLORER_POSTS],
-      });
-    },
-  });
-}
+//todo ==> User Related Mutations
 
 export function useUpdateUser() {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: (user: UpdateUser) => updateUser(user),
     onSuccess: (data) => {
-      toast("در حال بروز رسانی حساب کاربری...");
       queryClient.invalidateQueries({
         queryKey: [QUERY_KEYS.GET_CURRENT_USER],
       });
@@ -199,7 +216,6 @@ export function useFollowUser(targetUserId: string) {
     mutationFn: (action: "follow" | "unfollow") =>
       followUser(action, targetUserId),
     onSuccess: () => {
-      toast("در حال بروز رسانی...");
       queryClient.invalidateQueries({
         queryKey: [QUERY_KEYS.GET_CURRENT_USER],
       });
@@ -219,6 +235,8 @@ export function useFollowUser(targetUserId: string) {
   });
 }
 
+//todo ==> Comment Related Mutations
+
 export function useCreateComment() {
   const queryClient = useQueryClient();
   return useMutation({
@@ -232,11 +250,15 @@ export function useCreateComment() {
       const uniqueCommentId = uuidv4();
       return createComment(comment, post, uniqueCommentId);
     },
-    onSuccess: (data) => {
-      toast("در حال بروز رسانی...");
-      queryClient.invalidateQueries({
-        queryKey: [QUERY_KEYS.GET_POST_COMMENTS, data.postId],
-      });
+    onSuccess: (comment) => {
+      queryClient.setQueryData(
+        [QUERY_KEYS.GET_POST_COMMENTS, comment.postId],
+        (prevData: UnityHubDocumentList<Comment>) => {
+          const newData = structuredClone(prevData);
+          newData.documents.unshift(comment);
+          return newData;
+        }
+      );
     },
   });
 }
@@ -245,11 +267,18 @@ export function useUpdateComment() {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: (comment: UpdateComment) => updateComment(comment),
-    onSuccess: (data) => {
-      toast("در حال بروز رسانی...");
-      queryClient.invalidateQueries({
-        queryKey: [QUERY_KEYS.GET_POST_COMMENTS, data.postId],
-      });
+    onSuccess: (comment) => {
+      queryClient.setQueryData(
+        [QUERY_KEYS.GET_POST_COMMENTS, comment.postId],
+        (prevData: UnityHubDocumentList<Comment>) => {
+          const newData = structuredClone(prevData);
+          const prevCommentIndex = newData.documents.findIndex(
+            (com) => com.$id === comment.$id
+          );
+          newData.documents.splice(prevCommentIndex, 1, comment);
+          return newData;
+        }
+      );
     },
   });
 }
@@ -258,11 +287,18 @@ export function useDeleteComment(postId: string) {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: (commentId: string) => deleteComment(commentId),
-    onSuccess: () => {
-      toast("در حال بروز رسانی...");
-      queryClient.invalidateQueries({
-        queryKey: [QUERY_KEYS.GET_POST_COMMENTS, postId],
-      });
+    onSuccess: (deletedCommentId) => {
+      queryClient.setQueryData(
+        [QUERY_KEYS.GET_POST_COMMENTS, postId],
+        (prevData: UnityHubDocumentList<Comment>) => {
+          const newData = structuredClone(prevData);
+          newData.documents = newData.documents.filter(
+            (comment) => comment.$id !== deletedCommentId
+          );
+          --newData.total;
+          return newData;
+        }
+      );
     },
   });
 }

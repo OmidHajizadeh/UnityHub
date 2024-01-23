@@ -2,11 +2,16 @@ import { Query } from "appwrite";
 import { v4 as uuidv4 } from "uuid";
 
 import { LikePostParams, NewPost, Post, UpdatePost } from "@/types";
-import { appwriteConfig, databases } from "../lib/AppWirte/config";
-import { deleteFile, getFilePreview, getFileView, uploadFile } from "./fileAPI";
-import { getCurrentUser } from "./userAPI";
+import { appwriteConfig, databases } from "@/lib/AppWirte/config";
+import {
+  deleteFile,
+  getFilePreview,
+  getFileView,
+  uploadFile,
+} from "./file.api";
+import { getCurrentUser } from "./user.api";
 import { UnityHubError, generateAuditId } from "@/lib/utils";
-import { createAudit, deleteAudit } from "./auditsAPI";
+import { createAudit, deleteAudit } from "./audits.api";
 
 export async function createPost(post: NewPost) {
   const uploadedFile = await uploadFile(post.files[0]);
@@ -54,7 +59,7 @@ export async function createPost(post: NewPost) {
     );
   }
 
-  return newPost;
+  return newPost as Post;
 }
 
 export async function updatePost(post: UpdatePost) {
@@ -79,7 +84,7 @@ export async function updatePost(post: UpdatePost) {
     );
   }
 
-  return updatedPost;
+  return updatedPost as Post;
 }
 
 export async function deletePost(postId: string, imageId: string) {
@@ -190,7 +195,7 @@ export async function getPostById(postId: string) {
 export async function getExplorerPosts({ pageParam }: { pageParam: number }) {
   const queries: string[] = [
     Query.orderDesc("$createdAt"),
-    Query.limit(window.innerWidth > 768 ? 6 : 12),
+    Query.limit(window.innerWidth > 768 ? 9 : 12),
   ];
   if (pageParam) {
     queries.push(Query.cursorAfter(pageParam.toString()));
@@ -246,7 +251,7 @@ export async function getHomeFeed({ pageParam }: { pageParam: number }) {
   return posts;
 }
 
-export async function searchPosts({ searchTerm }: { searchTerm: string }) {
+export async function searchPosts(searchTerm: string) {
   const posts = await databases.listDocuments(
     appwriteConfig.databaseId,
     appwriteConfig.postCollectionId,

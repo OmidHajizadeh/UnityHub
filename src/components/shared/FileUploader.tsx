@@ -1,9 +1,9 @@
 import { useCallback, useState } from "react";
 import { FileRejection, FileWithPath, useDropzone } from "react-dropzone";
 
-import { Button } from "../ui/button";
+import { Button } from "@/components/ui/button";
+import { useToast } from "@/components/ui/use-toast";
 import UnityHubVideoPlayer from "./UnityHubVideoPlayer";
-import { useToast } from "../ui/use-toast";
 
 const MAXED_ALLOWED_FILE_SIZE = 10000000; // 10MB
 

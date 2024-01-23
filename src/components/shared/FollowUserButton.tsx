@@ -1,11 +1,11 @@
 import { AppwriteException } from "appwrite";
 
-import { Button } from "../ui/button";
-import Spinner from "../loaders/Spinner";
+import { Button } from "@/components/ui/button";
+import Spinner from "@/components/loaders/Spinner";
+import { useToast } from "@/components/ui/use-toast";
 import { useFollowUser } from "@/hooks/react-query/mutations";
-import { useToast } from "../ui/use-toast";
-import { UnityHubError } from "@/lib/utils";
 import { useGetCurrentUser } from "@/hooks/react-query/queries";
+import { UnityHubError } from "@/lib/utils";
 
 type FollowUserButtonProps = {
   className: string;

@@ -1,4 +1,4 @@
-import GlowingCard from "../shared/GlowingCard";
+import GlowingCard from "@/components/shared/GlowingCard";
 
 const MediumPostSkeleton = () => {
   return (

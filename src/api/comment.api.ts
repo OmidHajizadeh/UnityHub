@@ -1,9 +1,9 @@
 import { appwriteConfig, databases } from "@/lib/AppWirte/config";
 import { UnityHubError, generateAuditId } from "@/lib/utils";
-import { NewComment, UpdateComment } from "@/types";
+import { Comment, NewComment, UpdateComment } from "@/types";
 import { Models, Query } from "appwrite";
-import { createAudit, deleteAudit } from "./auditsAPI";
-import { getCurrentUser } from "./userAPI";
+import { createAudit, deleteAudit } from "./audits.api";
+import { getCurrentUser } from "./user.api";
 
 export async function getComments(postId: string) {
   const queries: string[] = [
@@ -64,7 +64,7 @@ export async function createComment(
   if (!newComment)
     throw new UnityHubError("خطا در ارسال کامنت", "لطفاً دوباره امتحان کنید.");
 
-  return newComment;
+  return newComment as Comment;
 }
 
 export async function updateComment(comment: UpdateComment) {
@@ -79,7 +79,7 @@ export async function updateComment(comment: UpdateComment) {
   if (!updatedComment)
     throw new UnityHubError("خطا در ویرایش کامنت", "لطفاً دوباره امتحان کنید.");
 
-  return updatedComment;
+  return updatedComment as Comment;
 }
 
 export async function deleteComment(commentId: string) {
@@ -107,4 +107,5 @@ export async function deleteComment(commentId: string) {
   ]);
   if (!deletedComment)
     throw new UnityHubError("خطا در حذف کامنت", "لطفاً دوباره امتحان کنید.");
+  return commentId;
 }

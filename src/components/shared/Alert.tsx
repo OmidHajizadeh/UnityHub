@@ -1,3 +1,5 @@
+import React, { useState } from "react";
+
 import {
   AlertDialog,
   AlertDialogAction,
@@ -9,22 +11,33 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
+import Spinner from "@/components/loaders/Spinner";
 
 type AlertProps = {
   title: string;
   description?: string;
-  onSubmit: () => void;
+  onConfirm: () => void;
   children: React.ReactNode;
+  isLoading: boolean;
 };
 
 export default function Alert({
   title,
   description,
-  onSubmit,
+  onConfirm,
   children,
+  isLoading,
 }: AlertProps) {
+  const [isOpen, setIsOpen] = useState(false);
+
+  async function onSubmition(e: React.MouseEvent) {
+    e.preventDefault();
+    await onConfirm();
+    setIsOpen(false);
+  }
+
   return (
-    <AlertDialog>
+    <AlertDialog onOpenChange={setIsOpen} open={isOpen}>
       <AlertDialogTrigger asChild>{children}</AlertDialogTrigger>
       <AlertDialogContent>
         <AlertDialogHeader>
@@ -34,8 +47,13 @@ export default function Alert({
           )}
         </AlertDialogHeader>
         <AlertDialogFooter>
-          <AlertDialogCancel>کنسل</AlertDialogCancel>
-          <AlertDialogAction onClick={onSubmit}>تایید</AlertDialogAction>
+          <AlertDialogCancel disabled={isLoading}>کنسل</AlertDialogCancel>
+          <AlertDialogAction disabled={isLoading} onClick={onSubmition}>
+            <div className="flex-center gap-2">
+              {isLoading && <Spinner size={20} />}
+              تایید
+            </div>
+          </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>

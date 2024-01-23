@@ -3,19 +3,18 @@ import { Helmet } from "react-helmet";
 import { Suspense, lazy } from "react";
 import { AnimatePresence } from "framer-motion";
 
-import AuthLayout from "./_auth/AuthLayout";
-import RootLayout from "./_root/RootLayout";
+import AuthLayout from "@/_auth/AuthLayout";
+import SignInForm from "@/_auth/forms/SignInForm";
+import Home from "@/_root/pages/Home";
+import NotFound from "@/_root/pages/NotFound";
+import RootLayout from "@/_root/RootLayout";
+import Spinner from "@/components/loaders/Spinner";
 import { Toaster } from "@/components/ui/toaster";
-import { Toaster as SonnerToaster } from "@/components/ui/sonner";
-import Home from "./_root/pages/Home";
-import ExploreFallback from "./components/suspense-fallbacks/ExploreFallback";
-import AllUsersFallback from "./components/suspense-fallbacks/AllUsersFallback";
-import PostDetailsFallback from "./components/suspense-fallbacks/PostDetailsFallback";
-import Spinner from "./components/loaders/Spinner";
-import ProfileFallback from "./components/suspense-fallbacks/ProfileFallback";
-import NotFound from "./_root/pages/NotFound";
-import SignInForm from "./_auth/forms/SignInForm";
-import AuditsFallback from "./components/suspense-fallbacks/AuditsFallback";
+import AuditsFallback from "@/components/suspense-fallbacks/AuditsFallback";
+import ProfileFallback from "@/components/suspense-fallbacks/ProfileFallback";
+import ExploreFallback from "@/components/suspense-fallbacks/ExploreFallback";
+import AllUsersFallback from "@/components/suspense-fallbacks/AllUsersFallback";
+import PostDetailsFallback from "@/components/suspense-fallbacks/PostDetailsFallback";
 
 import "./globals.css";
 
@@ -35,9 +34,9 @@ const Audits = lazy(() => import("./_root/pages/Audits"));
 
 function App() {
   const location = useLocation();
-  
+
   return (
-    <main className="flex min-h-screen">
+    <>
       <Helmet>
         <title>یونیتی هاب</title>
         <meta
@@ -53,111 +52,112 @@ function App() {
         <meta name="language" content="fa" />
         <meta name="theme-color" content="#877EFF" />
       </Helmet>
-      <AnimatePresence mode="wait">
-        <Routes key={location.key} location={location.pathname}>
-          {/* Public Routes */}
-          <Route element={<AuthLayout />}>
-            <Route path="/sign-in" element={<SignInForm />} />
-            <Route
-              path="/sign-up"
-              element={
-                <Suspense fallback={<Spinner size={50} />}>
-                  <SignUpForm />
-                </Suspense>
-              }
-            />
-            <Route
-              path="/forget-password"
-              element={
-                <Suspense fallback={<Spinner size={50} />}>
-                  <ForgetPasswordForm />
-                </Suspense>
-              }
-            />
-            <Route
-              path="/reset-password"
-              element={
-                <Suspense fallback={<Spinner size={50} />}>
-                  <ResetPasswordForm />
-                </Suspense>
-              }
-            />
-          </Route>
+      <main className="flex min-h-screen">
+        <AnimatePresence mode="wait">
+          <Routes key={location.key} location={location.pathname}>
+            {/* Public Routes */}
+            <Route element={<AuthLayout />}>
+              <Route path="/sign-in" element={<SignInForm />} />
+              <Route
+                path="/sign-up"
+                element={
+                  <Suspense fallback={<Spinner size={50} />}>
+                    <SignUpForm />
+                  </Suspense>
+                }
+              />
+              <Route
+                path="/forget-password"
+                element={
+                  <Suspense fallback={<Spinner size={50} />}>
+                    <ForgetPasswordForm />
+                  </Suspense>
+                }
+              />
+              <Route
+                path="/reset-password"
+                element={
+                  <Suspense fallback={<Spinner size={50} />}>
+                    <ResetPasswordForm />
+                  </Suspense>
+                }
+              />
+            </Route>
 
-          {/* Private Routes */}
-          <Route element={<RootLayout />}>
-            <Route index element={<Home />} />
-            <Route
-              path="/explore"
-              element={
-                <Suspense fallback={<ExploreFallback />}>
-                  <Explore />
-                </Suspense>
-              }
-            />
-            <Route
-              path="/all-users"
-              element={
-                <Suspense fallback={<AllUsersFallback />}>
-                  <AllUsers />
-                </Suspense>
-              }
-            />
-            <Route
-              path="/create-post"
-              element={
-                <Suspense fallback={<Spinner size={50} />}>
-                  <CreatePost />
-                </Suspense>
-              }
-            />
-            <Route
-              path="/audits"
-              element={
-                <Suspense fallback={<AuditsFallback />}>
-                  <Audits />
-                </Suspense>
-              }
-            />
-            <Route
-              path="/update-post/:id"
-              element={
-                <Suspense fallback={<Spinner size={50} />}>
-                  <UpdatePost />
-                </Suspense>
-              }
-            />
-            <Route
-              path="/posts/:id"
-              element={
-                <Suspense fallback={<PostDetailsFallback />}>
-                  <PostDetails />
-                </Suspense>
-              }
-            />
-            <Route
-              path="/profile/:id/*"
-              element={
-                <Suspense fallback={<ProfileFallback />}>
-                  <Profile />
-                </Suspense>
-              }
-            />
-            <Route
-              path="/update-profile"
-              element={
-                <Suspense fallback={<Spinner size={50} />}>
-                  <UpdateProfile />
-                </Suspense>
-              }
-            />
-          </Route>
-          <Route path="/*" element={<NotFound />} />
-        </Routes>
-      </AnimatePresence>
-      <Toaster />
-      <SonnerToaster />
-    </main>
+            {/* Private Routes */}
+            <Route element={<RootLayout />}>
+              <Route index element={<Home />} />
+              <Route
+                path="/explore"
+                element={
+                  <Suspense fallback={<ExploreFallback />}>
+                    <Explore />
+                  </Suspense>
+                }
+              />
+              <Route
+                path="/all-users"
+                element={
+                  <Suspense fallback={<AllUsersFallback />}>
+                    <AllUsers />
+                  </Suspense>
+                }
+              />
+              <Route
+                path="/create-post"
+                element={
+                  <Suspense fallback={<Spinner size={50} />}>
+                    <CreatePost />
+                  </Suspense>
+                }
+              />
+              <Route
+                path="/audits"
+                element={
+                  <Suspense fallback={<AuditsFallback />}>
+                    <Audits />
+                  </Suspense>
+                }
+              />
+              <Route
+                path="/update-post/:id"
+                element={
+                  <Suspense fallback={<Spinner size={50} />}>
+                    <UpdatePost />
+                  </Suspense>
+                }
+              />
+              <Route
+                path="/posts/:id"
+                element={
+                  <Suspense fallback={<PostDetailsFallback />}>
+                    <PostDetails />
+                  </Suspense>
+                }
+              />
+              <Route
+                path="/profile/:id/*"
+                element={
+                  <Suspense fallback={<ProfileFallback />}>
+                    <Profile />
+                  </Suspense>
+                }
+              />
+              <Route
+                path="/update-profile"
+                element={
+                  <Suspense fallback={<Spinner size={50} />}>
+                    <UpdateProfile />
+                  </Suspense>
+                }
+              />
+            </Route>
+            <Route path="/*" element={<NotFound />} />
+          </Routes>
+        </AnimatePresence>
+        <Toaster />
+      </main>
+    </>
   );
 }
 

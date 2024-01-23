@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import { Outlet, useNavigate } from "react-router-dom";
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 
 import Bottombar from "@/components/shared/Bottombar";
 import MainSidebar from "@/components/shared/MainSidebar";
@@ -29,6 +30,10 @@ const RootLayout = () => {
       </section>
 
       <Bottombar />
+      <div dir="ltr">
+      <ReactQueryDevtools />
+
+      </div>
     </div>
   );
 };

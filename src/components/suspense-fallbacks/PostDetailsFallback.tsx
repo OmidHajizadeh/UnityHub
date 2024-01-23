@@ -1,5 +1,6 @@
 import React from "react";
-import CommentSkeleton from "../loaders/CommentSkeleton";
+
+import CommentSkeleton from "@/components/loaders/CommentSkeleton";
 
 const PostDetailsFallback = () => {
   return (

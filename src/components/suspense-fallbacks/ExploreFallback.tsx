@@ -1,6 +1,6 @@
 import React from "react";
 
-import SmallPostSkeleton from "../loaders/SmallPostSkeleton";
+import SmallPostSkeleton from "@/components/loaders/SmallPostSkeleton";
 
 const ExploreFallback = () => {
   return (

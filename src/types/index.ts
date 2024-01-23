@@ -53,19 +53,19 @@ export type UpdatePost = {
 } & Readonly<Pick<Models.Document, "$id">>;
 
 //!  Comment Types
-export type NewComment = {
-  text: string;
-  author: string;
-  postId: string;
-};
 
-export type UpdateComment = {
-  commentId: string;
+export type Comment = {
   text: string;
   author: string;
   postId: string;
   edited: boolean;
-};
+} & Readonly<Models.Document>;
+
+export type NewComment = Pick<Comment, "text" | "author" | "postId">;
+
+export type UpdateComment = {
+  commentId: string;
+} & Readonly<Pick<Models.Document, "text" | "author" | "postId" | "edited">>;
 
 //!  Rest
 export type LikePostParams = {
@@ -90,4 +90,14 @@ export type ResetPassword = {
   secret: string;
   password: string;
   confirmPassword: string;
+};
+
+export type UnityHubDocumentList<T> = {
+  total: number;
+  documents: T[];
+};
+
+export type UnityHubPagesList<T> = {
+  pageParams: string[];
+  pages: UnityHubDocumentList<T>[];
 };

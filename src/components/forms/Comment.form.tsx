@@ -11,9 +11,9 @@ import {
   FormItem,
   FormMessage,
 } from "@/components/ui/form";
-import { Textarea } from "../ui/textarea";
-import { useToast } from "../ui/use-toast";
-import Loader from "../loaders/Spinner";
+import { Textarea } from "@/components/ui/textarea";
+import { useToast } from "@/components/ui/use-toast";
+import Spinner from "@/components/loaders/Spinner";
 import { CommentValidationSchema } from "@/lib/validation";
 import {
   useCreateComment,
@@ -22,19 +22,19 @@ import {
 import { UnityHubError } from "@/lib/utils";
 import { useGetCurrentUser } from "@/hooks/react-query/queries";
 
-type PostCommentProps = {
+type CommentFormProps = {
   comment?: Models.Document;
   action: "create" | "update";
   post: Models.Document;
   closeModal: () => void;
 };
 
-const PostComment = ({
+const CommentForm = ({
   comment,
   action,
   post,
   closeModal,
-}: PostCommentProps) => {
+}: CommentFormProps) => {
   const { toast } = useToast();
   const { data: user } = useGetCurrentUser();
 
@@ -127,7 +127,7 @@ const PostComment = ({
           >
             {isCreating || isUpdating ? (
               <div className="flex-center gap-2">
-                <Loader />
+                <Spinner />
                 در حال ارسال...
               </div>
             ) : action === "create" ? (
@@ -142,4 +142,4 @@ const PostComment = ({
   );
 };
 
-export default PostComment;
+export default CommentForm;

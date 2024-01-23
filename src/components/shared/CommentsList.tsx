@@ -1,13 +1,16 @@
-import React from "react";
+import React, { Suspense, lazy } from "react";
 import { Models } from "appwrite";
 import { Link } from "react-router-dom";
 
 import { useGetComments, useGetCurrentUser } from "@/hooks/react-query/queries";
 import { multiFormatDateString } from "@/lib/utils";
-import CommentDialog from "./CommentDialog";
-import Alert from "./Alert";
-import { useDeleteComment } from "@/hooks/react-query/mutations";
-import CommentSkeleton from "../loaders/CommentSkeleton";
+import Spinner from "@/components/loaders/Spinner";
+import CommentSkeleton from "@/components/loaders/CommentSkeleton";
+
+const DeleteCommentForm = lazy(
+  () => import("@/components/forms/DeleteComment.form")
+);
+const CommentDialog = lazy(() => import("@/components/pop-ups/CommentDialog"));
 
 type CommentsListProps = {
   post: Models.Document;
@@ -22,8 +25,6 @@ const CommentsList = ({ post }: CommentsListProps) => {
 
   const { data: user } = useGetCurrentUser();
 
-  const { mutateAsync: deleteComment } = useDeleteComment(post.$id);
-
   if (isLoadingComments)
     return (
       <ul dir="rtl" className="comments-container">
@@ -36,13 +37,11 @@ const CommentsList = ({ post }: CommentsListProps) => {
     );
 
   if (!comments || isError || comments.total === 0)
-    return <div className="comments-container">
-      <p className="text-center py-7">هیچ کامنتی برای این پست نوشته نشده.</p>
-    </div>;
-
-  async function deleteCommentHandler(commentId: string) {
-    await deleteComment(commentId);
-  }
+    return (
+      <div className="comments-container">
+        <p className="text-center py-7">هیچ کامنتی برای این پست نوشته نشده.</p>
+      </div>
+    );
 
   return (
     <ul dir="rtl" className="comments-container">
@@ -81,32 +80,28 @@ const CommentsList = ({ post }: CommentsListProps) => {
                 </small>
                 {user?.$id === comment.author.$id && (
                   <div className="flex gap-3">
-                    <CommentDialog
-                      comment={comment}
-                      action="update"
-                      post={comment.postId}
-                    >
-                      <img
-                        src="/icons/edit.svg"
-                        alt="comments"
-                        width={15}
-                        height={15}
-                        className="cursor-pointer"
+                    <Suspense fallback={<Spinner size={15} />}>
+                      <CommentDialog
+                        comment={comment}
+                        action="update"
+                        post={comment.postId}
+                      >
+                        <img
+                          aria-label="دکمه کامنت"
+                          src="/icons/edit.svg"
+                          alt="comments"
+                          width={15}
+                          height={15}
+                          className="cursor-pointer"
+                        />
+                      </CommentDialog>
+                    </Suspense>
+                    <Suspense fallback={<Spinner size={15} />}>
+                      <DeleteCommentForm
+                        commentId={comment.$id}
+                        postId={comment.postId}
                       />
-                    </CommentDialog>
-                    <Alert
-                      title="آیا مطمئن هستید ؟"
-                      onSubmit={deleteCommentHandler.bind(null, comment.$id)}
-                      description="این عملیات برگشت ناپذیر است و کامنت شما بصورت کامل حذف خواهد شد."
-                    >
-                      <img
-                        src="/icons/delete.svg"
-                        alt="delete"
-                        width={18}
-                        height={18}
-                        className="cursor-pointer"
-                      />
-                    </Alert>
+                    </Suspense>
                   </div>
                 )}
               </div>

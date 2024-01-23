@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 import { ControllerRenderProps, UseFormSetValue } from "react-hook-form";
 
-import { Input } from "../ui/input";
+import { Input } from "@/components/ui/input";
 
 type PostPostValues = {
   tags: string[];

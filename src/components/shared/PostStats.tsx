@@ -1,13 +1,14 @@
 import { AppwriteException } from "appwrite";
-import { useState } from "react";
+import { Suspense, lazy, useState } from "react";
 
-import { UnityHubError } from "@/lib/utils";
-import Spinner from "../loaders/Spinner";
-import { useLikePost, useSavePost } from "@/hooks/react-query/mutations";
-import { useToast } from "../ui/use-toast";
-import CommentDialog from "./CommentDialog";
-import { Post, User } from "@/types";
+import Spinner from "@/components/loaders/Spinner";
+import { useToast } from "@/components/ui/use-toast";
 import { useGetCurrentUser } from "@/hooks/react-query/queries";
+import { useLikePost, useSavePost } from "@/hooks/react-query/mutations";
+import { UnityHubError } from "@/lib/utils";
+import { Post, User } from "@/types";
+
+const CommentDialog = lazy(() => import("@/components/pop-ups/CommentDialog"));
 
 type PostStatsProps = {
   post: Post;
@@ -143,16 +144,18 @@ const PostStats = ({
       </div>
       <div className="flex gap-4 items-center">
         {showComments && (
-          <CommentDialog action="create" post={post}>
-            <img
-              aria-label="دکمه کامنت"
-              src="/icons/chat.svg"
-              alt="comments"
-              width={20}
-              height={20}
-              className="cursor-pointer"
-            />
-          </CommentDialog>
+          <Suspense fallback={<Spinner size={20} />}>
+            <CommentDialog action="create" post={post}>
+              <img
+                aria-label="دکمه کامنت"
+                src="/icons/chat.svg"
+                alt="comments"
+                width={20}
+                height={20}
+                className="cursor-pointer"
+              />
+            </CommentDialog>
+          </Suspense>
         )}
         <div>
           {isSavingPost ? (

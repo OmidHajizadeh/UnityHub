@@ -1,6 +1,6 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { AppwriteException, Models } from "appwrite";
+import { AppwriteException } from "appwrite";
 import { useNavigate } from "react-router-dom";
 import * as z from "zod";
 
@@ -14,23 +14,23 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Textarea } from "../ui/textarea";
-import FileUploader from "../shared/FileUploader";
-import { useToast } from "../ui/use-toast";
-import Spinner from "../loaders/Spinner";
+import { Textarea } from "@/components/ui/textarea";
+import FileUploader from "@/components/shared/FileUploader";
+import { useToast } from "@/components/ui/use-toast";
+import Spinner from "@/components/loaders/Spinner";
+import TagsInput from "@/components/shared/TagsInput";
 import { postValidationSchema } from "@/lib/validation";
-import { useCreatePost, useUpdatePost } from "@/hooks/react-query/mutations";
 import { UnityHubError, mediaType } from "@/lib/utils";
-import TagsInput from "../shared/TagsInput";
+import { useCreatePost, useUpdatePost } from "@/hooks/react-query/mutations";
 import { useGetCurrentUser } from "@/hooks/react-query/queries";
+import { Post } from "@/types";
 
-const PostForm = ({
-  post,
-  action,
-}: {
-  post?: Models.Document;
-  action: "create" | "update";
-}) => {
+type PostFormProp = {
+  action: "update" | "create";
+  post?: Post;
+};
+
+const PostForm = ({ post, action }: PostFormProp) => {
   const { mutateAsync: createPost, isPending: isCreating } = useCreatePost();
   const { mutateAsync: updatePost, isPending: isUpdating } = useUpdatePost();
   const { data: user } = useGetCurrentUser();
@@ -70,12 +70,12 @@ const PostForm = ({
         });
         navigate(-1);
       } else {
-        const newPost = await createPost({
+        await createPost({
           ...values,
           userId: user.$id,
           mediaType: mediaType(values.files[0]),
         });
-        navigate(`/posts/${newPost.$id}`);
+        navigate("/");
       }
     } catch (error) {
       if (error instanceof UnityHubError) {
@@ -173,7 +173,7 @@ const PostForm = ({
                 <FormControl>
                   <FileUploader
                     fieldChange={field.onChange}
-                    mediaUrl={post?.imageUrl}
+                    mediaUrl={post?.imageUrl || ""}
                     mediaType={post?.mediaType}
                     videoErrorHandling={fileErrorHandling}
                     updateMode={action === "update"}

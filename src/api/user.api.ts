@@ -8,9 +8,9 @@ import {
   databases,
 } from "@/lib/AppWirte/config";
 import { NewUser, ResetPassword, UpdateUser, User } from "@/types";
-import { deleteFile, getFilePreview, uploadFile } from "./fileAPI";
+import { deleteFile, getFilePreview, uploadFile } from "./file.api";
 import { UnityHubError, generateAuditId } from "@/lib/utils";
-import { createAudit, deleteAudit } from "./auditsAPI";
+import { createAudit, deleteAudit } from "./audits.api";
 
 export async function createUserAccount(user: NewUser) {
   // Getting all users
@@ -171,7 +171,7 @@ export async function getCurrentUser() {
   return currentUser.documents[0] as User;
 }
 
-export async function getUsers(limit?: number) {
+export async function getUsers(limit: number) {
   const currentUser = await getCurrentUser();
 
   if (!currentUser)
@@ -183,11 +183,9 @@ export async function getUsers(limit?: number) {
   const queries: string[] = [
     Query.orderDesc("$createdAt"),
     Query.notEqual("$id", currentUser.$id),
+    Query.limit(limit)
   ];
 
-  if (limit) {
-    queries.push(Query.limit(limit));
-  }
 
   const users = await databases.listDocuments(
     appwriteConfig.databaseId,
@@ -358,7 +356,7 @@ export async function followUser(action: string, targetUserId: string) {
   await auditPromise;
 }
 
-export async function searchUser({ searchTerm }: { searchTerm: string }) {
+export async function searchUser(searchTerm: string) {
   const posts = await databases.listDocuments(
     appwriteConfig.databaseId,
     appwriteConfig.userCollectionId,

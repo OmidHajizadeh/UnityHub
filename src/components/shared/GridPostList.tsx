@@ -25,9 +25,9 @@ const GridPostList = ({
               key={post.$id}
               className="relative w-full max-w-80 aspect-square"
               layout
-              exit={{ scale: 0.8, opacity: 0 }}
-              initial={{ scale: 0.8, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
+              exit={{ opacity: 0 }}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
               transition={{ duration: 0.2 }}
             >
               {post.mediaType === "video" && (
@@ -62,7 +62,9 @@ const GridPostList = ({
                     <p className="line-clamp-1">{post.creator.name}</p>
                   </Link>
                 )}
-                {showStats && <PostStats post={post as Post} showLikeCount={false} />}
+                {showStats && (
+                  <PostStats post={post as Post} showLikeCount={false} />
+                )}
               </div>
             </motion.div>
           );

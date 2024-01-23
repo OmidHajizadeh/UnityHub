@@ -1,6 +1,6 @@
 import { appwriteConfig, databases } from "@/lib/AppWirte/config";
 import { Query } from "appwrite";
-import { getCurrentUser } from "./userAPI";
+import { getCurrentUser } from "./user.api";
 import { Audit } from "@/types";
 import { UnityHubError } from "@/lib/utils";
 

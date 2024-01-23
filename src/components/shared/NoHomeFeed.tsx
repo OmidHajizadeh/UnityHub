@@ -1,7 +1,8 @@
-import { useGetUsers } from "@/hooks/react-query/queries";
 import { Link } from "react-router-dom";
-import UsersCardSkeleton from "../loaders/UsersCardSkeleton";
 import { AnimatePresence, motion } from "framer-motion";
+
+import { useGetUsers } from "@/hooks/react-query/queries";
+import UsersCardSkeleton from "@/components/loaders/UsersCardSkeleton";
 import UserCard from "./UserCard";
 
 const NoHomeFeed = () => {

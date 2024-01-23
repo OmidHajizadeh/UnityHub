@@ -1,10 +1,10 @@
 import { useEffect } from "react";
 import { Link, NavLink, useNavigate } from "react-router-dom";
 
-import { Button } from "../ui/button";
 import { useSignOutAccount } from "@/hooks/react-query/mutations";
-import Alert from "./Alert";
 import { useGetCurrentUser } from "@/hooks/react-query/queries";
+import { Button } from "@/components/ui/button";
+import Alert from "./Alert";
 
 const sidebarLinks = [
   {
@@ -13,14 +13,14 @@ const sidebarLinks = [
     label: "خانه",
   },
   {
-    imageUrl: "/icons/notification.svg",
-    route: "/audits",
-    label: "گزارش ها",
-  },
-  {
     imageUrl: "/icons/wallpaper.svg",
     route: "/explore",
     label: "اکسپلورر",
+  },
+  {
+    imageUrl: "/icons/notification.svg",
+    route: "/audits",
+    label: "گزارش ها",
   },
   {
     imageUrl: "/icons/people.svg",
@@ -35,7 +35,11 @@ const sidebarLinks = [
 ];
 
 const MainSidebar = () => {
-  const { mutateAsync: signOutHandler, isSuccess } = useSignOutAccount();
+  const {
+    mutateAsync: signOutHandler,
+    isSuccess,
+    isPending,
+  } = useSignOutAccount();
   const { data: user } = useGetCurrentUser();
 
   const navigate = useNavigate();
@@ -88,7 +92,11 @@ const MainSidebar = () => {
           ))}
         </ul>
       </div>
-      <Alert title="آیا مطمئن هستید ؟" onSubmit={signOutHandler}>
+      <Alert
+        title="آیا مطمئن هستید ؟"
+        onConfirm={signOutHandler}
+        isLoading={isPending}
+      >
         <Button variant="ghost" className="shad-button_ghost mt-4">
           <img src="/icons/logout.svg" alt="logout" />
           <p className="small-medium lg:base-medium">خروج از حساب کاربری</p>

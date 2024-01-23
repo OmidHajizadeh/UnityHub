@@ -1,5 +1,6 @@
 import React from "react";
-import AuditSkeleton from "../loaders/AuditSkeleton";
+
+import AuditSkeleton from "@/components/loaders/AuditSkeleton";
 
 const AuditsFallback = () => {
   return (

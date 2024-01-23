@@ -1,5 +1,6 @@
 import React from "react";
-import UsersCardSkeleton from "../loaders/UsersCardSkeleton";
+
+import UsersCardSkeleton from "@/components/loaders/UsersCardSkeleton";
 
 const AllUsersFallback = () => {
   return (

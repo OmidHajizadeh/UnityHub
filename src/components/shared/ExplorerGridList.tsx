@@ -21,9 +21,9 @@ const ExplorerGridList = ({
     return (
       <motion.li
         layout
-        exit={{ scale: 0.8, opacity: 0 }}
+        exit={{ opacity: 0 }}
         initial={{ opacity: 0 }}
-        animate={{ scale: 1, opacity: 1 }}
+        animate={{ opacity: 1 }}
         transition={{ duration: 0.2 }}
         key={post.$id}
         className="relative z-20 w-full mx-w-80 aspect-square"

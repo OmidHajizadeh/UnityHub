@@ -1,7 +1,7 @@
 import { Models } from "appwrite";
 import { motion } from "framer-motion";
 
-import Spinner from "../loaders/Spinner";
+import Spinner from "@/components/loaders/Spinner";
 import UserCard from "./UserCard";
 
 type SearchUserResultsProps = {

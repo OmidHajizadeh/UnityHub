@@ -1,4 +1,4 @@
-import SmallPostSkeleton from "../loaders/SmallPostSkeleton";
+import SmallPostSkeleton from "@/components/loaders/SmallPostSkeleton";
 
 type SmallPostsFallbackProps = {
   count?: number;

@@ -1,9 +1,10 @@
 import { useEffect } from "react";
 import ReactPlayer from "react-player";
 import { AnimatePresence, motion } from "framer-motion";
-import Spinner from "../loaders/Spinner";
-import useVideo from "@/hooks/use-video";
 import { useInView } from "react-intersection-observer";
+
+import Spinner from "@/components/loaders/Spinner";
+import useVideo from "@/hooks/use-video";
 
 type UnityHubVideoPlayerRaw = {
   videoUrl: string;
