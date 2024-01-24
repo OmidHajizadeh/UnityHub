@@ -123,6 +123,7 @@ const UnityHubVideoPlayer = ({
           }`}
           src={state.isMuted ? MutedIcon : UnmutedIcon}
           alt={state.isMuted ? "muted" : "unmuted"}
+          tabIndex={0}
           aria-roledescription="button"
           aria-label={state.isMuted ? "unmute button" : "mute button"}
         />
@@ -172,6 +173,7 @@ const UnityHubVideoPlayer = ({
                     }}
                     src={PlayIcon}
                     alt="پخش"
+                    tabIndex={0}
                     aria-roledescription="button"
                     aria-label="پخش"
                   />
