@@ -13,17 +13,16 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { useToast } from "@/components/ui/use-toast";
-
-import { ProfileValidation } from "@/lib/validation";
 import Spinner from "@/components/loaders/Spinner";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { useUpdateUser } from "@/hooks/react-query/mutations";
-import { UnityHubError } from "@/lib/utils";
+import { useToast } from "@/components/ui/use-toast";
 import { Textarea } from "@/components/ui/textarea";
-import { useGetCurrentUser } from "@/hooks/react-query/queries";
 import ImageUploader from "@/components/shared/ImageUploader";
+import { UnityHubError } from "@/lib/utils";
+import { ProfileValidation } from "@/lib/validation";
+import { useUpdateUser } from "@/hooks/react-query/mutations";
+import { useGetCurrentUser } from "@/hooks/react-query/queries";
 
 const UpdateProfile = () => {
   const { toast } = useToast();

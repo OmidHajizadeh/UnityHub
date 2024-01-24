@@ -2,13 +2,13 @@ import { useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { Helmet } from "react-helmet";
 
-import UsersCardSkeleton from "@/components/loaders/UsersCardSkeleton";
-import SearchUserResults from "@/components/shared/SearchUserResults";
+import { useToast } from "@/components/ui/use-toast";
 import UserCard from "@/components/shared/UserCard";
 import { Input } from "@/components/ui/input";
-import { useToast } from "@/components/ui/use-toast";
-import { useGetUsers, useSearchUser } from "@/hooks/react-query/queries";
+import UsersCardSkeleton from "@/components/loaders/UsersCardSkeleton";
+import SearchUserResults from "@/components/shared/SearchUserResults";
 import useDebounce from "@/hooks/use-debounce";
+import { useGetUsers, useSearchUser } from "@/hooks/react-query/queries";
 
 const AllUsers = () => {
   const { toast } = useToast();

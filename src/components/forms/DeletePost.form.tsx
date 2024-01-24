@@ -1,12 +1,12 @@
 import { AppwriteException } from "appwrite";
 import { useNavigate } from "react-router-dom";
 
-import { useDeletePost } from "@/hooks/react-query/mutations";
 import Alert from "@/components/shared/Alert";
+import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
+import { useDeletePost } from "@/hooks/react-query/mutations";
 import { UnityHubError } from "@/lib/utils";
 import { Post } from "@/types";
-import { Button } from "@/components/ui/button";
 
 type DeletePostFormProps = {
   post: Post;

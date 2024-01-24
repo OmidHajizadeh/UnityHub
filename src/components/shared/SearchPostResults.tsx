@@ -1,9 +1,9 @@
+import React from "react";
 import { Models } from "appwrite";
 import { motion } from "framer-motion";
 
 import Spinner from "@/components/loaders/Spinner";
 import ExplorerGridList from "./ExplorerGridList";
-import React from "react";
 
 type SearchPostResultsProps = {
   isFetching: boolean;

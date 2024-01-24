@@ -1,3 +1,5 @@
+import { Models } from "appwrite";
+import { useNavigate } from "react-router-dom";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { v4 as uuidv4 } from "uuid";
 
@@ -33,8 +35,6 @@ import {
   UpdatePost,
   UpdateUser,
 } from "@/types";
-import { Models } from "appwrite";
-import { useNavigate } from "react-router-dom";
 import { useToast } from "@/components/ui/use-toast";
 
 //todo ==> Auth Related Mutations

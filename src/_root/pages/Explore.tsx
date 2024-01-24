@@ -4,16 +4,16 @@ import { AnimatePresence } from "framer-motion";
 import { useInView } from "react-intersection-observer";
 import { AppwriteException } from "appwrite";
 
-import SearchPostResults from "@/components/shared/SearchPostResults";
 import { Input } from "@/components/ui/input";
+import { useToast } from "@/components/ui/use-toast";
+import ExploreFallback from "@/components/suspense-fallbacks/ExploreFallback";
+import ExplorerGridList from "@/components/shared/ExplorerGridList";
+import SmallPostSkeleton from "@/components/loaders/SmallPostSkeleton";
+import SearchPostResults from "@/components/shared/SearchPostResults";
 import useDebounce from "@/hooks/use-debounce";
 import { useSearchPosts } from "@/hooks/react-query/queries";
-import ExplorerGridList from "@/components/shared/ExplorerGridList";
-import ExploreFallback from "@/components/suspense-fallbacks/ExploreFallback";
-import SmallPostSkeleton from "@/components/loaders/SmallPostSkeleton";
-import { UnityHubError } from "@/lib/utils";
-import { useToast } from "@/components/ui/use-toast";
 import { useGetExplorerPosts } from "@/hooks/react-query/infiniteQueries";
+import { UnityHubError } from "@/lib/utils";
 
 const Explore = () => {
   const { ref, inView } = useInView();

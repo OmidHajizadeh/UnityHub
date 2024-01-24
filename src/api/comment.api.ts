@@ -1,9 +1,10 @@
+import { Models, Query } from "appwrite";
+
 import { appwriteConfig, databases } from "@/lib/AppWirte/config";
 import { UnityHubError, generateAuditId } from "@/lib/utils";
+import { getCurrentUser } from "@/api/user.api";
+import { createAudit, deleteAudit } from "@/api/audits.api";
 import { Comment, NewComment, UpdateComment } from "@/types";
-import { Models, Query } from "appwrite";
-import { createAudit, deleteAudit } from "./audits.api";
-import { getCurrentUser } from "./user.api";
 
 export async function getComments(postId: string) {
   const queries: string[] = [

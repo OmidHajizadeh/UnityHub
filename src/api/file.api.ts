@@ -1,7 +1,7 @@
 import { v4 as uuidv4 } from "uuid";
 
-import { appwriteConfig, storage } from "@/lib/AppWirte/config";
 import { UnityHubError } from "@/lib/utils";
+import { appwriteConfig, storage } from "@/lib/AppWirte/config";
 
 export async function uploadFile(file: File) {
   const uniqueId = uuidv4();

@@ -1,8 +1,8 @@
 import { Helmet } from "react-helmet";
 import { useParams } from "react-router-dom";
 
-import PostForm from "@/components/forms/Post.form";
 import Loader from "@/components/loaders/Spinner";
+import PostForm from "@/components/forms/Post.form";
 import { useGetPostById } from "@/hooks/react-query/queries";
 
 const UpdatePost = () => {

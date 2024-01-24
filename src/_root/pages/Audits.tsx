@@ -3,12 +3,12 @@ import { useInView } from "react-intersection-observer";
 import { Helmet } from "react-helmet";
 import { AppwriteException } from "appwrite";
 
-import AuditsFallback from "@/components/suspense-fallbacks/AuditsFallback";
-import { useToast } from "@/components/ui/use-toast";
 import AuditList from "@/components/shared/AuditList";
+import { useToast } from "@/components/ui/use-toast";
 import AuditSkeleton from "@/components/loaders/AuditSkeleton";
-import { UnityHubError } from "@/lib/utils";
+import AuditsFallback from "@/components/suspense-fallbacks/AuditsFallback";
 import { Audit } from "@/types";
+import { UnityHubError } from "@/lib/utils";
 import { useGetAudits } from "@/hooks/react-query/infiniteQueries";
 
 const Audits = () => {

@@ -7,10 +7,10 @@ import {
   avatars,
   databases,
 } from "@/lib/AppWirte/config";
-import { NewUser, ResetPassword, UpdateUser, User } from "@/types";
-import { deleteFile, getFilePreview, uploadFile } from "./file.api";
 import { UnityHubError, generateAuditId } from "@/lib/utils";
-import { createAudit, deleteAudit } from "./audits.api";
+import { createAudit, deleteAudit } from "@/api/audits.api";
+import { deleteFile, getFilePreview, uploadFile } from "@/api/file.api";
+import { NewUser, ResetPassword, UpdateUser, User } from "@/types";
 
 export async function createUserAccount(user: NewUser) {
   // Getting all users

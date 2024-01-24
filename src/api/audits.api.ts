@@ -1,8 +1,9 @@
-import { appwriteConfig, databases } from "@/lib/AppWirte/config";
 import { Query } from "appwrite";
-import { getCurrentUser } from "./user.api";
-import { Audit } from "@/types";
+
 import { UnityHubError } from "@/lib/utils";
+import { appwriteConfig, databases } from "@/lib/AppWirte/config";
+import { getCurrentUser } from "@/api/user.api";
+import { Audit } from "@/types";
 
 export function createAudit(audit: Audit, auditId: string) {
   return databases.createDocument(

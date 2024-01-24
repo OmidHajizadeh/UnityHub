@@ -1,8 +1,8 @@
 import { Models } from "appwrite";
 import { Link } from "react-router-dom";
 
-import FollowUserButton from "./FollowUserButton";
 import { useGetCurrentUser } from "@/hooks/react-query/queries";
+import FollowUserButton from "./FollowUserButton";
 
 type UserCardProps = {
   user: Models.Document;

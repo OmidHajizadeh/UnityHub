@@ -2,8 +2,8 @@ import { Models } from "appwrite";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 
-import PostStats from "./PostStats";
 import { Post } from "@/types";
+import PostStats from "./PostStats";
 import UnityHubVideoPlayer from "./UnityHubVideoPlayer";
 
 type ExplorerGridListProps = {

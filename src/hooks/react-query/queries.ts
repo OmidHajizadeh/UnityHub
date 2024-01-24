@@ -1,7 +1,5 @@
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 
-import { getPostById, searchPosts } from "@/api/posts.api";
-import { QUERY_KEYS } from "@/lib/react-query/QueryKeys";
 import {
   getCurrentUser,
   getUserById,
@@ -9,7 +7,9 @@ import {
   searchUser,
 } from "@/api/user.api";
 import { getComments } from "@/api/comment.api";
+import { getPostById, searchPosts } from "@/api/posts.api";
 import { Post, UnityHubDocumentList, User, UnityHubPagesList } from "@/types";
+import { QUERY_KEYS } from "@/lib/react-query/QueryKeys";
 
 //todo ==> User Related Queries
 

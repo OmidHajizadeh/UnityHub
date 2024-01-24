@@ -2,9 +2,9 @@ import { useEffect } from "react";
 import { Outlet, useNavigate } from "react-router-dom";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 
+import Topbar from "@/components/shared/Topbar";
 import Bottombar from "@/components/shared/Bottombar";
 import MainSidebar from "@/components/shared/MainSidebar";
-import Topbar from "@/components/shared/Topbar";
 import PageWrapper from "@/lib/framer-motion/PageWrapper";
 
 const RootLayout = () => {

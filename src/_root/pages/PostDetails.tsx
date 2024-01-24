@@ -3,14 +3,14 @@ import { Link, useParams } from "react-router-dom";
 import { Suspense, lazy } from "react";
 import { AppwriteException } from "appwrite";
 
+import Spinner from "@/components/loaders/Spinner";
 import PostStats from "@/components/shared/PostStats";
+import { useToast } from "@/components/ui/use-toast";
+import CommentsList from "@/components/shared/CommentsList";
 import PostDetailsFallback from "@/components/suspense-fallbacks/PostDetailsFallback";
+import UnityHubVideoPlayer from "@/components/shared/UnityHubVideoPlayer";
 import { useGetCurrentUser, useGetPostById } from "@/hooks/react-query/queries";
 import { UnityHubError, multiFormatDateString } from "@/lib/utils";
-import { useToast } from "@/components/ui/use-toast";
-import Spinner from "@/components/loaders/Spinner";
-import CommentsList from "@/components/shared/CommentsList";
-import UnityHubVideoPlayer from "@/components/shared/UnityHubVideoPlayer";
 
 const DeletePostForm = lazy(() => import("@/components/forms/DeletePost.form"));
 

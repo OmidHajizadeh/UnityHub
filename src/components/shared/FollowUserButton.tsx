@@ -1,7 +1,7 @@
 import { AppwriteException } from "appwrite";
 
-import { Button } from "@/components/ui/button";
 import Spinner from "@/components/loaders/Spinner";
+import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
 import { useFollowUser } from "@/hooks/react-query/mutations";
 import { useGetCurrentUser } from "@/hooks/react-query/queries";

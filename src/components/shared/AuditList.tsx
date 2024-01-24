@@ -1,8 +1,8 @@
 import { Link } from "react-router-dom";
 
-import FollowUserButton from "./FollowUserButton";
-import { multiFormatDateString } from "@/lib/utils";
 import { Audit } from "@/types";
+import { multiFormatDateString } from "@/lib/utils";
+import FollowUserButton from "./FollowUserButton";
 
 type AuditListProps = {
   audits: Audit[];

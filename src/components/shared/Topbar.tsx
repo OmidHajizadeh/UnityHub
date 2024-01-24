@@ -1,9 +1,9 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useEffect } from "react";
 
-import { Button } from "@/components/ui/button";
 import { useSignOutAccount } from "@/hooks/react-query/mutations";
 import { useGetCurrentUser } from "@/hooks/react-query/queries";
+import { Button } from "@/components/ui/button";
 import Alert from "./Alert";
 
 const Topbar = () => {

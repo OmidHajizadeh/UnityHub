@@ -9,12 +9,12 @@ import {
 import { Helmet } from "react-helmet";
 import { Suspense, lazy } from "react";
 
-import { useGetCurrentUser, useGetUserById } from "@/hooks/react-query/queries";
+import UserStats from "@/components/shared/UserStats";
 import GridPostList from "@/components/shared/GridPostList";
-import SmallPostsFallback from "@/components/suspense-fallbacks/SmallPostsFallback";
 import ProfileFallback from "@/components/suspense-fallbacks/ProfileFallback";
 import FollowUserButton from "@/components/shared/FollowUserButton";
-import UserStats from "@/components/shared/UserStats";
+import SmallPostsFallback from "@/components/suspense-fallbacks/SmallPostsFallback";
+import { useGetCurrentUser, useGetUserById } from "@/hooks/react-query/queries";
 
 const InteractedPosts = lazy(() => import("./InteractedPosts"));
 

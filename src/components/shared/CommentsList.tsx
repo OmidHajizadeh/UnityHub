@@ -1,11 +1,11 @@
-import React, { Suspense, lazy } from "react";
 import { Models } from "appwrite";
+import React, { Suspense, lazy } from "react";
 import { Link } from "react-router-dom";
 
-import { useGetComments, useGetCurrentUser } from "@/hooks/react-query/queries";
-import { multiFormatDateString } from "@/lib/utils";
 import Spinner from "@/components/loaders/Spinner";
 import CommentSkeleton from "@/components/loaders/CommentSkeleton";
+import { multiFormatDateString } from "@/lib/utils";
+import { useGetComments, useGetCurrentUser } from "@/hooks/react-query/queries";
 
 const DeleteCommentForm = lazy(
   () => import("@/components/forms/DeleteComment.form")

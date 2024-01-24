@@ -6,14 +6,14 @@ import { AppwriteException } from "appwrite";
 
 import PostCard from "@/components/shared/PostCard";
 import UserCard from "@/components/shared/UserCard";
-import { useGetUsers } from "@/hooks/react-query/queries";
-import MediumPostSkeleton from "@/components/loaders/MediumPostSkeleton";
-import UsersCardSkeleton from "@/components/loaders/UsersCardSkeleton";
-import { UnityHubError } from "@/lib/utils";
-import { useToast } from "@/components/ui/use-toast";
-import { Post } from "@/types";
 import NoHomeFeed from "@/components/shared/NoHomeFeed";
+import { useToast } from "@/components/ui/use-toast";
+import UsersCardSkeleton from "@/components/loaders/UsersCardSkeleton";
+import MediumPostSkeleton from "@/components/loaders/MediumPostSkeleton";
+import { useGetUsers } from "@/hooks/react-query/queries";
 import { useGetHomeFeed } from "@/hooks/react-query/infiniteQueries";
+import { Post } from "@/types";
+import { UnityHubError } from "@/lib/utils";
 
 const Home = () => {
   const { ref, inView } = useInView();

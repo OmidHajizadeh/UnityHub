@@ -1,9 +1,9 @@
 import { Link } from "react-router-dom";
 import { AnimatePresence, motion } from "framer-motion";
 
+import { Post } from "@/types";
 import PostStats from "./PostStats";
 import UnityHubVideoPlayer from "./UnityHubVideoPlayer";
-import { Post } from "@/types";
 
 type GridPostListProps = {
   posts: Post[];

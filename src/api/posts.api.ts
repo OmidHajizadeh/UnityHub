@@ -1,17 +1,17 @@
 import { Query } from "appwrite";
 import { v4 as uuidv4 } from "uuid";
 
-import { LikePostParams, NewPost, Post, UpdatePost } from "@/types";
-import { appwriteConfig, databases } from "@/lib/AppWirte/config";
 import {
   deleteFile,
   getFilePreview,
   getFileView,
   uploadFile,
-} from "./file.api";
-import { getCurrentUser } from "./user.api";
+} from "@/api/file.api";
+import { getCurrentUser } from "@/api/user.api";
+import { createAudit, deleteAudit } from "@/api/audits.api";
+import { appwriteConfig, databases } from "@/lib/AppWirte/config";
 import { UnityHubError, generateAuditId } from "@/lib/utils";
-import { createAudit, deleteAudit } from "./audits.api";
+import { LikePostParams, NewPost, Post, UpdatePost } from "@/types";
 
 export async function createPost(post: NewPost) {
   const uploadedFile = await uploadFile(post.files[0]);
@@ -195,7 +195,7 @@ export async function getPostById(postId: string) {
 export async function getExplorerPosts({ pageParam }: { pageParam: number }) {
   const queries: string[] = [
     Query.orderDesc("$createdAt"),
-    Query.limit(window.innerWidth > 768 ? 9 : 12),
+    Query.limit(window.innerWidth > 768 ? 6 : 9),
   ];
   if (pageParam) {
     queries.push(Query.cursorAfter(pageParam.toString()));

@@ -1,10 +1,10 @@
 import { Link } from "react-router-dom";
 
+import { Post } from "@/types";
+import { useGetCurrentUser } from "@/hooks/react-query/queries";
 import { multiFormatDateString } from "@/lib/utils";
 import PostStats from "./PostStats";
 import GlowingCard from "./GlowingCard";
-import { useGetCurrentUser } from "@/hooks/react-query/queries";
-import { Post } from "@/types";
 import UnityHubVideoPlayer from "./UnityHubVideoPlayer";
 
 const PostCard = ({ post }: { post: Post }) => {
