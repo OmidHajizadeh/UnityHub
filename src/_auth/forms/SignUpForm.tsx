@@ -4,6 +4,7 @@ import { useForm } from "react-hook-form";
 import * as z from "zod";
 import { AppwriteException } from "appwrite";
 
+import Logo from "/images/icon.svg";
 import { signupValidationSchema } from "@/lib/validation";
 
 import { Button } from "@/components/ui/button";
@@ -21,7 +22,7 @@ import Spinner from "@/components/loaders/Spinner";
 import {
   useCreateUserAccount,
   useSignInAccount,
-} from "@/hooks/react-query/mutations";
+} from "@/hooks/tanstack-query/mutations/auth-hooks";
 import { UnityHubError } from "@/lib/utils";
 
 const SignUpForm = () => {
@@ -84,7 +85,7 @@ const SignUpForm = () => {
   return (
     <Form {...form}>
       <div className="sm:w-420 flex-center flex-col px-4 sm:px-0">
-        <img src="/images/icon.svg" alt="logo" className="max-w-[5rem]" />
+        <img src={Logo} alt="UnityHub" className="max-w-[5rem]" />
 
         <h2 className="h3-bold mt-3 md:h2-bold font-bold pt-5 sm-pt-12">
           ایجاد حساب کاربری جدید
@@ -153,6 +154,7 @@ const SignUpForm = () => {
             type="submit"
             className="shad-button_primary bg-primary-500 mt-3"
             disabled={isUserLoading || isCreatingUser}
+            aria-disabled={isUserLoading || isCreatingUser}
           >
             {isCreatingUser ? (
               <div className="flex-center gap-2">

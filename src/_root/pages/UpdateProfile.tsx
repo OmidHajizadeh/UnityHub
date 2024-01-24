@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { Helmet } from "react-helmet";
 import { AppwriteException } from "appwrite";
 
+import EditIcon from "/icons/edit.svg";
 import {
   Form,
   FormControl,
@@ -21,8 +22,8 @@ import { Textarea } from "@/components/ui/textarea";
 import ImageUploader from "@/components/shared/ImageUploader";
 import { UnityHubError } from "@/lib/utils";
 import { ProfileValidation } from "@/lib/validation";
-import { useUpdateUser } from "@/hooks/react-query/mutations";
-import { useGetCurrentUser } from "@/hooks/react-query/queries";
+import { useUpdateUser } from "@/hooks/tanstack-query/mutations/user-hooks";
+import { useGetCurrentUser } from "@/hooks/tanstack-query/queries";
 
 const UpdateProfile = () => {
   const { toast } = useToast();
@@ -96,7 +97,7 @@ const UpdateProfile = () => {
         <div className="common-container">
           <div className="hidden md:flex-start gap-3 justify-start w-full max-w-5xl">
             <img
-              src="/icons/edit.svg"
+              src={EditIcon}
               width={36}
               height={36}
               alt="edit"
@@ -179,6 +180,7 @@ const UpdateProfile = () => {
                             className="shad-input"
                             {...field}
                             disabled
+                            aria-disabled
                           />
                         </FormControl>
                         <FormMessage />
@@ -198,6 +200,7 @@ const UpdateProfile = () => {
                             className="shad-input"
                             {...field}
                             disabled
+                            aria-disabled
                           />
                         </FormControl>
                         <FormMessage />
@@ -211,6 +214,7 @@ const UpdateProfile = () => {
                 type="submit"
                 className="shad-button_primary self-end w-full md:w-auto bg-primary-500 whitespace-nowrap"
                 disabled={isUpdatingUser}
+                aria-disabled
               >
                 {isUpdatingUser && <Spinner />}
                 ویرایش

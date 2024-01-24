@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 import { ControllerRenderProps, UseFormSetValue } from "react-hook-form";
 
+import DeleteIcon from "/icons/delete.svg";
 import { Input } from "@/components/ui/input";
 
 type PostPostValues = {
@@ -87,8 +88,8 @@ const TagsInput = ({ field, setFormValue }: TagsInputProps) => {
             key={tag.id}
           >
             <img
-              src="/icons/delete.svg"
-              alt="edit"
+              src={DeleteIcon}
+              alt="delete"
               width="16"
               height="16"
               className="invert brightness-0"

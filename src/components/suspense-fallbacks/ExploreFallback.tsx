@@ -1,5 +1,6 @@
 import React from "react";
 
+import WallpaperIcon from "/icons/wallpaper.svg";
 import SmallPostSkeleton from "@/components/loaders/SmallPostSkeleton";
 
 const ExploreFallback = () => {
@@ -8,7 +9,7 @@ const ExploreFallback = () => {
       <div className="common-container_inner">
         <div className="hidden md:flex gap-2 w-full max-w-5xl">
           <img
-            src="/icons/wallpaper.svg"
+            src={WallpaperIcon}
             width={36}
             height={36}
             alt="edit"

@@ -1,5 +1,4 @@
 import { Suspense, useState } from "react";
-import { Models } from "appwrite";
 
 import {
   Dialog,
@@ -9,11 +8,12 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import CommentForm from "@/components/forms/Comment.form";
+import { Post, Comment } from "@/types";
 
 type CommentDialogProps = {
-  comment?: Models.Document;
+  comment?: Comment;
   action: "create" | "update";
-  post: Models.Document;
+  post: Post;
   children: React.ReactNode;
 };
 

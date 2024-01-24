@@ -1,5 +1,6 @@
 import React from "react";
 
+import UsersIcon from "/icons/people.svg";
 import UsersCardSkeleton from "@/components/loaders/UsersCardSkeleton";
 
 const AllUsersFallback = () => {
@@ -8,7 +9,7 @@ const AllUsersFallback = () => {
       <div className="common-container_inner">
         <div className="flex gap-2 w-full max-w-5xl">
           <img
-            src="/icons/people.svg"
+            src={UsersIcon}
             width={36}
             height={36}
             alt="users"

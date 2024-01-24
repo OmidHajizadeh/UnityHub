@@ -1,6 +1,7 @@
 import { useCallback, useState } from "react";
 import { FileWithPath, useDropzone } from "react-dropzone";
 
+import FileUploadIcon from "/icons/file-upload.svg";
 import { Button } from "@/components/ui/button";
 
 type ImageUploaderProps = {
@@ -45,12 +46,7 @@ const ImageUploader = ({ fieldChange, mediaUrl }: ImageUploaderProps) => {
         </>
       ) : (
         <div className="file_uploader-box">
-          <img
-            src="/icons/file-upload.svg"
-            alt="file upload"
-            width={96}
-            height={77}
-          />
+          <img src={FileUploadIcon} alt="file upload" width={96} height={77} />
           <h3 className="base-medium text-light-2 mb-2 mt-6">
             عکس خود را اینجا رها کنید
           </h3>

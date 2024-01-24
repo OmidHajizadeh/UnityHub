@@ -1,6 +1,6 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { AppwriteException, Models } from "appwrite";
+import { AppwriteException } from "appwrite";
 import * as z from "zod";
 
 import {
@@ -14,18 +14,19 @@ import Spinner from "@/components/loaders/Spinner";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/components/ui/use-toast";
-import { CommentValidationSchema } from "@/lib/validation";
 import {
   useCreateComment,
   useUpdateComment,
-} from "@/hooks/react-query/mutations";
-import { useGetCurrentUser } from "@/hooks/react-query/queries";
+} from "@/hooks/tanstack-query/mutations/comment-hooks";
+import { useGetCurrentUser } from "@/hooks/tanstack-query/queries";
 import { UnityHubError } from "@/lib/utils";
+import { CommentValidationSchema } from "@/lib/validation";
+import { Post, Comment } from "@/types";
 
 type CommentFormProps = {
-  comment?: Models.Document;
+  comment?: Comment;
   action: "create" | "update";
-  post: Models.Document;
+  post: Post;
   closeModal: () => void;
 };
 
@@ -65,13 +66,12 @@ const CommentForm = ({
         await createComment({
           comment: {
             text: values.text,
-            author: user.$id,
+            author: user,
             postId: post.$id,
           },
           post: post,
         });
       }
-      closeModal();
     } catch (error) {
       if (error instanceof UnityHubError) {
         return toast({
@@ -93,6 +93,8 @@ const CommentForm = ({
           variant: "destructive",
         });
       }
+    } finally {
+      closeModal();
     }
   }
 
@@ -106,6 +108,7 @@ const CommentForm = ({
           control={form.control}
           name="text"
           disabled={isCreating || isUpdating}
+          aria-disabled={isCreating || isUpdating}
           render={({ field }) => (
             <FormItem>
               <FormControl>
@@ -122,6 +125,7 @@ const CommentForm = ({
         <div className="flex -mt-4 items-center justify-end">
           <Button
             disabled={isCreating || isUpdating}
+            aria-disabled={isCreating || isUpdating}
             type="submit"
             className="shad-button_primary bg-primary-500 whitespace-nowrap"
           >

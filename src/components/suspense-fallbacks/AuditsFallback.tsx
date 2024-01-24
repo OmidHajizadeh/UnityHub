@@ -1,5 +1,6 @@
 import React from "react";
 
+import NotificationIcon from "/icons/notification.svg";
 import AuditSkeleton from "@/components/loaders/AuditSkeleton";
 
 const AuditsFallback = () => {
@@ -8,7 +9,7 @@ const AuditsFallback = () => {
       <div className="user-container">
         <div className="hidden md:flex gap-2 w-full max-w-5xl">
           <img
-            src="/icons/notification.svg"
+            src={NotificationIcon}
             width={36}
             height={36}
             alt="audits"

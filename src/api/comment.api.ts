@@ -1,10 +1,16 @@
-import { Models, Query } from "appwrite";
+import { Query } from "appwrite";
 
 import { appwriteConfig, databases } from "@/lib/AppWirte/config";
 import { UnityHubError, generateAuditId } from "@/lib/utils";
 import { getCurrentUser } from "@/api/user.api";
 import { createAudit, deleteAudit } from "@/api/audits.api";
-import { Comment, NewComment, UpdateComment } from "@/types";
+import {
+  Comment,
+  NewComment,
+  Post,
+  UnityHubDocumentList,
+  UpdateComment,
+} from "@/types";
 
 export async function getComments(postId: string) {
   const queries: string[] = [
@@ -24,30 +30,34 @@ export async function getComments(postId: string) {
       "لطفاً دوباره امتحان کنید."
     );
 
-  return comments;
+  return comments as UnityHubDocumentList<Comment>;
 }
 
 export async function createComment(
   comment: NewComment,
-  post: Models.Document,
+  post: Post,
   commentId: string
 ) {
   const currentUser = await getCurrentUser();
   const uniqueAuditId = generateAuditId("comment", currentUser.$id, commentId);
 
-  const auditPromise = createAudit(
-    {
-      userId: post.creator.$id,
-      initiativeUserId: currentUser.$id,
-      initiativeUserImageUrl: currentUser.imageUrl,
-      initiativeUserUsername: currentUser.username,
-      message: comment.text,
-      postImageUrl: post.imageUrl,
-      postId: post.$id,
-      auditType: "comment",
-    },
-    uniqueAuditId
-  );
+  let auditPromise;
+
+  if (currentUser.$id !== post.creator.$id) {
+    auditPromise = createAudit(
+      {
+        userId: post.creator.$id,
+        initiativeUserId: currentUser.$id,
+        initiativeUserImageUrl: currentUser.imageUrl,
+        initiativeUserUsername: currentUser.username,
+        message: comment.text,
+        postImageUrl: post.imageUrl,
+        postId: post.$id,
+        auditType: "comment",
+      },
+      uniqueAuditId
+    );
+  }
 
   const newCommentPromise = databases.createDocument(
     appwriteConfig.databaseId,
@@ -55,15 +65,17 @@ export async function createComment(
     commentId,
     {
       text: comment.text,
-      author: comment.author,
+      author: comment.author.$id,
       postId: comment.postId,
     }
   );
 
   const [newComment] = await Promise.all([newCommentPromise, auditPromise]);
 
-  if (!newComment)
+  if (!newComment) {
+    await deleteAudit(uniqueAuditId);
     throw new UnityHubError("خطا در ارسال کامنت", "لطفاً دوباره امتحان کنید.");
+  }
 
   return newComment as Comment;
 }
@@ -83,7 +95,7 @@ export async function updateComment(comment: UpdateComment) {
   return updatedComment as Comment;
 }
 
-export async function deleteComment(commentId: string) {
+export async function deleteComment(comment: Comment, postCreatorId: string) {
   const currentUser = await getCurrentUser();
 
   if (!currentUser) {
@@ -96,17 +108,23 @@ export async function deleteComment(commentId: string) {
   const deleteCommentPromise = databases.deleteDocument(
     appwriteConfig.databaseId,
     appwriteConfig.commentCollectionId,
-    commentId
+    comment.$id
   );
 
-  const uniqueAuditId = generateAuditId("comment", currentUser.$id, commentId);
-  const auditPromise = deleteAudit(uniqueAuditId);
+  let uniqueAuditId;
+  let auditPromise;
+
+  if (comment.author.$id !== postCreatorId) {
+    uniqueAuditId = generateAuditId("comment", currentUser.$id, comment.$id);
+    auditPromise = deleteAudit(uniqueAuditId);
+  }
 
   const [deletedComment] = await Promise.all([
     deleteCommentPromise,
     auditPromise,
   ]);
+
   if (!deletedComment)
     throw new UnityHubError("خطا در حذف کامنت", "لطفاً دوباره امتحان کنید.");
-  return commentId;
+  return comment.$id;
 }

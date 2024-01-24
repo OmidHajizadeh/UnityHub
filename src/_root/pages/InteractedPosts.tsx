@@ -2,7 +2,7 @@ import { Helmet } from "react-helmet";
 
 import GridPostList from "@/components/shared/GridPostList";
 import SmallPostsFallback from "@/components/suspense-fallbacks/SmallPostsFallback";
-import { useGetCurrentUser } from "@/hooks/react-query/queries";
+import { useGetCurrentUser } from "@/hooks/tanstack-query/queries";
 
 type InteractedPostsProps = {
   type: "liked" | "saved";

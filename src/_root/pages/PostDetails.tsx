@@ -3,13 +3,17 @@ import { Link, useParams } from "react-router-dom";
 import { Suspense, lazy } from "react";
 import { AppwriteException } from "appwrite";
 
+import EditIcon from "/icons/edit.svg";
 import Spinner from "@/components/loaders/Spinner";
 import PostStats from "@/components/shared/PostStats";
 import { useToast } from "@/components/ui/use-toast";
 import CommentsList from "@/components/shared/CommentsList";
 import PostDetailsFallback from "@/components/suspense-fallbacks/PostDetailsFallback";
 import UnityHubVideoPlayer from "@/components/shared/UnityHubVideoPlayer";
-import { useGetCurrentUser, useGetPostById } from "@/hooks/react-query/queries";
+import {
+  useGetCurrentUser,
+  useGetPostById,
+} from "@/hooks/tanstack-query/queries";
 import { UnityHubError, multiFormatDateString } from "@/lib/utils";
 
 const DeletePostForm = lazy(() => import("@/components/forms/DeletePost.form"));
@@ -28,6 +32,14 @@ const PostDetails = () => {
   const { data: user } = useGetCurrentUser();
 
   if (isLoadingPost) return <PostDetailsFallback />;
+
+  if (!isLoadingPost && !post) {
+    return (
+      <div className="post_details-container">
+        <p>پست پیدا نشد</p>
+      </div>
+    );
+  }
 
   if (isErrorPost) {
     if (error instanceof UnityHubError) {
@@ -50,14 +62,6 @@ const PostDetails = () => {
         variant: "destructive",
       });
     }
-  }
-
-  if (!post) {
-    return (
-      <div className="post_details-container">
-        <p>پست پیدا نشد</p>
-      </div>
-    );
   }
 
   return (
@@ -134,12 +138,7 @@ const PostDetails = () => {
                 {user && user.$id === post.creator.$id && (
                   <>
                     <Link to={`/update-post/${post.$id}`}>
-                      <img
-                        src="/icons/edit.svg"
-                        alt="edit"
-                        width={20}
-                        height={20}
-                      />
+                      <img src={EditIcon} alt="edit" width={20} height={20} />
                     </Link>
                     <Suspense fallback={<Spinner />}>
                       <DeletePostForm post={post} />

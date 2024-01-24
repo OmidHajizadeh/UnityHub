@@ -1,8 +1,9 @@
 import { useEffect } from "react";
 import { Link, NavLink, useNavigate } from "react-router-dom";
 
-import { useSignOutAccount } from "@/hooks/react-query/mutations";
-import { useGetCurrentUser } from "@/hooks/react-query/queries";
+import LogOutIcon from "/icons/logout.svg";
+import { useSignOutAccount } from "@/hooks/tanstack-query/mutations/auth-hooks";
+import { useGetCurrentUser } from "@/hooks/tanstack-query/queries";
 import { Button } from "@/components/ui/button";
 import Alert from "./Alert";
 
@@ -98,7 +99,7 @@ const MainSidebar = () => {
         isLoading={isPending}
       >
         <Button variant="ghost" className="shad-button_ghost mt-4">
-          <img src="/icons/logout.svg" alt="logout" />
+          <img src={LogOutIcon} alt="logout" />
           <p className="small-medium lg:base-medium">خروج از حساب کاربری</p>
         </Button>
       </Alert>

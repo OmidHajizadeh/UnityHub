@@ -3,6 +3,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { AppwriteException } from "appwrite";
 
+import Logo from "/images/icon.svg";
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -16,7 +17,7 @@ import { Input } from "@/components/ui/input";
 import { useToast } from "@/components/ui/use-toast";
 import Spinner from "@/components/loaders/Spinner";
 import { resetPasswordValidationSchema } from "@/lib/validation";
-import { useResetPassword } from "@/hooks/react-query/mutations";
+import { useResetPassword } from "@/hooks/tanstack-query/mutations/auth-hooks";
 import { UnityHubError } from "@/lib/utils";
 
 const ResetPasswordForm = () => {
@@ -74,7 +75,7 @@ const ResetPasswordForm = () => {
   return (
     <Form {...form}>
       <div className="sm:w-420 flex-center flex-col px-4 sm:px-0">
-        <img src="/images/icon.svg" alt="logo" className="max-w-[5rem]" />
+        <img src={Logo} alt="UnityHub" className="max-w-[5rem]" />
         <h2 className="h3-bold mt-3 md:h2-bold font-bold pt-5 sm-pt-12">
           ساخت رمز عبور جدید
         </h2>
@@ -115,6 +116,7 @@ const ResetPasswordForm = () => {
             type="submit"
             className="shad-button_primary bg-primary-500 mt-3"
             disabled={isRequestPending}
+            aria-disabled={isRequestPending}
           >
             {isRequestPending ? (
               <div className="flex-center gap-2">

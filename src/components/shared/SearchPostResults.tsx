@@ -1,13 +1,13 @@
 import React from "react";
-import { Models } from "appwrite";
 import { motion } from "framer-motion";
 
 import Spinner from "@/components/loaders/Spinner";
 import ExplorerGridList from "./ExplorerGridList";
+import { Post, UnityHubDocumentList } from "@/types";
 
 type SearchPostResultsProps = {
   isFetching: boolean;
-  searchedPosts: Models.DocumentList<Models.Document> | undefined;
+  searchedPosts: UnityHubDocumentList<Post> | undefined;
 };
 
 const SearchPostResults = React.forwardRef(

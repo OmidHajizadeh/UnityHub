@@ -3,7 +3,7 @@ import { Query } from "appwrite";
 import { UnityHubError } from "@/lib/utils";
 import { appwriteConfig, databases } from "@/lib/AppWirte/config";
 import { getCurrentUser } from "@/api/user.api";
-import { Audit } from "@/types";
+import { Audit, UnityHubDocumentList } from "@/types";
 
 export function createAudit(audit: Audit, auditId: string) {
   return databases.createDocument(
@@ -49,5 +49,5 @@ export async function getAudits({ pageParam }: { pageParam: number }) {
   if (!audits)
     throw new UnityHubError("خطا در دریافت گزارش ها", "لطفا صفحه را رفرش کنید");
 
-  return audits;
+  return audits as UnityHubDocumentList<Audit>;
 }

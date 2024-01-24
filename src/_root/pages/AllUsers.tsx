@@ -2,13 +2,14 @@ import { useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { Helmet } from "react-helmet";
 
+import SearchIcon from "/icons/search.svg";
 import { useToast } from "@/components/ui/use-toast";
 import UserCard from "@/components/shared/UserCard";
 import { Input } from "@/components/ui/input";
 import UsersCardSkeleton from "@/components/loaders/UsersCardSkeleton";
 import SearchUserResults from "@/components/shared/SearchUserResults";
 import useDebounce from "@/hooks/use-debounce";
-import { useGetUsers, useSearchUser } from "@/hooks/react-query/queries";
+import { useGetUsers, useSearchUser } from "@/hooks/tanstack-query/queries";
 
 const AllUsers = () => {
   const { toast } = useToast();
@@ -51,7 +52,7 @@ const AllUsers = () => {
             <h2 className="h3-bold md:h2-bold w-full">جستجو</h2>
           </div>
           <div className="flex gap-1 px-4 w-full rounded-lg bg-dark-4">
-            <img src="/icons/search.svg" alt="search" width={24} height={24} />
+            <img src={SearchIcon} alt="جستجو" width={24} height={24} />
             <Input
               type="text"
               placeholder="جستجو نام کاربری..."

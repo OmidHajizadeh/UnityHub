@@ -3,8 +3,8 @@ import { AppwriteException } from "appwrite";
 import Spinner from "@/components/loaders/Spinner";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
-import { useFollowUser } from "@/hooks/react-query/mutations";
-import { useGetCurrentUser } from "@/hooks/react-query/queries";
+import { useFollowUser } from "@/hooks/tanstack-query/mutations/user-hooks";
+import { useGetCurrentUser } from "@/hooks/tanstack-query/queries";
 import { UnityHubError } from "@/lib/utils";
 
 type FollowUserButtonProps = {
@@ -74,6 +74,7 @@ const FollowUserButton = ({
           : "bg-primary-500 hover:bg-primary-600"
       }`}
       disabled={isFollowActionOn}
+      aria-disabled={isFollowActionOn}
     >
       {isFollowActionOn ? (
         <>

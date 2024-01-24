@@ -1,12 +1,18 @@
 import { AppwriteException } from "appwrite";
 import { Suspense, lazy, useState } from "react";
 
+import LikeIcon from "/icons/like.svg";
+import LikedIcon from "/icons/liked.svg";
+import CommentIcon from "/icons/chat.svg";
 import Spinner from "@/components/loaders/Spinner";
 import { useToast } from "@/components/ui/use-toast";
-import { useGetCurrentUser } from "@/hooks/react-query/queries";
-import { useLikePost, useSavePost } from "@/hooks/react-query/mutations";
 import { UnityHubError } from "@/lib/utils";
 import { Post, User } from "@/types";
+import {
+  useLikePost,
+  useSavePost,
+} from "@/hooks/tanstack-query/mutations/post-hooks";
+import { useGetCurrentUser } from "@/hooks/tanstack-query/queries";
 
 const CommentDialog = lazy(() => import("@/components/pop-ups/CommentDialog"));
 
@@ -128,8 +134,9 @@ const PostStats = ({
           <Spinner size={20} />
         ) : (
           <img
-            aria-label="دکمه لایک پست"
-            src={`/icons/${likes.includes(user.$id) ? "liked" : "like"}.svg`}
+            aria-label="لایک پست"
+            aria-roledescription="button"
+            src={likes.includes(user.$id) ? LikedIcon : LikeIcon}
             alt="like"
             width={20}
             height={20}
@@ -147,8 +154,9 @@ const PostStats = ({
           <Suspense fallback={<Spinner size={20} />}>
             <CommentDialog action="create" post={post}>
               <img
-                aria-label="دکمه کامنت"
-                src="/icons/chat.svg"
+                aria-label="کامنت"
+                src={CommentIcon}
+                aria-roledescription="button"
                 alt="comments"
                 width={20}
                 height={20}
@@ -163,8 +171,9 @@ const PostStats = ({
           ) : (
             <img
               src={`/icons/${saves.includes(user.$id) ? "saved" : "save"}.svg`}
-              aria-label="دکمه ذخیره پست"
+              aria-label="ذخیره پست"
               alt="save"
+              aria-roledescription="button"
               width={20}
               height={20}
               onClick={saveHandler}

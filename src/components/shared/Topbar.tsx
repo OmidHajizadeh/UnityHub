@@ -1,8 +1,10 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useEffect } from "react";
 
-import { useSignOutAccount } from "@/hooks/react-query/mutations";
-import { useGetCurrentUser } from "@/hooks/react-query/queries";
+import LogOutIcon from "/icons/logout.svg";
+import FullLogoIcon from "/images/logo.svg";
+import { useSignOutAccount } from "@/hooks/tanstack-query/mutations/auth-hooks";
+import { useGetCurrentUser } from "@/hooks/tanstack-query/queries";
 import { Button } from "@/components/ui/button";
 import Alert from "./Alert";
 
@@ -26,7 +28,7 @@ const Topbar = () => {
     <section className="topbar">
       <div className="flex-between py-4 px-5">
         <Link to="/" className="flex gap-3 items-center">
-          <img src="/images/logo.svg" alt="logo" width={130} height={325} />
+          <img src={FullLogoIcon} alt="logo" width={130} height={325} />
         </Link>
         <div className="flex items-center gap-4">
           <Alert
@@ -35,7 +37,7 @@ const Topbar = () => {
             isLoading={isPending}
           >
             <Button variant="ghost" className="shad-button_ghost">
-              <img src="/icons/logout.svg" alt="logout" />
+              <img src={LogOutIcon} alt="logout" />
             </Button>
           </Alert>
           <Link

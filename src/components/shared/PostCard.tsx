@@ -1,7 +1,8 @@
 import { Link } from "react-router-dom";
 
+import EditIcon from "/icons/edit.svg";
 import { Post } from "@/types";
-import { useGetCurrentUser } from "@/hooks/react-query/queries";
+import { useGetCurrentUser } from "@/hooks/tanstack-query/queries";
 import { multiFormatDateString } from "@/lib/utils";
 import PostStats from "./PostStats";
 import GlowingCard from "./GlowingCard";
@@ -39,7 +40,7 @@ const PostCard = ({ post }: { post: Post }) => {
         </Link>
         {user?.$id === post.creator.$id && (
           <Link to={`/update-post/${post.$id}`}>
-            <img src="/icons/edit.svg" alt="edit" width={20} height={20} />
+            <img src={EditIcon} alt="edit" width={20} height={20} />
           </Link>
         )}
       </div>

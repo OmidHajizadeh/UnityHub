@@ -47,8 +47,14 @@ export default function Alert({
           )}
         </AlertDialogHeader>
         <AlertDialogFooter>
-          <AlertDialogCancel disabled={isLoading}>کنسل</AlertDialogCancel>
-          <AlertDialogAction disabled={isLoading} onClick={onSubmition}>
+          <AlertDialogCancel aria-disabled={isLoading} disabled={isLoading}>
+            کنسل
+          </AlertDialogCancel>
+          <AlertDialogAction
+            aria-disabled={isLoading}
+            disabled={isLoading}
+            onClick={onSubmition}
+          >
             <div className="flex-center gap-2">
               {isLoading && <Spinner size={20} />}
               تایید

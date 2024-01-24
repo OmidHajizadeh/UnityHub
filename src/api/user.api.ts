@@ -10,7 +10,13 @@ import {
 import { UnityHubError, generateAuditId } from "@/lib/utils";
 import { createAudit, deleteAudit } from "@/api/audits.api";
 import { deleteFile, getFilePreview, uploadFile } from "@/api/file.api";
-import { NewUser, ResetPassword, UpdateUser, User } from "@/types";
+import {
+  NewUser,
+  ResetPassword,
+  UnityHubDocumentList,
+  UpdateUser,
+  User,
+} from "@/types";
 
 export async function createUserAccount(user: NewUser) {
   // Getting all users
@@ -101,7 +107,7 @@ export async function createUserAccount(user: NewUser) {
     throw new UnityHubError("خطای سرور", "لطفا دوباره امتحان کنید.");
   }
 
-  return newUser;
+  return newUser as User;
 }
 
 export async function signInAccount(email: string, password: string) {
@@ -183,9 +189,8 @@ export async function getUsers(limit: number) {
   const queries: string[] = [
     Query.orderDesc("$createdAt"),
     Query.notEqual("$id", currentUser.$id),
-    Query.limit(limit)
+    Query.limit(limit),
   ];
-
 
   const users = await databases.listDocuments(
     appwriteConfig.databaseId,
@@ -199,7 +204,7 @@ export async function getUsers(limit: number) {
       "لطفاً دوباره امتحان کنید"
     );
 
-  return users;
+  return users as UnityHubDocumentList<User>;
 }
 
 export async function getUserById(userId: string) {
@@ -215,7 +220,7 @@ export async function getUserById(userId: string) {
       "لطفاً دوباره امتحان کنید"
     );
 
-  return user;
+  return user as User;
 }
 
 export async function updateUser(user: UpdateUser) {
@@ -271,7 +276,7 @@ export async function updateUser(user: UpdateUser) {
     await deleteFile(user.imageId);
   }
 
-  return updatedUser;
+  return updatedUser as User;
 }
 
 export async function followUser(action: string, targetUserId: string) {
@@ -357,16 +362,16 @@ export async function followUser(action: string, targetUserId: string) {
 }
 
 export async function searchUser(searchTerm: string) {
-  const posts = await databases.listDocuments(
+  const users = await databases.listDocuments(
     appwriteConfig.databaseId,
     appwriteConfig.userCollectionId,
     [Query.search("username", searchTerm)]
   );
-  if (!posts)
+  if (!users)
     throw new UnityHubError(
       "خطا در پیدا کردن کاربر",
       "لطفاً دوباره امتحان کنید."
     );
 
-  return posts;
+  return users as UnityHubDocumentList<User>;
 }

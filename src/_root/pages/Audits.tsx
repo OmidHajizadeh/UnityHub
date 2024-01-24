@@ -3,13 +3,14 @@ import { useInView } from "react-intersection-observer";
 import { Helmet } from "react-helmet";
 import { AppwriteException } from "appwrite";
 
+import NotificationIcon from "/icons/notification.svg"
 import AuditList from "@/components/shared/AuditList";
 import { useToast } from "@/components/ui/use-toast";
 import AuditSkeleton from "@/components/loaders/AuditSkeleton";
 import AuditsFallback from "@/components/suspense-fallbacks/AuditsFallback";
 import { Audit } from "@/types";
 import { UnityHubError } from "@/lib/utils";
-import { useGetAudits } from "@/hooks/react-query/infiniteQueries";
+import { useGetAudits } from "@/hooks/tanstack-query/infiniteQueries";
 
 const Audits = () => {
   const {
@@ -71,10 +72,10 @@ const Audits = () => {
         <div className="common-container_inner">
           <div className="hidden md:flex gap-2 w-full max-w-5xl">
             <img
-              src="/icons/notification.svg"
+              src={NotificationIcon}
               width={36}
               height={36}
-              alt="audits"
+              alt="audit"
               className="invert-white"
             />
             <h2 className="h3-bold md:h2-bold w-full">گزارش ها</h2>

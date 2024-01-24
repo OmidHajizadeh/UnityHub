@@ -1,6 +1,7 @@
 import { useCallback, useState } from "react";
 import { FileRejection, FileWithPath, useDropzone } from "react-dropzone";
 
+import FileUploadIcon from "/icons/file-upload.svg";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
 import UnityHubVideoPlayer from "./UnityHubVideoPlayer";
@@ -110,12 +111,7 @@ const FileUploader = ({
         </>
       ) : (
         <div className="file_uploader-box gap-4" {...getRootProps()}>
-          <img
-            src="/icons/file-upload.svg"
-            alt="file upload"
-            width={96}
-            height={77}
-          />
+          <img src={FileUploadIcon} alt="upload" width={96} height={77} />
           <h3 className="base-medium text-light-2">
             مدیا خود را اینجا رها کنید
           </h3>

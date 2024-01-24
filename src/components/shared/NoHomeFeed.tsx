@@ -1,7 +1,9 @@
 import { Link } from "react-router-dom";
 import { AnimatePresence, motion } from "framer-motion";
 
-import { useGetUsers } from "@/hooks/react-query/queries";
+import ArrowIcon from "/icons/arrow.png";
+import FileUploadIcon from "/icons/file-upload.svg";
+import { useGetUsers } from "@/hooks/tanstack-query/queries";
 import UsersCardSkeleton from "@/components/loaders/UsersCardSkeleton";
 import UserCard from "./UserCard";
 
@@ -10,7 +12,7 @@ const NoHomeFeed = () => {
 
   return (
     <article className="w-full  max-w-5xl flex flex-col items-center">
-      <img src="/icons/file-upload.svg" className="w-32 h-32" alt="no feed" />
+      <img src={FileUploadIcon} className="w-32 h-32" alt="no feed" />
       <h4 className="my-3 h3-bold">هیچ پستی برای نمایش پیدا نشد</h4>
       <p>
         برای دیدن پست
@@ -60,7 +62,7 @@ const NoHomeFeed = () => {
       </div>
       <div className="hidden xl:flex items-center gap-8 flex-col w-full">
         <p>از منو سمت راست یک یا چند کاربر را دنبال کنید</p>
-        <img src="/icons/arrow.png" alt="arrow" />
+        <img src={ArrowIcon} alt="arrow" />
       </div>
     </article>
   );

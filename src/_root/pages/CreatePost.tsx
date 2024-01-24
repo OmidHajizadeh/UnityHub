@@ -1,5 +1,6 @@
 import { Helmet } from "react-helmet";
 
+import AddIcon from "/icons/add-post.svg";
 import PostForm from "@/components/forms/Post.form";
 
 const CreatePost = () => {
@@ -12,7 +13,7 @@ const CreatePost = () => {
         <div className="common-container">
           <div className="max-w-5xl hidden md:flex-start gap-3 justify-start w-full">
             <img
-              src="/icons/add-post.svg"
+              src={AddIcon}
               alt="add"
               width={36}
               height={36}

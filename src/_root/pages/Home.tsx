@@ -10,8 +10,8 @@ import NoHomeFeed from "@/components/shared/NoHomeFeed";
 import { useToast } from "@/components/ui/use-toast";
 import UsersCardSkeleton from "@/components/loaders/UsersCardSkeleton";
 import MediumPostSkeleton from "@/components/loaders/MediumPostSkeleton";
-import { useGetUsers } from "@/hooks/react-query/queries";
-import { useGetHomeFeed } from "@/hooks/react-query/infiniteQueries";
+import { useGetUsers } from "@/hooks/tanstack-query/queries";
+import { useGetHomeFeed } from "@/hooks/tanstack-query/infiniteQueries";
 import { Post } from "@/types";
 import { UnityHubError } from "@/lib/utils";
 

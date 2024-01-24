@@ -1,12 +1,12 @@
-import { Models } from "appwrite";
 import { motion } from "framer-motion";
 
 import Spinner from "@/components/loaders/Spinner";
+import { UnityHubDocumentList, User } from "@/types";
 import UserCard from "./UserCard";
 
 type SearchUserResultsProps = {
   isFetching: boolean;
-  searchedUsers: Models.DocumentList<Models.Document> | undefined;
+  searchedUsers: UnityHubDocumentList<User> | undefined;
 };
 
 const SearchUserResults = ({

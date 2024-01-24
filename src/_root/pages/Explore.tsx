@@ -4,6 +4,8 @@ import { AnimatePresence } from "framer-motion";
 import { useInView } from "react-intersection-observer";
 import { AppwriteException } from "appwrite";
 
+import WallpaperIcon from "/icons/wallpaper.svg"
+import SearchIcon from "/icons/search.svg";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/components/ui/use-toast";
 import ExploreFallback from "@/components/suspense-fallbacks/ExploreFallback";
@@ -11,8 +13,8 @@ import ExplorerGridList from "@/components/shared/ExplorerGridList";
 import SmallPostSkeleton from "@/components/loaders/SmallPostSkeleton";
 import SearchPostResults from "@/components/shared/SearchPostResults";
 import useDebounce from "@/hooks/use-debounce";
-import { useSearchPosts } from "@/hooks/react-query/queries";
-import { useGetExplorerPosts } from "@/hooks/react-query/infiniteQueries";
+import { useSearchPosts } from "@/hooks/tanstack-query/queries";
+import { useGetExplorerPosts } from "@/hooks/tanstack-query/infiniteQueries";
 import { UnityHubError } from "@/lib/utils";
 
 const Explore = () => {
@@ -110,7 +112,7 @@ const Explore = () => {
         <div className="common-container_inner">
           <div className="hidden md:flex gap-2 w-full max-w-5xl">
             <img
-              src="/icons/wallpaper.svg"
+              src={WallpaperIcon}
               width={36}
               height={36}
               alt="edit"
@@ -119,7 +121,7 @@ const Explore = () => {
             <h2 className="h3-bold md:h2-bold w-full">جستجو</h2>
           </div>
           <div className="flex gap-1 px-4 w-full rounded-lg bg-dark-4">
-            <img src="/icons/search.svg" alt="search" width={24} height={24} />
+            <img src={SearchIcon} alt="جستجو" width={24} height={24} />
             <Input
               type="text"
               placeholder="جستجو متن پست..."

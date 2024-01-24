@@ -21,8 +21,11 @@ import Spinner from "@/components/loaders/Spinner";
 import TagsInput from "@/components/shared/TagsInput";
 import { postValidationSchema } from "@/lib/validation";
 import { UnityHubError, mediaType } from "@/lib/utils";
-import { useCreatePost, useUpdatePost } from "@/hooks/react-query/mutations";
-import { useGetCurrentUser } from "@/hooks/react-query/queries";
+import {
+  useCreatePost,
+  useUpdatePost,
+} from "@/hooks/tanstack-query/mutations/post-hooks";
+import { useGetCurrentUser } from "@/hooks/tanstack-query/queries";
 import { Post } from "@/types";
 
 type PostFormProp = {
@@ -187,6 +190,7 @@ const PostForm = ({ post, action }: PostFormProp) => {
         <div className="flex gap-4 items-center justify-end">
           <Button
             disabled={isCreating || isUpdating}
+            aria-disabled={isCreating || isUpdating}
             type="submit"
             className="shad-button_primary w-full md:w-auto bg-primary-500 whitespace-nowrap"
           >

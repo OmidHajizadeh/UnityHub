@@ -1,3 +1,5 @@
+import SpinnerIcon from "/icons/loader.svg";
+
 type SpinnerProps = {
   size?: number;
 };
@@ -5,12 +7,7 @@ type SpinnerProps = {
 const Spinner = ({ size = 24 }: SpinnerProps) => {
   return (
     <div className="flex-center w-full">
-      <img
-        src="/icons/loader.svg"
-        alt="loader"
-        width={size}
-        height={size}
-      />
+      <img src={SpinnerIcon} alt="loader" width={size} height={size} />
     </div>
   );
 };

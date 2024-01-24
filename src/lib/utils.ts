@@ -58,20 +58,14 @@ export const generateAuditId = (
   userId: string,
   targetId: string
 ) => {
-  let id = "";
   switch (action) {
     case "like":
-      id = `${userId.slice(0, 12)}_likes_${targetId.slice(0, 12)}`;
-      break;
+      return `${userId.slice(0, 12)}_likes_${targetId.slice(0, 12)}`;
     case "comment":
-      id = `${userId.slice(0, 12)}_comment_${targetId.slice(0, 12)}`;
-      break;
+      return `${userId.slice(0, 12)}_comment_${targetId.slice(0, 12)}`;
     case "follow":
-      id = `${userId.slice(0, 12)}_follow_${targetId.slice(0, 12)}`;
-      break;
+      return `${userId.slice(0, 12)}_follow_${targetId.slice(0, 12)}`;
   }
-
-  return id;
 };
 
 export function mediaType(file: File) {

@@ -1,23 +1,28 @@
 import { AppwriteException } from "appwrite";
 
+import DeleteIcon from "/icons/delete.svg";
 import Alert from "@/components/shared/Alert";
 import { useToast } from "@/components/ui/use-toast";
 import { UnityHubError } from "@/lib/utils";
-import { useDeleteComment } from "@/hooks/react-query/mutations";
+import { Comment } from "@/types";
+import { useDeleteComment } from "@/hooks/tanstack-query/mutations/comment-hooks";
 
-type DeleteCommentFormProps = {
-  commentId: string;
-  postId: string;
-};
-
-const DeleteCommentForm = ({ commentId, postId }: DeleteCommentFormProps) => {
+const DeleteCommentForm = ({
+  comment,
+  postCreatorId,
+}: {
+  comment: Comment;
+  postCreatorId: string;
+}) => {
   const { toast } = useToast();
 
-  const { mutateAsync: deleteComment, isPending } = useDeleteComment(postId);
+  const { mutateAsync: deleteComment, isPending } = useDeleteComment(
+    comment.postId
+  );
 
   async function deleteCommentHandler() {
     try {
-      await deleteComment(commentId);
+      await deleteComment({ comment, postCreatorId });
     } catch (error) {
       if (error instanceof UnityHubError) {
         return toast({
@@ -45,12 +50,12 @@ const DeleteCommentForm = ({ commentId, postId }: DeleteCommentFormProps) => {
   return (
     <Alert
       title="آیا مطمئن هستید ؟"
-      description="این عملیات برگشت ناپذیر است و تمام اطلاعات مربوط به این پست بطور کامل حذف خواهند شد."
+      description="این عملیات برگشت ناپذیر است و تمام اطلاعات مربوط به این کامنت بطور کامل حذف خواهند شد."
       isLoading={isPending}
       onConfirm={deleteCommentHandler}
     >
       <img
-        src="/icons/delete.svg"
+        src={DeleteIcon}
         alt="delete"
         width={18}
         height={18}

@@ -1,18 +1,15 @@
 import { AppwriteException } from "appwrite";
 import { useNavigate } from "react-router-dom";
 
+import DeleteIcon from "/icons/delete.svg";
 import Alert from "@/components/shared/Alert";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
-import { useDeletePost } from "@/hooks/react-query/mutations";
-import { UnityHubError } from "@/lib/utils";
 import { Post } from "@/types";
+import { UnityHubError } from "@/lib/utils";
+import { useDeletePost } from "@/hooks/tanstack-query/mutations/post-hooks";
 
-type DeletePostFormProps = {
-  post: Post;
-};
-
-const DeletePostForm = ({ post }: DeletePostFormProps) => {
+const DeletePostForm = ({ post }: { post: Post }) => {
   const navigate = useNavigate();
   const { toast } = useToast();
 
@@ -58,7 +55,7 @@ const DeletePostForm = ({ post }: DeletePostFormProps) => {
       onConfirm={deletePostHandler.bind(null, post.$id, post.imageId)}
     >
       <Button variant="ghost" className="ghost_details-delete-btn">
-        <img src="/icons/delete.svg" alt="edit" width={24} height={24} />
+        <img src={DeleteIcon} alt="delete" width={24} height={24} />
       </Button>
     </Alert>
   );

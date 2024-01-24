@@ -1,13 +1,13 @@
-import { Models } from "appwrite";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 
+import VideoIcon from "/icons/video.svg";
 import { Post } from "@/types";
 import PostStats from "./PostStats";
 import UnityHubVideoPlayer from "./UnityHubVideoPlayer";
 
 type ExplorerGridListProps = {
-  posts: Models.Document[];
+  posts: Post[];
   showUser?: boolean;
   showStats?: boolean;
 };
@@ -30,7 +30,7 @@ const ExplorerGridList = ({
       >
         {post.mediaType === "video" && (
           <img
-            src="/icons/video.svg"
+            src={VideoIcon}
             alt="video"
             className="absolute z-10 top-2 right-2 h-4 w-4 xs:w-6 xs:h-6 lg:top-4 lg:right-4 lg:w-8 lg:h-8 xl:w-10 xl:h-10 rounded-full"
           />

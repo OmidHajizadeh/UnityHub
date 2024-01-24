@@ -56,7 +56,7 @@ export type UpdatePost = {
 
 export type Comment = {
   text: string;
-  author: string;
+  author: User;
   postId: string;
   edited: boolean;
 } & Readonly<Models.Document>;

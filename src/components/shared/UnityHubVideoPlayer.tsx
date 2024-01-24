@@ -3,6 +3,10 @@ import ReactPlayer from "react-player";
 import { AnimatePresence, motion } from "framer-motion";
 import { useInView } from "react-intersection-observer";
 
+import PlayIcon from "/icons/play.svg";
+import ErrorIcon from "/icons/error.svg";
+import MutedIcon from "/icons/muted.svg";
+import UnmutedIcon from "/icons/unmuted.svg";
 import Spinner from "@/components/loaders/Spinner";
 import useVideo from "@/hooks/use-video";
 
@@ -61,7 +65,10 @@ const UnityHubVideoPlayer = ({
           e.preventDefault();
           return false;
         }}
-        onClick={() => dispatch({ type: "change-play" })}
+        onClick={() => {
+          if (isListItem) return;
+          dispatch({ type: "change-play" });
+        }}
         ref={ref}
       >
         <ReactPlayer
@@ -112,9 +119,9 @@ const UnityHubVideoPlayer = ({
             dispatch({ type: "change-mute" });
           }}
           className={`w-6 h-6 md:w-8 md:h-8 rounded-full transition-opacity absolute bottom-2 right-1 md:bottom-5 md:right-4 ${
-            state.isPlaying ? "opacity-100" : "opacity-0"
+            state.isPlaying ? "opacity-40 hover:opacity-100" : "opacity-0"
           }`}
-          src={`/icons/${state.isMuted ? "muted" : "unmuted"}.svg`}
+          src={state.isMuted ? MutedIcon : UnmutedIcon}
           alt={state.isMuted ? "muted" : "unmuted"}
           aria-roledescription="button"
           aria-label={state.isMuted ? "unmute button" : "mute button"}
@@ -139,7 +146,7 @@ const UnityHubVideoPlayer = ({
         (state.hasError && !state.isPlaying ? (
           <div className="absolute inset-0 rounded-xl grid place-items-center backdrop-blur-sm">
             <div className="flex flex-col gap-4 items-center">
-              <img className="w-14 h-14" src="/icons/error.svg" alt="ارور" />
+              <img src={ErrorIcon} className="w-14 h-14" alt="error" />
               <p>خطا در دریافت ویدیو</p>
             </div>
           </div>
@@ -163,8 +170,9 @@ const UnityHubVideoPlayer = ({
                       if (isListItem) return;
                       dispatch({ type: "change-play" });
                     }}
-                    src="/icons/play.svg"
+                    src={PlayIcon}
                     alt="پخش"
+                    aria-roledescription="button"
                     aria-label="پخش"
                   />
                 </motion.div>

@@ -1,5 +1,7 @@
 import { Link } from "react-router-dom";
 
+import Logo from "/images/icon.svg";
+import CommentIcon from "/icons/comment.svg";
 import { Audit } from "@/types";
 import { multiFormatDateString } from "@/lib/utils";
 import FollowUserButton from "./FollowUserButton";
@@ -28,8 +30,8 @@ const AuditList = ({ audits }: AuditListProps) => {
           />
           {audit.auditType === "comment" && (
             <img
-              src="/icons/comment.svg"
-              alt="comment icon"
+              src={CommentIcon}
+              alt="comment"
               className="absolute -top-2 -start-0 w-5 h-5"
             />
           )}
@@ -44,19 +46,21 @@ const AuditList = ({ audits }: AuditListProps) => {
                 @{audit.initiativeUserUsername}
               </small>
             </Link>
-            <p dir="auto" className="whitespace-break-spaces text-right">{audit.message}</p>
+            <p dir="auto" className="whitespace-break-spaces text-right">
+              {audit.message}
+            </p>
             <small>
               <time className="text-light-4">
                 {multiFormatDateString(audit.$createdAt)}
               </time>
             </small>
           </div>
-          {audit.auditType === "like" ? (
+          {audit.auditType === "like" || audit.auditType === "comment" ? (
             <Link className="shrink-0" to={`/posts/${audit.postId}`}>
               <img
                 src={audit.postImageUrl}
-                className="rounded-md h-20 w-20"
-                alt="تصویر پست لایک شده"
+                className="rounded-md h-20 w-20 object-cover"
+                alt="تصویر پست"
               />
             </Link>
           ) : audit.auditType === "follow" ? (
@@ -64,21 +68,13 @@ const AuditList = ({ audits }: AuditListProps) => {
               className="shad-button_primary px-4"
               targetUserId={audit.initiativeUserId}
             />
-          ) : audit.auditType === "comment" ? (
-            <Link className="shrink-0" to={`/posts/${audit.postId}`}>
-              <img
-                src={audit.postImageUrl}
-                className="rounded-md h-20 w-20"
-                alt="تصویر پست کامنت گذاری شده"
-              />
-            </Link>
           ) : (
             <Link
               className="shrink-0"
               to={`/profile/${audit.initiativeUserId}`}
             >
               <img
-                src="/images/icon.svg"
+                src={Logo}
                 className="rounded-md me-3 h-14 w-14"
                 alt={audit.initiativeUserUsername}
               />

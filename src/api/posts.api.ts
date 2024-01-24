@@ -11,7 +11,13 @@ import { getCurrentUser } from "@/api/user.api";
 import { createAudit, deleteAudit } from "@/api/audits.api";
 import { appwriteConfig, databases } from "@/lib/AppWirte/config";
 import { UnityHubError, generateAuditId } from "@/lib/utils";
-import { LikePostParams, NewPost, Post, UpdatePost } from "@/types";
+import {
+  LikePostParams,
+  NewPost,
+  Post,
+  UnityHubDocumentList,
+  UpdatePost,
+} from "@/types";
 
 export async function createPost(post: NewPost) {
   const uploadedFile = await uploadFile(post.files[0]);
@@ -157,7 +163,7 @@ export async function likePost({ action, likesArray, post }: LikePostParams) {
       "لایک پست با خطا مواجه شد",
       "لطفاً دوباره امتحان کنید."
     );
-  return updatedPost;
+  return updatedPost as Post;
 }
 
 export async function savePost(postId: string, savesArray: string[]) {
@@ -176,7 +182,7 @@ export async function savePost(postId: string, savesArray: string[]) {
       "لطفاً دوباره امتحان کنید."
     );
 
-  return updatedPost;
+  return updatedPost as Post;
 }
 
 export async function getPostById(postId: string) {
@@ -213,7 +219,7 @@ export async function getExplorerPosts({ pageParam }: { pageParam: number }) {
       "لطفاً دوباره امتحان کنید."
     );
 
-  return posts;
+  return posts as UnityHubDocumentList<Post>;
 }
 
 export async function getHomeFeed({ pageParam }: { pageParam: number }) {
@@ -248,7 +254,7 @@ export async function getHomeFeed({ pageParam }: { pageParam: number }) {
       "لطفاً دوباره امتحان کنید."
     );
 
-  return posts;
+  return posts as UnityHubDocumentList<Post>;
 }
 
 export async function searchPosts(searchTerm: string) {
@@ -264,5 +270,5 @@ export async function searchPosts(searchTerm: string) {
       "لطفاً دوباره امتحان کنید."
     );
 
-  return posts;
+  return posts as UnityHubDocumentList<Post>;
 }

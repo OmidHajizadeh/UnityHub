@@ -9,12 +9,19 @@ import {
 import { Helmet } from "react-helmet";
 import { Suspense, lazy } from "react";
 
+import LikeIcon from "/icons/like.svg";
+import EditIcon from "/icons/edit.svg";
+import PostsIcon from "/icons/posts.svg";
+import SavedIcon from "/icons/bookmark.svg";
 import UserStats from "@/components/shared/UserStats";
 import GridPostList from "@/components/shared/GridPostList";
 import ProfileFallback from "@/components/suspense-fallbacks/ProfileFallback";
 import FollowUserButton from "@/components/shared/FollowUserButton";
 import SmallPostsFallback from "@/components/suspense-fallbacks/SmallPostsFallback";
-import { useGetCurrentUser, useGetUserById } from "@/hooks/react-query/queries";
+import {
+  useGetCurrentUser,
+  useGetUserById,
+} from "@/hooks/tanstack-query/queries";
 
 const InteractedPosts = lazy(() => import("./InteractedPosts"));
 
@@ -92,12 +99,7 @@ const Profile = () => {
                   user.$id !== thisUser.$id && "hidden"
                 }`}
               >
-                <img
-                  src={"/icons/edit.svg"}
-                  alt="edit"
-                  width={20}
-                  height={20}
-                />
+                <img src={EditIcon} alt="edit" width={20} height={20} />
                 <p className="flex whitespace-nowrap small-medium">
                   ویرایش پروفایل
                 </p>
@@ -125,7 +127,7 @@ const Profile = () => {
                 user.$id !== thisUser.$id && "hidden"
               }`}
             >
-              <img src={"/icons/edit.svg"} alt="edit" width={20} height={20} />
+              <img src={EditIcon} alt="edit" width={20} height={20} />
               <p className="flex whitespace-nowrap small-medium">
                 ویرایش پروفایل
               </p>
@@ -146,12 +148,7 @@ const Profile = () => {
                 pathname === `/profile/${id}` && "!bg-dark-3"
               }`}
             >
-              <img
-                src={"/icons/posts.svg"}
-                alt="posts"
-                width={20}
-                height={20}
-              />
+              <img src={PostsIcon} alt="posts" width={20} height={20} />
               <span className="hidden lg:inline">پست های من</span>
             </Link>
             <Link
@@ -160,7 +157,7 @@ const Profile = () => {
                 pathname === `/profile/${id}/liked-posts` && "!bg-dark-3"
               }`}
             >
-              <img src={"/icons/like.svg"} alt="like" width={20} height={20} />
+              <img src={LikeIcon} alt="like" width={20} height={20} />
               <span className="hidden lg:inline">لایک شده ها</span>
             </Link>
             <Link
@@ -169,12 +166,7 @@ const Profile = () => {
                 pathname === `/profile/${id}/saved-posts` && "!bg-dark-3"
               }`}
             >
-              <img
-                src={"/icons/bookmark.svg"}
-                alt="like"
-                width={20}
-                height={20}
-              />
+              <img src={SavedIcon} alt="like" width={20} height={20} />
               <span className="hidden lg:inline">ذخیره شده ها</span>
             </Link>
           </div>

@@ -1,11 +1,11 @@
-import { Models } from "appwrite";
 import { Link } from "react-router-dom";
 
-import { useGetCurrentUser } from "@/hooks/react-query/queries";
+import { useGetCurrentUser } from "@/hooks/tanstack-query/queries";
+import { User } from "@/types";
 import FollowUserButton from "./FollowUserButton";
 
 type UserCardProps = {
-  user: Models.Document;
+  user: User;
 };
 
 const UserCard = ({ user }: UserCardProps) => {
