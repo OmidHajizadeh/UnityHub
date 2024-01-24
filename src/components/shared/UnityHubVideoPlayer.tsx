@@ -97,6 +97,7 @@ const UnityHubVideoPlayer = ({
           }}
           onError={() => {
             dispatch({ type: "error" });
+            dispatch({ type: "pause" });
             if (isFromForm) {
               videoErrorHandling.set(
                 "فایل انتخاب شده معتبر نیست یا مشکلی دارد"
