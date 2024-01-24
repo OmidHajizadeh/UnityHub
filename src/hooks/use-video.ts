@@ -2,19 +2,18 @@ import { useReducer } from "react";
 
 type VideoTypeAction = {
   type:
-    | "mute"
     | "change-mute"
     | "play"
     | "pause"
     | "change-play"
-    | "buffer"
+    | "buffering"
     | "clear-buffer"
     | "error"
     | "clear-error";
 };
 
 type VideoPayloadAction = {
-  type: "change-hold-time" | "change-progress";
+  type: "change-progress";
   playload: number;
 };
 
@@ -23,7 +22,6 @@ const initialVideoState = {
   hasError: false,
   isPlaying: false,
   isBuffering: false,
-  holdTime: 0,
   currentProgress: 0,
 };
 
@@ -31,8 +29,6 @@ type VideoAction = VideoTypeAction | VideoPayloadAction;
 
 function videoReducer(state: typeof initialVideoState, action: VideoAction) {
   switch (action.type) {
-    case "mute":
-      return { ...state, isMuted: true };
     case "change-mute":
       return { ...state, isMuted: !state.isMuted };
     case "play":
@@ -41,7 +37,7 @@ function videoReducer(state: typeof initialVideoState, action: VideoAction) {
       return { ...state, isPlaying: false };
     case "change-play":
       return { ...state, isPlaying: !state.isPlaying };
-    case "buffer":
+    case "buffering":
       return { ...state, isBuffering: true };
     case "clear-buffer":
       return { ...state, isBuffering: false };
@@ -49,8 +45,6 @@ function videoReducer(state: typeof initialVideoState, action: VideoAction) {
       return { ...state, hasError: true };
     case "clear-error":
       return { ...state, hasError: false };
-    case "change-hold-time":
-      return { ...state, holdTime: action.playload };
     case "change-progress":
       return { ...state, currentProgress: action.playload };
     default:

@@ -34,19 +34,6 @@ const UnityHubVideoPlayer = ({
   const [state, dispatch] = useVideo();
   const { ref, inView } = useInView();
 
-  function handlePlayStatus(action: "pause" | "play") {
-    if (isListItem) return;
-    if (action === "pause") {
-      dispatch({ type: "pause" });
-      dispatch({ type: "change-hold-time", playload: Date.now() });
-    } else {
-      dispatch({ type: "play" });
-      if (Date.now() - state.holdTime < 500) {
-        dispatch({ type: "change-mute" });
-      }
-    }
-  }
-
   useEffect(() => {
     if (!inView) {
       dispatch({ type: "pause" });
@@ -74,8 +61,7 @@ const UnityHubVideoPlayer = ({
           e.preventDefault();
           return false;
         }}
-        onMouseDown={handlePlayStatus.bind(null, "pause")}
-        onMouseUp={handlePlayStatus.bind(null, "play")}
+        onClick={() => dispatch({ type: "change-play" })}
         ref={ref}
       >
         <ReactPlayer
@@ -86,7 +72,7 @@ const UnityHubVideoPlayer = ({
           height={"100%"}
           playing={state.isPlaying}
           playsinline
-          fallback={<></>}
+          // fallback={<></>}
           muted={state.isMuted}
           config={{
             file: {
@@ -104,7 +90,7 @@ const UnityHubVideoPlayer = ({
             });
           }}
           onBuffer={() => {
-            dispatch({ type: "buffer" });
+            dispatch({ type: "buffering" });
           }}
           onBufferEnd={() => {
             dispatch({ type: "clear-buffer" });
@@ -119,26 +105,27 @@ const UnityHubVideoPlayer = ({
           }}
         />
 
-        {state.currentProgress !== 1 && state.currentProgress !== 0 && (
-          <img
-            className={`w-8 h-8 rounded-full transition-opacity absolute bottom-6 right-6 ${
-              state.isMuted
-                ? "opacity-100 duration-0"
-                : "opacity-0 duration-700 delay-1000"
-            }`}
-            src={`/icons/${state.isMuted ? "muted" : "unmuted"}.svg`}
-            alt={state.isMuted ? "muted" : "unmuted"}
-            aria-label={state.isMuted ? "unmute button" : "mute button"}
-          />
-        )}
+        <img
+          onClick={(e) => {
+            e.stopPropagation();
+            dispatch({ type: "change-mute" });
+          }}
+          className={`w-6 h-6 md:w-8 md:h-8 rounded-full transition-opacity absolute bottom-2 right-1 md:bottom-5 md:right-4 ${
+            state.isPlaying ? "opacity-100" : "opacity-0"
+          }`}
+          src={`/icons/${state.isMuted ? "muted" : "unmuted"}.svg`}
+          alt={state.isMuted ? "muted" : "unmuted"}
+          aria-roledescription="button"
+          aria-label={state.isMuted ? "unmute button" : "mute button"}
+        />
         {!state.hasError && (
           <div
-            className={`h-1 rounded-sm bg-white transition-opacity duration-700 absolute bottom-0 inset-x-0 ${
+            className={`h-1 rounded-sm bg-white transition-opacity absolute bottom-0 inset-x-0 ${
               state.isPlaying ? "opacity-100" : "opacity-0"
             }`}
           >
             <div
-              className="h-full w-full transition-transform ease-linear rounded-sm bg-primary-500"
+              className="h-full w-full transition-transform rounded-sm bg-primary-500"
               style={{
                 transform: `scaleX(${state.currentProgress})`,
                 transformOrigin: "left",
@@ -148,7 +135,7 @@ const UnityHubVideoPlayer = ({
         )}
       </div>
       {!isListItem &&
-        (state.hasError ? (
+        (state.hasError && !state.isPlaying ? (
           <div className="absolute inset-0 rounded-xl grid place-items-center backdrop-blur-sm">
             <div className="flex flex-col gap-4 items-center">
               <img className="w-14 h-14" src="/icons/error.svg" alt="ارور" />
@@ -157,29 +144,30 @@ const UnityHubVideoPlayer = ({
           </div>
         ) : (
           <AnimatePresence mode="popLayout">
-            {(state.currentProgress === 1 || state.currentProgress === 0) && (
-              <motion.div
-                key="play-state"
-                exit={{ opacity: 0 }}
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ duration: 0.25 }}
-                className={`absolute inset-0 rounded-xl grid place-items-center ${
-                  state.currentProgress === 1 ? "backdrop-blur-sm" : ""
-                }`}
-              >
-                <img
-                  className="w-14 h-14 cursor-pointer"
-                  onClick={() => {
-                    if (isListItem) return;
-                    dispatch({ type: "change-play" });
-                  }}
-                  src="/icons/play.svg"
-                  alt="پخش"
-                  aria-label="پخش"
-                />
-              </motion.div>
-            )}
+            {(state.currentProgress === 1 || state.currentProgress === 0) &&
+              !state.isBuffering && (
+                <motion.div
+                  key="play-state"
+                  exit={{ opacity: 0 }}
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ duration: 0.25 }}
+                  className={`absolute inset-0 rounded-xl grid place-items-center ${
+                    state.currentProgress === 1 ? "backdrop-blur-sm" : ""
+                  }`}
+                >
+                  <img
+                    className="w-14 h-14 cursor-pointer"
+                    onClick={() => {
+                      if (isListItem) return;
+                      dispatch({ type: "change-play" });
+                    }}
+                    src="/icons/play.svg"
+                    alt="پخش"
+                    aria-label="پخش"
+                  />
+                </motion.div>
+              )}
             {state.isBuffering && (
               <motion.div
                 key="buffering-state"
