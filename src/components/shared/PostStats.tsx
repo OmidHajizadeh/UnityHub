@@ -139,6 +139,7 @@ const PostStats = ({
             src={likes.includes(user.$id) ? LikedIcon : LikeIcon}
             alt="like"
             width={20}
+            tabIndex={0}
             height={20}
             onClick={likeHandler}
             className="cursor-pointer"
@@ -159,6 +160,7 @@ const PostStats = ({
                 aria-roledescription="button"
                 alt="comments"
                 width={20}
+                tabIndex={0}
                 height={20}
                 className="cursor-pointer"
               />
@@ -176,6 +178,7 @@ const PostStats = ({
               aria-roledescription="button"
               width={20}
               height={20}
+              tabIndex={0}
               onClick={saveHandler}
               className="cursor-pointer"
             />
