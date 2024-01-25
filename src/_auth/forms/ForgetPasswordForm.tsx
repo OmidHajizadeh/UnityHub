@@ -28,10 +28,13 @@ const ForgetPasswordForm = () => {
     isSuccess,
   } = useForgetPassword();
 
+  const urlSearchParams = new URLSearchParams(window.location.search);
+  const email = urlSearchParams.get("email");
+
   const form = useForm<z.infer<typeof forgetPasswordValidationSchema>>({
     resolver: zodResolver(forgetPasswordValidationSchema),
     defaultValues: {
-      email: "",
+      email: email || "",
     },
   });
 

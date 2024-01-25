@@ -128,7 +128,13 @@ const SignInForm = () => {
                 ثبت نام
               </Link>
             </p>
-            <Link to="/forget-password">
+            <Link
+              to={
+                form.getValues("email")
+                  ? `/forget-password?email=${form.getValues("email")}`
+                  : "/forget-password"
+              }
+            >
               <small>رمز عبور خود را فراموش کردید ؟</small>
             </Link>
           </div>
