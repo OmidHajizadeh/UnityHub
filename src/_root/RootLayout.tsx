@@ -31,8 +31,7 @@ const RootLayout = () => {
 
       <Bottombar />
       <div dir="ltr">
-      <ReactQueryDevtools />
-
+        <ReactQueryDevtools />
       </div>
     </div>
   );

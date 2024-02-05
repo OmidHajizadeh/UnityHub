@@ -1,7 +1,7 @@
+import { useEffect } from "react";
 import { Outlet, useNavigate } from "react-router-dom";
 
 import PageWrapper from "@/lib/framer-motion/PageWrapper";
-import { useEffect } from "react";
 
 const AuthLayout = () => {
   const navigate = useNavigate();

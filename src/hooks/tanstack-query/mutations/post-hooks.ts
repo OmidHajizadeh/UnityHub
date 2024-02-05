@@ -81,9 +81,9 @@ export function useLikePost() {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: (likePostObj: LikePostParams) => likePost(likePostObj),
-    onSuccess: (data) => {
+    onSuccess: (post) => {
       queryClient.invalidateQueries({
-        queryKey: [QUERY_KEYS.GET_POST_BY_ID, data?.$id],
+        queryKey: [QUERY_KEYS.GET_POST_BY_ID, post.$id],
       });
       queryClient.invalidateQueries({
         queryKey: [QUERY_KEYS.GET_HOME_FEED],
@@ -108,9 +108,9 @@ export function useSavePost() {
       postId: string;
       savesArray: string[];
     }) => savePost(postId, savesArray),
-    onSuccess: (data) => {
+    onSuccess: (post) => {
       queryClient.invalidateQueries({
-        queryKey: [QUERY_KEYS.GET_POST_BY_ID, data?.$id],
+        queryKey: [QUERY_KEYS.GET_POST_BY_ID, post.$id],
       });
       queryClient.invalidateQueries({
         queryKey: [QUERY_KEYS.GET_HOME_FEED],
