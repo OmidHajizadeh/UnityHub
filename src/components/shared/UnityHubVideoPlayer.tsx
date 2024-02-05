@@ -88,6 +88,10 @@ const UnityHubVideoPlayer = ({
           }}
           onEnded={() => {
             dispatch({ type: "pause" });
+            dispatch({
+              type: "change-progress",
+              playload: 0,
+            });
           }}
           progressInterval={10}
           onProgress={(e) => {
