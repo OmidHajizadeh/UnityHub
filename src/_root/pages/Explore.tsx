@@ -4,7 +4,7 @@ import { AnimatePresence } from "framer-motion";
 import { useInView } from "react-intersection-observer";
 import { AppwriteException } from "appwrite";
 
-import WallpaperIcon from "/icons/wallpaper.svg"
+import WallpaperIcon from "/icons/wallpaper.svg";
 import SearchIcon from "/icons/search.svg";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/components/ui/use-toast";
@@ -16,12 +16,18 @@ import useDebounce from "@/hooks/use-debounce";
 import { useSearchPosts } from "@/hooks/tanstack-query/queries";
 import { useGetExplorerPosts } from "@/hooks/tanstack-query/infiniteQueries";
 import { UnityHubError } from "@/lib/utils";
+import { usePWAContext } from "@/ccontext/PWAContextProvider";
 
 const Explore = () => {
   const { ref, inView } = useInView();
   const [searchValue, setSearchValue] = useState("");
   const { toast } = useToast();
   const debouncedSearchValue = useDebounce(searchValue, 500);
+  const { defferedEvent } = usePWAContext();
+
+  if (defferedEvent) {
+    defferedEvent.prompt();
+  }
 
   const {
     data: searchedPosts,

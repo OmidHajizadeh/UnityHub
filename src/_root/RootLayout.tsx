@@ -6,9 +6,11 @@ import Topbar from "@/components/shared/Topbar";
 import Bottombar from "@/components/shared/Bottombar";
 import MainSidebar from "@/components/shared/MainSidebar";
 import PageWrapper from "@/lib/framer-motion/PageWrapper";
+import { usePWAContext } from "@/ccontext/PWAContextProvider";
 
 const RootLayout = () => {
   const navigate = useNavigate();
+  const { setDefferedEvent } = usePWAContext();
 
   useEffect(() => {
     if (
@@ -17,6 +19,14 @@ const RootLayout = () => {
     ) {
       navigate("/sign-in");
     }
+  }, []);
+
+  useEffect(() => {
+    window.addEventListener("beforeinstallprompt", (e) => {
+      e.preventDefault();
+      setDefferedEvent(e);
+      return false;
+    });
   }, []);
 
   return (

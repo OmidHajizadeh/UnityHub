@@ -1,14 +1,14 @@
 {
   "name": "unityhub",
   "private": true,
-  "version": "1.2.0",
+  "version": "1.8.0",
   "author": "Omid Hajizadeh",
   "type": "module",
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
-    "preview": "vite preview"
+    "preview": "vite preview --port 5200"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.3.2",

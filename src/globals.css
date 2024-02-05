@@ -4,6 +4,10 @@
 @tailwind components;
 @tailwind utilities;
 
+*::-webkit-scrollbar {
+  display: none;
+}
+
 @layer base {
   * {
     @apply box-border list-none p-0 m-0 scroll-smooth select-none;
@@ -260,7 +264,7 @@
   .post-card_media {
     @apply w-full max-h-[45rem] rounded-md md:rounded-2xl object-cover;
   }
-  
+
   .topbar {
     @apply fixed top-0 z-50 md:hidden bg-dark-2 w-full;
   }
