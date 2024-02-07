@@ -2,8 +2,8 @@
 var sw = self;
 // Override the "self" variable
 //todo => run >> tsc public/sw.ts --watch
-var STATIC_ASSETS_NAME = "static-files-v" + 2;
-var DYNAMIC_ASSETS_NAME = "dynamic-files-v" + 1;
+var STATIC_ASSETS_NAME = "static-files-v" + 3;
+var DYNAMIC_ASSETS_NAME = "dynamic-files-v" + 2;
 // const IDB_VERSION = 1;
 var STATIC_FILES = [
     "/",
