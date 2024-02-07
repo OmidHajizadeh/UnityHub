@@ -2,12 +2,13 @@
 var sw = self;
 // Override the "self" variable
 //todo => run >> tsc public/sw.ts --watch
-var STATIC_ASSETS_NAME = "static-files-v" + 4;
-var DYNAMIC_ASSETS_NAME = "dynamic-files-v" + 5;
-var IDB_VERSION = 1;
+var STATIC_ASSETS_NAME = "static-files-v" + 1;
+var DYNAMIC_ASSETS_NAME = "dynamic-files-v" + 1;
+// const IDB_VERSION = 1;
 var STATIC_FILES = [
     "/",
     "/index.html",
+    "/offline.html",
     "/icons/add-post.svg",
     "/logo/icon-192x192.png",
     "/logo/icon-256x256.png",
@@ -71,33 +72,26 @@ var STATIC_FILES = [
     "/src/fonts/woff2/IRANYekanX-Thin.woff2",
     "/src/fonts/woff2/IRANYekanX-UltraLight.woff2",
 ];
-var IDBStores;
-(function (IDBStores) {
-    IDBStores["USERS"] = "users";
-    IDBStores["CURRENT_USER"] = "current-user";
-})(IDBStores || (IDBStores = {}));
-//
-//
-//
-function openIDB() {
-    var req = indexedDB.open("Dynamic-JSON", IDB_VERSION);
-    req.onupgradeneeded = function (event) {
-        var IDB = event.target.result;
-        if (!IDB.objectStoreNames.contains(IDBStores.USERS)) {
-            IDB.createObjectStore(IDBStores.USERS, {
-                keyPath: "$id",
-            });
-        }
-        if (!IDB.objectStoreNames.contains(IDBStores.CURRENT_USER)) {
-            IDB.createObjectStore(IDBStores.CURRENT_USER, {
-                keyPath: "$id",
-            });
-        }
-    };
-}
-//
-//
-//
+// enum IDBStores {
+//   USERS = "users",
+//   CURRENT_USER = "current-user",
+// }
+// function openIDB() {
+//   const req = indexedDB.open("Dynamic-JSON", IDB_VERSION);
+//   req.onupgradeneeded = (event) => {
+//     let IDB = (event.target as IDBOpenDBRequest).result;
+//     if (!IDB.objectStoreNames.contains(IDBStores.USERS)) {
+//       IDB.createObjectStore(IDBStores.USERS, {
+//         keyPath: "$id",
+//       });
+//     }
+//     if (!IDB.objectStoreNames.contains(IDBStores.CURRENT_USER)) {
+//       IDB.createObjectStore(IDBStores.CURRENT_USER, {
+//         keyPath: "$id",
+//       });
+//     }
+//   };
+// }
 //! Install Event:
 sw.addEventListener("install", function (event) {
     sw.skipWaiting();
@@ -107,7 +101,7 @@ sw.addEventListener("install", function (event) {
 });
 //! Activate Event:
 sw.addEventListener("activate", function (event) {
-    openIDB();
+    // openIDB();
     event.waitUntil(caches.keys().then(function (keyList) {
         return Promise.all(keyList.map(function (key) {
             if (key !== STATIC_ASSETS_NAME && key !== DYNAMIC_ASSETS_NAME) {
@@ -120,19 +114,25 @@ sw.addEventListener("activate", function (event) {
 //! Fetch Event:
 sw.addEventListener("fetch", function (event) {
     if (isRequestFromCacheAssets(event.request.url, STATIC_FILES)) {
-        console.log(event.request.url);
         event.respondWith(caches.match(event.request));
-    }
-    else if (isRequestingUsers(event.request.url)) {
-        event.respondWith(fetch(event.request));
+        // } else if (isRequestingMedia(event.request.url)) {
+        // event.respondWith(fetch(event.request));
     }
     else {
         event.respondWith(caches.match(event.request).then(function (cachedResponse) {
             return (cachedResponse ||
-                fetch(event.request).then(function (networkResponse) {
+                fetch(event.request)
+                    .then(function (networkResponse) {
                     return caches.open(DYNAMIC_ASSETS_NAME).then(function (cache) {
-                        cache.put(event.request, networkResponse.clone()).catch(function () { });
+                        cache
+                            .put(event.request, networkResponse.clone())
+                            .catch(function () { });
                         return networkResponse;
+                    });
+                })
+                    .catch(function () {
+                    return caches.open(STATIC_ASSETS_NAME).then(function (cache) {
+                        return cache.match("/offline.html");
                     });
                 }));
         }));
@@ -145,6 +145,6 @@ sw.addEventListener("fetch", function (event) {
 function isRequestFromCacheAssets(url, urls) {
     return urls.some(function (text) { return text === url || (url.indexOf(text) > -1 && text !== "/"); });
 }
-function isRequestingUsers(URL) {
-    return (URL.indexOf("/databases/65823185615fc5393cc9/collections/6582346356961de8c8d2") !== -1);
+function isRequestingMedia(URL) {
+    return URL.indexOf("/storage/buckets/657de8268e00d19b91c2/") !== -1;
 }

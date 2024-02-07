@@ -83,20 +83,6 @@ export class UnityHubError extends Error {
   }
 }
 
-// export function readFromIDB(
-//   storeName: string,
-//   action: "getAll" | "get",
-//   id?: string
-// ) {
-//   const req = indexedDB.open("Dynamic-JSON");
-//   req.onsuccess = (event) => {
-//     const IDB = (event.target as IDBOpenDBRequest).result;
-
-//     const tx = IDB.transaction(storeName, "readonly");
-
-//   };
-// }
-
 export function writeToIDB<T>(storeName: IDBStores, data: T) {
   const req = indexedDB.open("Dynamic-JSON");
   req.onsuccess = (event) => {

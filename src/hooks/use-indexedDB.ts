@@ -1,3 +1,4 @@
+import { IDBStores } from "@/types";
 import { useCallback, useEffect, useState } from "react";
 
 export const useReadAllFromIDB = <T>(storeName: IDBStores) => {

@@ -1,29 +1,15 @@
 import { Link } from "react-router-dom";
 
 import { useGetCurrentUser } from "@/hooks/tanstack-query/queries";
-import { IDBStores, User } from "@/types";
+import { User } from "@/types";
 import FollowUserButton from "./FollowUserButton";
-import { useReadAllFromIDB } from "@/hooks/use-indexedDB";
-import { useEffect, useState } from "react";
 
 type UserCardProps = {
   user: User;
 };
 
 const UserCard = ({ user }: UserCardProps) => {
-  const { data: fetchedCurrentUser } = useGetCurrentUser();
-  const cachedUser = useReadAllFromIDB<User>(IDBStores.CURRENT_USER);
-
-  const [currentUser, setCurrentUser] = useState<User>();
-
-  useEffect(() => {
-    if (cachedUser) {
-      setCurrentUser(cachedUser[0]);
-    }
-    if (fetchedCurrentUser) {
-      setCurrentUser(fetchedCurrentUser);
-    }
-  }, [fetchedCurrentUser, cachedUser]);
+  const { data: currentUser } = useGetCurrentUser();
 
   return (
     <Link to={`/profile/${user.$id}`} className="user-card">

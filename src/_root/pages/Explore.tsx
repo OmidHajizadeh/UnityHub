@@ -42,7 +42,7 @@ const Explore = () => {
 
   useEffect(() => {
     if (defferedEvent) {
-      defferedEvent.prompt();
+      defferedEvent.prompt().catch(() => {});
     }
   }, []);
 
