@@ -1,3 +1,4 @@
+import { IDBStores } from "@/types";
 import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
 
@@ -25,7 +26,6 @@ export function formatDateString(dateString: string) {
   return `${formattedDate} at ${time}`;
 }
 
-//
 export const multiFormatDateString = (timestamp: string = ""): string => {
   const timestampNum = Math.round(new Date(timestamp).getTime() / 1000);
   const date: Date = new Date(timestampNum * 1000);
@@ -81,4 +81,34 @@ export class UnityHubError extends Error {
     super(message);
     this.name = "UnityHubError";
   }
+}
+
+// export function readFromIDB(
+//   storeName: string,
+//   action: "getAll" | "get",
+//   id?: string
+// ) {
+//   const req = indexedDB.open("Dynamic-JSON");
+//   req.onsuccess = (event) => {
+//     const IDB = (event.target as IDBOpenDBRequest).result;
+
+//     const tx = IDB.transaction(storeName, "readonly");
+
+//   };
+// }
+
+export function writeToIDB<T>(storeName: IDBStores, data: T) {
+  const req = indexedDB.open("Dynamic-JSON");
+  req.onsuccess = (event) => {
+    const IDB = (event.target as IDBOpenDBRequest).result;
+
+    const tx = IDB.transaction(storeName, "readwrite");
+    const store = tx.objectStore(storeName);
+
+    store.add(data);
+
+    tx.oncomplete = () => {
+      IDB.close();
+    };
+  };
 }

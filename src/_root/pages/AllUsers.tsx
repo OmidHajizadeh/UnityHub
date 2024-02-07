@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { Helmet } from "react-helmet";
 
@@ -9,21 +9,34 @@ import { Input } from "@/components/ui/input";
 import UsersCardSkeleton from "@/components/loaders/UsersCardSkeleton";
 import SearchUserResults from "@/components/shared/SearchUserResults";
 import useDebounce from "@/hooks/use-debounce";
+import { useReadAllFromIDB } from "@/hooks/use-indexedDB";
 import { useGetUsers, useSearchUser } from "@/hooks/tanstack-query/queries";
+import { IDBStores, User } from "@/types";
 
 const AllUsers = () => {
   const { toast } = useToast();
   const [searchValue, setSearchValue] = useState("");
   const debouncedSearchValue = useDebounce(searchValue, 500);
+  const cachedUsers = useReadAllFromIDB<User>(IDBStores.USERS);
+  const [users, setUsers] = useState<User[]>();
 
   const {
-    data: users,
+    data: fetchedUsers,
     isLoading: isLoadingUsers,
     isError: isErrorUsers,
   } = useGetUsers(6);
 
   const { data: searchedUsers, isPending: isFetching } =
     useSearchUser(debouncedSearchValue);
+
+  useEffect(() => {
+    if (cachedUsers) {
+      setUsers(cachedUsers);
+    }
+    if (fetchedUsers) {
+      setUsers(fetchedUsers.documents);
+    }
+  }, [fetchedUsers, cachedUsers]);
 
   if (isErrorUsers) {
     toast({
@@ -32,6 +45,7 @@ const AllUsers = () => {
       variant: "destructive",
     });
   }
+
   const shouldShowSearchResults = searchValue.trim().length !== 0;
 
   return (
@@ -68,7 +82,8 @@ const AllUsers = () => {
               کاربران اخیر
             </h2>
           )}
-          {isLoadingUsers ? (
+
+          {isLoadingUsers && !cachedUsers ? (
             <section className="user-grid">
               {Array.from({ length: 6 }).map((_, index) => {
                 return (
@@ -89,7 +104,7 @@ const AllUsers = () => {
                 )}
                 {!searchedUsers &&
                   users &&
-                  users.documents.map((user) => {
+                  users.map((user) => {
                     return (
                       <motion.li
                         key={user.$id}

@@ -1,10 +1,12 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Link, NavLink, useNavigate } from "react-router-dom";
 
 import LogOutIcon from "/icons/logout.svg";
 import { useSignOutAccount } from "@/hooks/tanstack-query/mutations/auth-hooks";
 import { useGetCurrentUser } from "@/hooks/tanstack-query/queries";
 import { Button } from "@/components/ui/button";
+import { useReadAllFromIDB } from "@/hooks/use-indexedDB";
+import { IDBStores, User } from "@/types";
 import Alert from "./Alert";
 
 const sidebarLinks = [
@@ -41,7 +43,20 @@ const MainSidebar = () => {
     isSuccess,
     isPending,
   } = useSignOutAccount();
-  const { data: user } = useGetCurrentUser();
+  const { data: currentUserFetched, isSuccess: isFetched } = useGetCurrentUser();
+
+  const currentUserCached = useReadAllFromIDB<User>(IDBStores.CURRENT_USER);
+  const [currentUser, setCurrentUser] = useState<User>();
+  
+  useEffect(() => {
+    if (currentUserCached && !currentUserFetched) {
+      setCurrentUser(currentUserCached[0]);
+    }
+
+    if (currentUserFetched) {
+      setCurrentUser(currentUserFetched);
+    }
+  }, [currentUserFetched, currentUserCached]);
 
   const navigate = useNavigate();
 
@@ -54,16 +69,21 @@ const MainSidebar = () => {
   return (
     <nav className="rightsidebar">
       <div className="flex flex-col gap-11">
-        {user ? (
-          <Link to={`/profile/${user.$id}`} className="flex gap-3 items-center">
+        {currentUser ? (
+          <Link
+            to={`/profile/${currentUser.$id}`}
+            className="flex gap-3 items-center"
+          >
             <img
-              src={user?.imageUrl || "/icons/profile-placeholder.svg"}
+              src={currentUser?.imageUrl || "/icons/profile-placeholder.svg"}
               alt="profile"
               className="h-14 w-14 rounded-full"
             />
             <div className="flex flex-col">
-              <p className="body-bold">{user.name}</p>
-              <p className="small-regular text-light-3">{user.username}@</p>
+              <p className="body-bold">{currentUser.name}</p>
+              <p className="small-regular text-light-3">
+                {currentUser.username}@
+              </p>
             </div>
           </Link>
         ) : (

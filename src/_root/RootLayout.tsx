@@ -6,7 +6,7 @@ import Topbar from "@/components/shared/Topbar";
 import Bottombar from "@/components/shared/Bottombar";
 import MainSidebar from "@/components/shared/MainSidebar";
 import PageWrapper from "@/lib/framer-motion/PageWrapper";
-import { usePWAContext } from "@/ccontext/PWAContextProvider";
+import { usePWAContext } from "@/context/PWAContextProvider";
 
 const RootLayout = () => {
   const navigate = useNavigate();

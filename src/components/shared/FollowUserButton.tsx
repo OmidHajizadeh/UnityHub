@@ -6,6 +6,9 @@ import { useToast } from "@/components/ui/use-toast";
 import { useFollowUser } from "@/hooks/tanstack-query/mutations/user-hooks";
 import { useGetCurrentUser } from "@/hooks/tanstack-query/queries";
 import { UnityHubError } from "@/lib/utils";
+import { useReadAllFromIDB } from "@/hooks/use-indexedDB";
+import { IDBStores, User } from "@/types";
+import { useEffect, useState } from "react";
 
 type FollowUserButtonProps = {
   className: string;
@@ -19,16 +22,29 @@ const FollowUserButton = ({
   const { toast } = useToast();
 
   const {
-    data: user,
+    data: fetchedCurrentUser,
     isLoading: isLoadingUser,
     isPending,
   } = useGetCurrentUser();
+
+  const cachedUser = useReadAllFromIDB<User>(IDBStores.CURRENT_USER);
+  const [user, setUser] = useState<User>();
+
+  useEffect(() => {
+    if (cachedUser) {
+      setUser(cachedUser[0]);
+    }
+    if (fetchedCurrentUser) {
+      setUser(fetchedCurrentUser);
+    }
+  }, [fetchedCurrentUser, cachedUser]);
+
   const { mutateAsync: followAction, isPending: isFollowActionOn } =
     useFollowUser(targetUserId);
 
-  if (!user || isLoadingUser || isPending) return <Spinner />;
+  if ((isLoadingUser || isPending) && !user) return <Spinner />;
 
-  const hadFollowedUser = user.followings.includes(targetUserId);
+  const hadFollowedUser = user?.followings.includes(targetUserId);
 
   async function followUserHandler(
     action: "follow" | "unfollow",

@@ -4,19 +4,26 @@ const sw = self as unknown as ServiceWorkerGlobalScope;
 
 //todo => run >> tsc public/sw.ts --watch
 
-const STATIC_ASSETS = "static-data-v" + 4;
+const STATIC_ASSETS_NAME = "static-files-v" + 4;
+const DYNAMIC_ASSETS_NAME = "dynamic-files-v" + 5;
+const IDB_VERSION = 1;
 
 const STATIC_FILES = [
   "/",
   "/index.html",
   "/icons/add-post.svg",
+  "/logo/icon-192x192.png",
+  "/logo/icon-256x256.png",
+  "/logo/icon-384x384.png",
+  "/logo/icon-512x512.png",
   "/icons/arrow.png",
   "/icons/back.svg",
   "/icons/bookmark.svg",
   "/icons/chat.svg",
   "/icons/comment.svg",
   "/icons/delete.svg",
-  "/icons/editerror.svg",
+  "/icons/edit.svg",
+  "/icons/error.svg",
   "/icons/file-upload.svg",
   "/icons/filter.svg",
   "/icons/follow.svg",
@@ -68,17 +75,44 @@ const STATIC_FILES = [
   "/src/fonts/woff2/IRANYekanX-UltraLight.woff2",
 ];
 
-function isRequestAlreadyCached(url: string, urls: string[]) {
-  return urls.some(
-    (text) => text === url || (url.indexOf(text) > -1 && text !== "/")
-  );
+enum IDBStores {
+  USERS = "users",
+  CURRENT_USER = "current-user",
 }
+
+//
+//
+//
+
+function openIDB() {
+  const req = indexedDB.open("Dynamic-JSON", IDB_VERSION);
+
+  req.onupgradeneeded = (event) => {
+    let IDB = (event.target as IDBOpenDBRequest).result;
+
+    if (!IDB.objectStoreNames.contains(IDBStores.USERS)) {
+      IDB.createObjectStore(IDBStores.USERS, {
+        keyPath: "$id",
+      });
+    }
+
+    if (!IDB.objectStoreNames.contains(IDBStores.CURRENT_USER)) {
+      IDB.createObjectStore(IDBStores.CURRENT_USER, {
+        keyPath: "$id",
+      });
+    }
+  };
+}
+
+//
+//
+//
 
 //! Install Event:
 sw.addEventListener("install", (event) => {
   sw.skipWaiting();
   event.waitUntil(
-    caches.open(STATIC_ASSETS).then((cache) => {
+    caches.open(STATIC_ASSETS_NAME).then((cache) => {
       return cache.addAll(STATIC_FILES);
     })
   );
@@ -86,11 +120,12 @@ sw.addEventListener("install", (event) => {
 
 //! Activate Event:
 sw.addEventListener("activate", function (event) {
+  openIDB();
   event.waitUntil(
     caches.keys().then((keyList) =>
       Promise.all(
         keyList.map((key) => {
-          if (key !== STATIC_ASSETS) {
+          if (key !== STATIC_ASSETS_NAME && key !== DYNAMIC_ASSETS_NAME) {
             return caches.delete(key);
           }
         })
@@ -103,9 +138,43 @@ sw.addEventListener("activate", function (event) {
 
 //! Fetch Event:
 sw.addEventListener("fetch", (event) => {
-  if (isRequestAlreadyCached(event.request.url, STATIC_FILES)) {
+  if (isRequestFromCacheAssets(event.request.url, STATIC_FILES)) {
+    console.log(event.request.url);
     event.respondWith(caches.match(event.request) as PromiseLike<Response>);
+  } else if (isRequestingUsers(event.request.url)) {
+    event.respondWith(fetch(event.request));
   } else {
-    event.respondWith(fetch(event.request) as PromiseLike<Response>);
+    event.respondWith(
+      caches.match(event.request).then((cachedResponse) => {
+        return (
+          cachedResponse ||
+          (fetch(event.request).then((networkResponse) => {
+            return caches.open(DYNAMIC_ASSETS_NAME).then((cache) => {
+              cache.put(event.request, networkResponse.clone()).catch(() => {});
+              return networkResponse;
+            });
+          }) as PromiseLike<Response>)
+        );
+      })
+    );
   }
 });
+
+//
+//
+//
+
+//! Utility functions
+function isRequestFromCacheAssets(url: string, urls: string[]) {
+  return urls.some(
+    (text) => text === url || (url.indexOf(text) > -1 && text !== "/")
+  );
+}
+
+function isRequestingUsers(URL: string) {
+  return (
+    URL.indexOf(
+      "/databases/65823185615fc5393cc9/collections/6582346356961de8c8d2"
+    ) !== -1
+  );
+}

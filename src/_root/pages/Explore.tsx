@@ -16,7 +16,7 @@ import useDebounce from "@/hooks/use-debounce";
 import { useSearchPosts } from "@/hooks/tanstack-query/queries";
 import { useGetExplorerPosts } from "@/hooks/tanstack-query/infiniteQueries";
 import { UnityHubError } from "@/lib/utils";
-import { usePWAContext } from "@/ccontext/PWAContextProvider";
+import { usePWAContext } from "@/context/PWAContextProvider";
 
 const Explore = () => {
   const { ref, inView } = useInView();
@@ -24,10 +24,6 @@ const Explore = () => {
   const { toast } = useToast();
   const debouncedSearchValue = useDebounce(searchValue, 500);
   const { defferedEvent } = usePWAContext();
-
-  if (defferedEvent) {
-    defferedEvent.prompt();
-  }
 
   const {
     data: searchedPosts,
@@ -43,6 +39,12 @@ const Explore = () => {
     isError: isPostsError,
     error: postsError,
   } = useGetExplorerPosts();
+
+  useEffect(() => {
+    if (defferedEvent) {
+      defferedEvent.prompt();
+    }
+  }, []);
 
   useEffect(() => {
     if (inView && !searchValue) {

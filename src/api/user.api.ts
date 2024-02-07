@@ -7,10 +7,11 @@ import {
   avatars,
   databases,
 } from "@/lib/AppWirte/config";
-import { UnityHubError, generateAuditId } from "@/lib/utils";
+import { UnityHubError, generateAuditId, writeToIDB } from "@/lib/utils";
 import { createAudit, deleteAudit } from "@/api/audits.api";
 import { deleteFile, getFilePreview, uploadFile } from "@/api/file.api";
 import {
+  IDBStores,
   NewUser,
   ResetPassword,
   UnityHubDocumentList,
@@ -174,7 +175,10 @@ export async function getCurrentUser() {
       "لطفاً به حساب کاربری خود وارد شوید."
     );
 
-  return currentUser.documents[0] as User;
+  const user = currentUser.documents[0] as User;
+  writeToIDB(IDBStores.CURRENT_USER, user);
+
+  return user;
 }
 
 export async function getUsers(limit: number) {
@@ -192,11 +196,11 @@ export async function getUsers(limit: number) {
     Query.limit(limit),
   ];
 
-  const users = await databases.listDocuments(
+  const users = (await databases.listDocuments(
     appwriteConfig.databaseId,
     appwriteConfig.userCollectionId,
     queries
-  );
+  )) as UnityHubDocumentList<User>;
 
   if (!users)
     throw new UnityHubError(
@@ -204,15 +208,19 @@ export async function getUsers(limit: number) {
       "لطفاً دوباره امتحان کنید"
     );
 
-  return users as UnityHubDocumentList<User>;
+  users.documents.forEach((user) => {
+    writeToIDB(IDBStores.USERS, user);
+  });
+
+  return users;
 }
 
 export async function getUserById(userId: string) {
-  const user = await databases.getDocument(
+  const user = (await databases.getDocument(
     appwriteConfig.databaseId,
     appwriteConfig.userCollectionId,
     userId
-  );
+  )) as User;
 
   if (!user)
     throw new UnityHubError(
@@ -220,7 +228,8 @@ export async function getUserById(userId: string) {
       "لطفاً دوباره امتحان کنید"
     );
 
-  return user as User;
+  writeToIDB(IDBStores.USERS, user);
+  return user;
 }
 
 export async function updateUser(user: UpdateUser) {
@@ -275,6 +284,8 @@ export async function updateUser(user: UpdateUser) {
   if (user.imageId && hasFileToUpdate) {
     await deleteFile(user.imageId);
   }
+
+  writeToIDB(IDBStores.USERS, updatedUser);
 
   return updatedUser as User;
 }
@@ -358,6 +369,9 @@ export async function followUser(action: string, targetUserId: string) {
     throw new UnityHubError("خطای سرور", "لطفاً دوباره امتحان کنید.");
   }
 
+  writeToIDB(IDBStores.USERS, UpdateTargetUser);
+  writeToIDB(IDBStores.CURRENT_USER, updateCurrentUser);
+
   await auditPromise;
 }
 
@@ -367,11 +381,16 @@ export async function searchUser(searchTerm: string) {
     appwriteConfig.userCollectionId,
     [Query.search("username", searchTerm)]
   );
+
   if (!users)
     throw new UnityHubError(
       "خطا در پیدا کردن کاربر",
       "لطفاً دوباره امتحان کنید."
     );
+
+  users.documents.forEach((user) => {
+    writeToIDB(IDBStores.USERS, user);
+  });
 
   return users as UnityHubDocumentList<User>;
 }

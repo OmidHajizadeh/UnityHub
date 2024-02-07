@@ -3,7 +3,7 @@ import { BrowserRouter } from "react-router-dom";
 
 import App from "@/App.tsx";
 import { QueryProvider } from "@/lib/react-query/QueryProvider.tsx";
-import PWAContextProvider from "@/ccontext/PWAContextProvider";
+import PWAContextProvider from "@/context/PWAContextProvider";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <BrowserRouter>

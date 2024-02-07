@@ -1,7 +1,8 @@
+import { BeforeInstallPromptEvent } from "@/types";
 import React, { useContext, useState } from "react";
 
 const context = React.createContext<{
-  defferedEvent: any | null;
+  defferedEvent: BeforeInstallPromptEvent | null;
   setDefferedEvent: React.Dispatch<React.SetStateAction<any | null>>;
 }>({
   defferedEvent: null,
@@ -9,7 +10,8 @@ const context = React.createContext<{
 });
 
 const PWAContextProvider = ({ children }: { children: React.ReactNode }) => {
-  const [defferedEvent, setDefferedEvent] = useState<any | null>(null);
+  const [defferedEvent, setDefferedEvent] =
+    useState<BeforeInstallPromptEvent | null>(null);
   return (
     <context.Provider
       value={{
