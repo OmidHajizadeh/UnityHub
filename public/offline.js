@@ -1,5 +1,3 @@
-import React from "react";
-
 var OfflinePage = function OfflinePage() {
   return React.createElement(
     "div",
