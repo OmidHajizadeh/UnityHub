@@ -4,14 +4,14 @@ const sw = self as unknown as ServiceWorkerGlobalScope;
 
 //todo => run >> tsc public/sw.ts --watch
 
-const STATIC_ASSETS_NAME = "static-files-v" + 1;
+const STATIC_ASSETS_NAME = "static-files-v" + 2;
 const DYNAMIC_ASSETS_NAME = "dynamic-files-v" + 1;
 // const IDB_VERSION = 1;
 
 const STATIC_FILES = [
   "/",
   "/index.html",
-  "/offline.html",
+  "/offline.js",
   "/icons/add-post.svg",
   "/logo/icon-192x192.png",
   "/logo/icon-256x256.png",
@@ -151,7 +151,7 @@ sw.addEventListener("fetch", (event) => {
             })
             .catch(() => {
               return caches.open(STATIC_ASSETS_NAME).then((cache) => {
-                return cache.match("/offline.html");
+                return cache.match("/offline.js");
               });
             }) as PromiseLike<Response>)
         );

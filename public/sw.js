@@ -2,13 +2,13 @@
 var sw = self;
 // Override the "self" variable
 //todo => run >> tsc public/sw.ts --watch
-var STATIC_ASSETS_NAME = "static-files-v" + 1;
+var STATIC_ASSETS_NAME = "static-files-v" + 2;
 var DYNAMIC_ASSETS_NAME = "dynamic-files-v" + 1;
 // const IDB_VERSION = 1;
 var STATIC_FILES = [
     "/",
     "/index.html",
-    "/offline.html",
+    "/offline.js",
     "/icons/add-post.svg",
     "/logo/icon-192x192.png",
     "/logo/icon-256x256.png",
@@ -132,7 +132,7 @@ sw.addEventListener("fetch", function (event) {
                 })
                     .catch(function () {
                     return caches.open(STATIC_ASSETS_NAME).then(function (cache) {
-                        return cache.match("/offline.html");
+                        return cache.match("/offline.js");
                     });
                 }));
         }));
