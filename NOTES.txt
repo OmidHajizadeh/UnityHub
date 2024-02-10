@@ -1,0 +1,3 @@
+01. Add workbox to the project and configure caching and offline capabilities.
+02. Add location API to a new post location input.
+03. Try background sync for adding a new post.

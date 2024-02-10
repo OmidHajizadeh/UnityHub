@@ -70,6 +70,7 @@ const UnityHubVideoPlayer = ({
           dispatch({ type: "change-play" });
         }}
         ref={ref}
+        className="w-full"
       >
         <ReactPlayer
           key={videoUrl}
@@ -97,7 +98,7 @@ const UnityHubVideoPlayer = ({
           onProgress={(e) => {
             dispatch({
               type: "change-progress",
-              playload: +e.played.toFixed(4),
+              playload: +e.played.toFixed(3),
             });
           }}
           onBuffer={() => {
@@ -138,7 +139,7 @@ const UnityHubVideoPlayer = ({
             }`}
           >
             <div
-              className="h-full w-full transition-transform rounded-sm bg-primary-500"
+              className="h-full w-full rounded-sm bg-primary-500"
               style={{
                 transform: `scaleX(${state.currentProgress})`,
                 transformOrigin: "left",

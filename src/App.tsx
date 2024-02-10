@@ -17,6 +17,7 @@ import AllUsersFallback from "@/components/suspense-fallbacks/AllUsersFallback";
 import PostDetailsFallback from "@/components/suspense-fallbacks/PostDetailsFallback";
 
 import "./globals.css";
+import Offline from "./_root/pages/offline";
 
 const SignUpForm = lazy(() => import("./_auth/forms/SignUpForm"));
 const ForgetPasswordForm = lazy(
@@ -34,7 +35,9 @@ const Audits = lazy(() => import("./_root/pages/Audits"));
 
 function App() {
   const location = useLocation();
-
+  if (!navigator.onLine) {
+    return <Offline />;
+  }
   return (
     <>
       <Helmet>
