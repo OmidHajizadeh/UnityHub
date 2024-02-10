@@ -6,6 +6,7 @@ import { AnimatePresence } from "framer-motion";
 import AuthLayout from "@/_auth/AuthLayout";
 import SignInForm from "@/_auth/forms/SignInForm";
 import Home from "@/_root/pages/Home";
+import Offline from "@/_root/pages/Offline";
 import NotFound from "@/_root/pages/NotFound";
 import RootLayout from "@/_root/RootLayout";
 import Spinner from "@/components/loaders/Spinner";
@@ -17,7 +18,6 @@ import AllUsersFallback from "@/components/suspense-fallbacks/AllUsersFallback";
 import PostDetailsFallback from "@/components/suspense-fallbacks/PostDetailsFallback";
 
 import "./globals.css";
-import Offline from "./_root/pages/offline";
 
 const SignUpForm = lazy(() => import("./_auth/forms/SignUpForm"));
 const ForgetPasswordForm = lazy(
