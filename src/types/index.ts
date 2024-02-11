@@ -92,6 +92,14 @@ export type ResetPassword = {
   confirmPassword: string;
 };
 
+export type PostValues = {
+  tags: string[];
+  caption: string;
+  location: string;
+  files: File[];
+};
+
+
 export type UnityHubDocumentList<T> = {
   total: number;
   documents: T[];

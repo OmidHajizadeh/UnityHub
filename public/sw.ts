@@ -4,12 +4,13 @@ const sw = self as unknown as ServiceWorkerGlobalScope;
 
 //todo => run >> tsc public/sw.ts --watch
 
-const STATIC_ASSETS_NAME = "static-files-v" + 1;
-const DYNAMIC_ASSETS_NAME = "dynamic-files-v" + 1;
+const STATIC_ASSETS_NAME = "static-files-v" + 5;
+const DYNAMIC_ASSETS_NAME = "dynamic-files-v" + 3;
 
 const STATIC_FILES = [
   "/",
   "/index.html",
+  "/offline.html",
   "/icons/add-post.svg",
   "/icons/arrow.png",
   "/icons/back.svg",
@@ -69,43 +70,44 @@ const STATIC_FILES = [
   "/assets/IRANYekanX-ExtraBold-8sr7PBGc.woff",
   "/assets/IRANYekanX-DemiBold-yk786QtJ.woff",
   "/assets/IRANYekanX-Bold-OFD9JDtF.woff",
-  "/assets/index-9uCojWaM.css",
-  "/assets/video-bjKr2C5s.js",
-  "/assets/delete-kxN_Zkjr.js",
-  "/assets/use-debounce-JwuGpVD_.js",
-  "/assets/textarea-SqWJZ_ge.js",
-  "/assets/InteractedPosts-NoYg99WV.js",
-  "/assets/CreatePost-nMkDN70q.js",
-  "/assets/UpdatePost-F4A_Scfl.js",
-  "/assets/comment-hooks--uQkBxjb.js",
-  "/assets/DeleteComment.form-Gfij9YoU.js",
-  "/assets/DeletePost.form-yC8lQ_sf.js",
-  "/assets/ForgetPasswordForm-AUDBQV-T.js",
-  "/assets/ResetPasswordForm-RPsc5IeX.js",
-  "/assets/AllUsers-jM80BFBC.js",
-  "/assets/Mixcloud-dcG9SaAJ.js",
-  "/assets/SignUpForm-QS1N0C8o.js",
-  "/assets/Kaltura-abV8j1wH.js",
-  "/assets/Vidyard-LbZN6uwY.js",
-  "/assets/SoundCloud-plgSulfG.js",
-  "/assets/Streamable-kwmbCIUB.js",
-  "/assets/Audits-CqQN7Roz.js",
-  "/assets/DailyMotion-a62_r_Dx.js",
-  "/assets/Preview-a_9Lxav-.js",
-  "/assets/Twitch-oVBT0HNJ.js",
-  "/assets/Facebook-wmsvBr9Q.js",
-  "/assets/Wistia-ucoH6TVv.js",
-  "/assets/Vimeo-I91ztYP8.js",
-  "/assets/Explore-JFD3iTH9.js",
-  "/assets/CommentDialog-eVg0KK7u.js",
-  "/assets/UpdateProfile-fxeedowk.js",
-  "/assets/YouTube-5Y4B88yf.js",
-  "/assets/Profile-T10gWQF-.js",
-  "/assets/Post.form-dVWGVtwL.js",
-  "/assets/PostDetails-7s9uI11G.js",
-  "/assets/FilePlayer-LM23bqv8.js",
-  "/assets/index-56oth_nY.js",
-  "/assets/index-yUWG-ebX.js",
+
+  // "/assets/index-9uCojWaM.css",
+  // "/assets/video-bjKr2C5s.js",
+  // "/assets/delete-kxN_Zkjr.js",
+  // "/assets/use-debounce-JwuGpVD_.js",
+  // "/assets/textarea-SqWJZ_ge.js",
+  // "/assets/InteractedPosts-NoYg99WV.js",
+  // "/assets/CreatePost-nMkDN70q.js",
+  // "/assets/UpdatePost-F4A_Scfl.js",
+  // "/assets/comment-hooks--uQkBxjb.js",
+  // "/assets/DeleteComment.form-Gfij9YoU.js",
+  // "/assets/DeletePost.form-yC8lQ_sf.js",
+  // "/assets/ForgetPasswordForm-AUDBQV-T.js",
+  // "/assets/ResetPasswordForm-RPsc5IeX.js",
+  // "/assets/AllUsers-jM80BFBC.js",
+  // "/assets/Mixcloud-dcG9SaAJ.js",
+  // "/assets/SignUpForm-QS1N0C8o.js",
+  // "/assets/Kaltura-abV8j1wH.js",
+  // "/assets/Vidyard-LbZN6uwY.js",
+  // "/assets/SoundCloud-plgSulfG.js",
+  // "/assets/Streamable-kwmbCIUB.js",
+  // "/assets/Audits-CqQN7Roz.js",
+  // "/assets/DailyMotion-a62_r_Dx.js",
+  // "/assets/Preview-a_9Lxav-.js",
+  // "/assets/Twitch-oVBT0HNJ.js",
+  // "/assets/Facebook-wmsvBr9Q.js",
+  // "/assets/Wistia-ucoH6TVv.js",
+  // "/assets/Vimeo-I91ztYP8.js",
+  // "/assets/Explore-JFD3iTH9.js",
+  // "/assets/CommentDialog-eVg0KK7u.js",
+  // "/assets/UpdateProfile-fxeedowk.js",
+  // "/assets/YouTube-5Y4B88yf.js",
+  // "/assets/Profile-T10gWQF-.js",
+  // "/assets/Post.form-dVWGVtwL.js",
+  // "/assets/PostDetails-7s9uI11G.js",
+  // "/assets/FilePlayer-LM23bqv8.js",
+  // "/assets/index-56oth_nY.js",
+  // "/assets/index-yUWG-ebX.js",
 ];
 
 //! Install Event:
@@ -140,8 +142,6 @@ sw.addEventListener("activate", function (event) {
 sw.addEventListener("fetch", (event) => {
   if (isRequestingStaticFiles(event.request.url, STATIC_FILES)) {
     event.respondWith(caches.match(event.request) as PromiseLike<Response>);
-    // } else if (isRequestingMedia(event.request.url)) {
-    // event.respondWith(fetch(event.request));
   } else {
     event.respondWith(
       caches.match(event.request).then((cachedResponse) => {
@@ -152,15 +152,24 @@ sw.addEventListener("fetch", (event) => {
               return caches.open(DYNAMIC_ASSETS_NAME).then((cache) => {
                 //
                 const contentType = networkResponse.headers.get("Content-Type");
-                if (isCachableResponse(contentType || "")) {
+                if (isToBeCached(contentType || "")) {
                   cache.put(event.request, networkResponse.clone());
                 }
 
                 return networkResponse;
               });
+            } else {
+              console.log("RESPONSE NOT OKAY", event.request.url);
             }
             return networkResponse;
           }) as PromiseLike<Response>)
+          // .catch(() => {
+          //   console.log("CATCH CALL OF SERVICE WORKER");
+          //   return caches.open(STATIC_ASSETS_NAME).then((cache) => {
+          //     console.log(cache.match("/offline.html"));
+          //     return cache.match("/offline.html");
+          //   });
+          // })
         );
       })
     );
@@ -186,11 +195,11 @@ const ALLOWED_CONTENT_TYPES = [
   "text/javascript",
   "text/css",
   "text/html",
+  "text/plain",
   "application/javascript",
-  "application/json",
   "font/woff",
 ];
 
-function isCachableResponse(content: string) {
+function isToBeCached(content: string) {
   return ALLOWED_CONTENT_TYPES.includes(content);
 }

@@ -36,6 +36,8 @@ const Audits = lazy(() => import("./_root/pages/Audits"));
 function App() {
   const location = useLocation();
   if (!navigator.onLine) {
+    console.log('from app.tsx');
+    
     return <Offline />;
   }
   return (
@@ -155,6 +157,9 @@ function App() {
                 }
               />
             </Route>
+
+            {/* <Route path="/offline" element={<Offline />} /> */}
+
             <Route path="/*" element={<NotFound />} />
           </Routes>
         </AnimatePresence>

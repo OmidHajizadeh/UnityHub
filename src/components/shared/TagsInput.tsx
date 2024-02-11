@@ -4,17 +4,11 @@ import { ControllerRenderProps, UseFormSetValue } from "react-hook-form";
 
 import DeleteIcon from "/icons/delete.svg";
 import { Input } from "@/components/ui/input";
-
-type PostPostValues = {
-  tags: string[];
-  caption: string;
-  location: string;
-  files: File[];
-};
+import { PostValues } from "@/types";
 
 type TagsInputProps = {
-  field: ControllerRenderProps<PostPostValues, "tags">;
-  setFormValue: UseFormSetValue<PostPostValues>;
+  field: ControllerRenderProps<PostValues, "tags">;
+  setFormValue: UseFormSetValue<PostValues>;
 };
 
 const TagsInput = ({ field, setFormValue }: TagsInputProps) => {

@@ -10,7 +10,7 @@ import { usePWAContext } from "@/context/PWAContextProvider";
 
 const RootLayout = () => {
   const navigate = useNavigate();
-  const { setDefferedEvent } = usePWAContext();
+  const { setDefferedEvent, PWAPromptAsked } = usePWAContext();
 
   useEffect(() => {
     if (
@@ -22,11 +22,13 @@ const RootLayout = () => {
   }, []);
 
   useEffect(() => {
-    window.addEventListener("beforeinstallprompt", (e) => {
-      e.preventDefault();
-      setDefferedEvent(e);
-      return false;
-    });
+    if (!PWAPromptAsked) {
+      window.addEventListener("beforeinstallprompt", (e) => {
+        e.preventDefault();
+        setDefferedEvent(e);
+        return false;
+      });
+    }
   }, []);
 
   return (

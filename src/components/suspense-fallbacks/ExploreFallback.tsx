@@ -22,7 +22,7 @@ const ExploreFallback = () => {
 
       <div className="relative w-full max-w-5xl">
         <section className="grid-container">
-          {Array.from({ length: window.innerWidth > 400 ? 9 : 12 }).map(
+          {Array.from({ length: window.innerWidth > 300 ? 9 : 12 }).map(
             (_, index) => (
               <React.Fragment key={index}>
                 <SmallPostSkeleton />

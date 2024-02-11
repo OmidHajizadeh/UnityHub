@@ -23,7 +23,7 @@ const Explore = () => {
   const [searchValue, setSearchValue] = useState("");
   const { toast } = useToast();
   const debouncedSearchValue = useDebounce(searchValue, 500);
-  const { defferedEvent } = usePWAContext();
+  const { defferedEvent, PWAPromptAsked } = usePWAContext();
 
   const {
     data: searchedPosts,
@@ -41,8 +41,11 @@ const Explore = () => {
   } = useGetExplorerPosts();
 
   useEffect(() => {
-    if (defferedEvent) {
-      defferedEvent.prompt().catch(() => {});
+    if (defferedEvent && !PWAPromptAsked) {
+      defferedEvent.prompt();
+      defferedEvent.userChoice.then(() => {
+        localStorage.setItem("install-prompt", "asked");
+      });
     }
   }, []);
 
