@@ -4,8 +4,8 @@ const sw = self as unknown as ServiceWorkerGlobalScope;
 
 //todo => run >> tsc public/sw.ts --watch
 
-const STATIC_ASSETS_NAME = "static-files-v" + 5;
-const DYNAMIC_ASSETS_NAME = "dynamic-files-v" + 3;
+const STATIC_ASSETS_NAME = "static-files-v" + 6;
+const DYNAMIC_ASSETS_NAME = "dynamic-files-v" + 4;
 
 const STATIC_FILES = [
   "/",
@@ -201,5 +201,7 @@ const ALLOWED_CONTENT_TYPES = [
 ];
 
 function isToBeCached(content: string) {
-  return ALLOWED_CONTENT_TYPES.includes(content);
+  return ALLOWED_CONTENT_TYPES.some((contentType) =>
+    content.includes(contentType)
+  );
 }

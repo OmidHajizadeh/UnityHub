@@ -2,8 +2,8 @@
 var sw = self;
 // Override the "self" variable
 //todo => run >> tsc public/sw.ts --watch
-var STATIC_ASSETS_NAME = "static-files-v" + 5;
-var DYNAMIC_ASSETS_NAME = "dynamic-files-v" + 3;
+var STATIC_ASSETS_NAME = "static-files-v" + 6;
+var DYNAMIC_ASSETS_NAME = "dynamic-files-v" + 4;
 var STATIC_FILES = [
     "/",
     "/index.html",
@@ -177,5 +177,7 @@ var ALLOWED_CONTENT_TYPES = [
     "font/woff",
 ];
 function isToBeCached(content) {
-    return ALLOWED_CONTENT_TYPES.includes(content);
+    return ALLOWED_CONTENT_TYPES.some(function (contentType) {
+        return content.includes(contentType);
+    });
 }
