@@ -152,16 +152,15 @@ sw.addEventListener("fetch", (event) => {
               return caches.open(DYNAMIC_ASSETS_NAME).then((cache) => {
                 //
                 const contentType = networkResponse.headers.get("Content-Type");
-                if (isToBeCached(contentType || "")) {
+                if (isToBeCached(contentType)) {
                   cache.put(event.request, networkResponse.clone());
                 }
 
                 return networkResponse;
               });
             } else {
-              console.log("RESPONSE NOT OKAY", event.request.url);
+              return networkResponse;
             }
-            return networkResponse;
           }) as PromiseLike<Response>)
           // .catch(() => {
           //   console.log("CATCH CALL OF SERVICE WORKER");
@@ -200,7 +199,8 @@ const ALLOWED_CONTENT_TYPES = [
   "font/woff",
 ];
 
-function isToBeCached(content: string) {
+function isToBeCached(content: string | null) {
+  if (!content) return false;
   return ALLOWED_CONTENT_TYPES.some((contentType) =>
     content.includes(contentType)
   );

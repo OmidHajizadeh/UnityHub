@@ -136,16 +136,15 @@ sw.addEventListener("fetch", function (event) {
                         return caches.open(DYNAMIC_ASSETS_NAME).then(function (cache) {
                             //
                             var contentType = networkResponse.headers.get("Content-Type");
-                            if (isToBeCached(contentType || "")) {
+                            if (isToBeCached(contentType)) {
                                 cache.put(event.request, networkResponse.clone());
                             }
                             return networkResponse;
                         });
                     }
                     else {
-                        console.log("RESPONSE NOT OKAY", event.request.url);
+                        return networkResponse;
                     }
-                    return networkResponse;
                 })
             // .catch(() => {
             //   console.log("CATCH CALL OF SERVICE WORKER");
@@ -177,6 +176,8 @@ var ALLOWED_CONTENT_TYPES = [
     "font/woff",
 ];
 function isToBeCached(content) {
+    if (!content)
+        return false;
     return ALLOWED_CONTENT_TYPES.some(function (contentType) {
         return content.includes(contentType);
     });
