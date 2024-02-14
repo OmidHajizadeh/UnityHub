@@ -2,14 +2,15 @@ import ReactDOM from "react-dom/client";
 import { BrowserRouter } from "react-router-dom";
 
 import App from "@/App.tsx";
+import { Toaster } from "@/components/ui/toaster";
 import { QueryProvider } from "@/lib/react-query/QueryProvider.tsx";
 import PWAContextProvider from "@/context/PWAContextProvider";
-
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <BrowserRouter>
     <PWAContextProvider>
       <QueryProvider>
         <App />
+        <Toaster />
       </QueryProvider>
     </PWAContextProvider>
   </BrowserRouter>

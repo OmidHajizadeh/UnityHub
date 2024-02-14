@@ -10,7 +10,6 @@ import Offline from "@/_root/pages/Offline";
 import NotFound from "@/_root/pages/NotFound";
 import RootLayout from "@/_root/RootLayout";
 import Spinner from "@/components/loaders/Spinner";
-import { Toaster } from "@/components/ui/toaster";
 import AuditsFallback from "@/components/suspense-fallbacks/AuditsFallback";
 import ProfileFallback from "@/components/suspense-fallbacks/ProfileFallback";
 import ExploreFallback from "@/components/suspense-fallbacks/ExploreFallback";
@@ -36,8 +35,8 @@ const Audits = lazy(() => import("./_root/pages/Audits"));
 function App() {
   const location = useLocation();
   if (!navigator.onLine) {
-    console.log('from app.tsx');
-    
+    console.log("from app.tsx");
+
     return <Offline />;
   }
   return (
@@ -163,7 +162,6 @@ function App() {
             <Route path="/*" element={<NotFound />} />
           </Routes>
         </AnimatePresence>
-        <Toaster />
       </main>
     </>
   );
